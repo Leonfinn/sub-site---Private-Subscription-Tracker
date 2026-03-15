@@ -1,0 +1,36 @@
+<!-- tests/runner.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SubSight Tests</title>
+  <style>
+    body { font-family: monospace; background: #0f172a; color: #e2e8f0; padding: 24px; }
+    .pass { color: #4ade80; } .fail { color: #f87171; }
+    h1 { color: #38bdf8; margin-bottom: 16px; }
+    pre { line-height: 1.8; }
+    #summary { margin-top: 16px; font-size: 18px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>SubSight Test Runner</h1>
+  <pre id="output"></pre>
+  <div id="summary"></div>
+  <script src="lib/assert.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/charts.js"></script>
+  <script src="test-storage.js"></script>
+  <script src="test-charts.js"></script>
+  <script>
+    const out = document.getElementById('output');
+    const summary = document.getElementById('summary');
+    const passed = _testResults.filter(r => r.pass).length;
+    const total = _testResults.length;
+    out.innerHTML = _testResults.map(r =>
+      `<span class="${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓' : '✗'} ${r.name}${r.error ? '\n  └─ ' + r.error : ''}</span>`
+    ).join('\n');
+    summary.textContent = `${passed}/${total} passed`;
+    summary.style.color = passed === total ? '#4ade80' : '#f87171';
+  </script>
+</body>
+</html>
