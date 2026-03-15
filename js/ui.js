@@ -238,7 +238,169 @@ function renderSubscriptionsList(subs) {
 // ── Stub functions (filled in later tasks) ────────────────────────────────────
 
 function renderDashboard(subs, settings) { /* Task 13 */ }
-function renderModal(sub) { /* Task 12 */ }
+function renderModal(sub) {
+  const modal = document.getElementById('modal');
+  const overlay = document.getElementById('modalOverlay');
+  if (!modal) return;
+
+  const isEdit = sub !== null && sub !== undefined;
+  const settings = getSettings();
+  const defaultCurrency = settings.defaultCurrency || 'GBP';
+
+  modal.innerHTML = '';
+
+  // Title
+  const title = document.createElement('div');
+  title.className = 'modal-title';
+  title.textContent = isEdit ? 'Edit Subscription' : 'Add Subscription';
+
+  const sub2 = document.createElement('div');
+  sub2.className = 'modal-sub';
+  sub2.textContent = 'All fields marked * are required. Data stays on your device.';
+
+  // Form grid
+  const grid = document.createElement('div');
+  grid.className = 'form-grid';
+
+  function makeField(label, inputEl, full) {
+    const group = document.createElement('div');
+    group.className = 'form-group' + (full ? ' full' : '');
+    const lbl = document.createElement('label');
+    lbl.className = 'form-label';
+    lbl.textContent = label;
+    group.appendChild(lbl);
+    group.appendChild(inputEl);
+    return group;
+  }
+
+  function makeSelect(options, value) {
+    const sel = document.createElement('select');
+    sel.className = 'form-input';
+    options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt;
+      o.textContent = opt;
+      if (opt === value) o.selected = true;
+      sel.appendChild(o);
+    });
+    return sel;
+  }
+
+  // Name
+  const nameInput = document.createElement('input');
+  nameInput.className = 'form-input';
+  nameInput.type = 'text';
+  nameInput.placeholder = 'e.g. Netflix, Spotify, Adobe CC…';
+  if (isEdit) nameInput.value = sub.name;
+  grid.appendChild(makeField('Service Name *', nameInput, true));
+
+  // Category
+  const catSelect = makeSelect(CATEGORIES, isEdit ? sub.category : CATEGORIES[0]);
+  grid.appendChild(makeField('Category *', catSelect, false));
+
+  // Status
+  const statusSelect = makeSelect(STATUSES, isEdit ? sub.status : 'Active');
+  grid.appendChild(makeField('Status', statusSelect, false));
+
+  // Cost
+  const costInput = document.createElement('input');
+  costInput.className = 'form-input';
+  costInput.type = 'number';
+  costInput.step = '0.01';
+  costInput.min = '0';
+  costInput.placeholder = '0.00';
+  if (isEdit) costInput.value = sub.cost;
+  grid.appendChild(makeField('Cost *', costInput, false));
+
+  // Currency
+  const currSelect = makeSelect(CURRENCIES, isEdit ? sub.currency : defaultCurrency);
+  grid.appendChild(makeField('Currency', currSelect, false));
+
+  // Billing Cycle
+  const cycleSelect = makeSelect(BILLING_CYCLES, isEdit ? sub.billingCycle : 'Monthly');
+  grid.appendChild(makeField('Billing Cycle', cycleSelect, false));
+
+  // Next Billing Date
+  const dateInput = document.createElement('input');
+  dateInput.className = 'form-input';
+  dateInput.type = 'date';
+  if (isEdit && sub.nextBillingDate) dateInput.value = sub.nextBillingDate;
+  grid.appendChild(makeField('Next Billing Date', dateInput, false));
+
+  // Notes
+  const notesInput = document.createElement('input');
+  notesInput.className = 'form-input';
+  notesInput.type = 'text';
+  notesInput.placeholder = 'e.g. shared with family, trial ends soon…';
+  if (isEdit && sub.notes) notesInput.value = sub.notes;
+  grid.appendChild(makeField('Notes (optional)', notesInput, true));
+
+  // Error message
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'form-error';
+  errorDiv.style.display = 'none';
+
+  // Actions
+  const actions = document.createElement('div');
+  actions.className = 'modal-actions';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'btn-cancel';
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.addEventListener('click', closeModal);
+
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'btn-save';
+  saveBtn.textContent = isEdit ? 'Save Changes' : 'Save Subscription';
+  saveBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+    const cost = parseFloat(costInput.value);
+    if (!name) {
+      errorDiv.textContent = 'Service name is required.';
+      errorDiv.style.display = 'block';
+      return;
+    }
+    if (isNaN(cost) || cost < 0) {
+      errorDiv.textContent = 'Please enter a valid cost (0 or more).';
+      errorDiv.style.display = 'block';
+      return;
+    }
+    const updated = {
+      ...(isEdit ? sub : {}),
+      name,
+      category: catSelect.value,
+      status: statusSelect.value,
+      cost,
+      currency: currSelect.value,
+      billingCycle: cycleSelect.value,
+      nextBillingDate: dateInput.value || null,
+      notes: notesInput.value.trim(),
+      starred: isEdit ? sub.starred : false,
+    };
+    saveSubscription(updated);
+    closeModal();
+  });
+
+  actions.appendChild(cancelBtn);
+  actions.appendChild(saveBtn);
+
+  modal.appendChild(title);
+  modal.appendChild(sub2);
+  modal.appendChild(grid);
+  modal.appendChild(errorDiv);
+  modal.appendChild(actions);
+
+  // Close on backdrop click
+  if (!overlay._modalBackdropBound) {
+    overlay._modalBackdropBound = true;
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+  }
+
+  // Focus name field
+  setTimeout(() => nameInput.focus(), 50);
+}
 function renderAlternatives(subs) { /* Task 15 */ }
 function renderExport() { /* Task 16 */ }
 function renderSettings(settings) { /* Task 17 */ }
