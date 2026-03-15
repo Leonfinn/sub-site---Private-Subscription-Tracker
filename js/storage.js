@@ -77,3 +77,45 @@ function clearAllData() {
   Object.values(KEYS).forEach(k => localStorage.removeItem(k));
   _notify();
 }
+
+// --- Calculations ---
+function monthlyEquivalent(sub) {
+  if (sub.status !== 'Active') return 0;
+  const cost = parseFloat(sub.cost) || 0;
+  switch (sub.billingCycle) {
+    case 'Weekly':    return (cost * 52) / 12;
+    case 'Quarterly': return cost / 3;
+    case 'Annually':  return cost / 12;
+    default:          return cost;
+  }
+}
+
+function getActiveSubs(subs) {
+  return subs.filter(s => s.status === 'Active');
+}
+
+function isMultiCurrency(subs) {
+  return new Set(getActiveSubs(subs).map(s => s.currency)).size > 1;
+}
+
+function totalMonthlySpend(subs) {
+  return getActiveSubs(subs).reduce((sum, s) => sum + monthlyEquivalent(s), 0);
+}
+
+function categoryBreakdown(subs) {
+  return getActiveSubs(subs).reduce((acc, s) => {
+    const cat = s.category || 'Other';
+    acc[cat] = (acc[cat] || 0) + monthlyEquivalent(s);
+    return acc;
+  }, {});
+}
+
+function upcomingRenewals(subs, days = 30) {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() + days * 86400000);
+  return subs
+    .filter(s => s.status === 'Active' && s.nextBillingDate)
+    .map(s => ({ ...s, daysUntil: Math.ceil((new Date(s.nextBillingDate) - now) / 86400000) }))
+    .filter(s => s.daysUntil >= 0 && new Date(s.nextBillingDate) <= cutoff)
+    .sort((a, b) => a.daysUntil - b.daysUntil);
+}

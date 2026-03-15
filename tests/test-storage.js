@@ -61,3 +61,71 @@ test('deleteSubscription removes sub by id', () => {
   deleteSubscription(sub.id);
   assertEquals(getAllSubscriptions().length, 0);
 });
+
+// monthlyEquivalent
+test('monthlyEquivalent: Monthly returns cost as-is', () => {
+  assertClose(monthlyEquivalent({ cost: 10, billingCycle: 'Monthly', status: 'Active' }), 10);
+});
+test('monthlyEquivalent: Weekly = cost * 52 / 12', () => {
+  assertClose(monthlyEquivalent({ cost: 10, billingCycle: 'Weekly', status: 'Active' }), 43.333);
+});
+test('monthlyEquivalent: Quarterly = cost / 3', () => {
+  assertClose(monthlyEquivalent({ cost: 30, billingCycle: 'Quarterly', status: 'Active' }), 10);
+});
+test('monthlyEquivalent: Annually = cost / 12', () => {
+  assertClose(monthlyEquivalent({ cost: 120, billingCycle: 'Annually', status: 'Active' }), 10);
+});
+test('monthlyEquivalent: Paused sub returns 0', () => {
+  assertEquals(monthlyEquivalent({ cost: 10, billingCycle: 'Monthly', status: 'Paused' }), 0);
+});
+
+// isMultiCurrency
+test('isMultiCurrency: false when all same currency', () => {
+  const subs = [
+    { status: 'Active', currency: 'GBP', cost: 10, billingCycle: 'Monthly' },
+    { status: 'Active', currency: 'GBP', cost: 5,  billingCycle: 'Monthly' }
+  ];
+  assertEquals(isMultiCurrency(subs), false);
+});
+test('isMultiCurrency: true when mixed', () => {
+  const subs = [
+    { status: 'Active', currency: 'GBP', cost: 10, billingCycle: 'Monthly' },
+    { status: 'Active', currency: 'USD', cost: 5,  billingCycle: 'Monthly' }
+  ];
+  assertEquals(isMultiCurrency(subs), true);
+});
+
+// totalMonthlySpend
+test('totalMonthlySpend: sums only active subs', () => {
+  const subs = [
+    { status: 'Active', currency: 'GBP', cost: 10, billingCycle: 'Monthly' },
+    { status: 'Paused', currency: 'GBP', cost: 20, billingCycle: 'Monthly' }
+  ];
+  assertClose(totalMonthlySpend(subs), 10);
+});
+
+// categoryBreakdown
+test('categoryBreakdown: groups by category', () => {
+  const subs = [
+    { status: 'Active', category: 'Streaming', cost: 10, billingCycle: 'Monthly', currency: 'GBP' },
+    { status: 'Active', category: 'Streaming', cost: 5,  billingCycle: 'Monthly', currency: 'GBP' },
+    { status: 'Active', category: 'Music',     cost: 8,  billingCycle: 'Monthly', currency: 'GBP' }
+  ];
+  const bd = categoryBreakdown(subs);
+  assertClose(bd['Streaming'], 15);
+  assertClose(bd['Music'], 8);
+});
+
+// upcomingRenewals
+test('upcomingRenewals: returns subs due within 30 days', () => {
+  const soon = new Date(Date.now() + 5 * 86400000).toISOString().slice(0, 10);
+  const far  = new Date(Date.now() + 60 * 86400000).toISOString().slice(0, 10);
+  const subs = [
+    { status: 'Active', nextBillingDate: soon, name: 'A', cost: 10, billingCycle: 'Monthly', currency: 'GBP', category: 'Streaming', starred: false, notes: '' },
+    { status: 'Active', nextBillingDate: far,  name: 'B', cost: 5,  billingCycle: 'Monthly', currency: 'GBP', category: 'Music',     starred: false, notes: '' }
+  ];
+  const renewals = upcomingRenewals(subs);
+  assertEquals(renewals.length, 1);
+  assertEquals(renewals[0].name, 'A');
+  assert(renewals[0].daysUntil <= 6);
+});
