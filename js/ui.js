@@ -273,7 +273,7 @@ function renderDashboard(subs, settings) {
     const multiCurr = isMultiCurrency(subs);
     const monthly = totalMonthlySpend(subs);
     const annual = monthly * 12;
-    const threshold = settings.wasteAlertThreshold || 1500;
+    const threshold = settings.wasteAlertThreshold ?? 1500;
     if (!multiCurr && annual > threshold) {
       const activeSubs = subs.filter(s => s.status === 'Active');
       const currCode = activeSubs.length > 0 ? activeSubs[0].currency : (settings.defaultCurrency || 'GBP');
