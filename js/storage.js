@@ -50,3 +50,30 @@ function isBannerDismissed() {
 function dismissBanner() {
   localStorage.setItem(KEYS.BANNER, 'true');
 }
+
+// --- Subscriptions ---
+function getAllSubscriptions() {
+  try { return JSON.parse(localStorage.getItem(KEYS.SUBS) || '[]'); }
+  catch { return []; }
+}
+
+function saveSubscription(sub) {
+  const subs = getAllSubscriptions();
+  if (!sub.id) sub = { ...sub, id: _generateId() };
+  const idx = subs.findIndex(s => s.id === sub.id);
+  if (idx >= 0) subs[idx] = sub; else subs.push(sub);
+  localStorage.setItem(KEYS.SUBS, JSON.stringify(subs));
+  _notify();
+  return sub;
+}
+
+function deleteSubscription(id) {
+  localStorage.setItem(KEYS.SUBS,
+    JSON.stringify(getAllSubscriptions().filter(s => s.id !== id)));
+  _notify();
+}
+
+function clearAllData() {
+  Object.values(KEYS).forEach(k => localStorage.removeItem(k));
+  _notify();
+}
