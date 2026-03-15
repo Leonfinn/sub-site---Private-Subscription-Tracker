@@ -19,8 +19,9 @@ const KEYS = {
 const DEFAULT_SETTINGS = { defaultCurrency: 'GBP', wasteAlertThreshold: 1500 };
 
 function _notify() {
+  const subs = typeof getAllSubscriptions === 'function' ? getAllSubscriptions() : [];
   document.dispatchEvent(new CustomEvent('subsight:updated', {
-    detail: { subscriptions: getAllSubscriptions(), settings: getSettings() }
+    detail: { subscriptions: subs, settings: getSettings() }
   }));
 }
 
