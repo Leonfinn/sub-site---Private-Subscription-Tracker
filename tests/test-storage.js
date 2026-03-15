@@ -158,3 +158,58 @@ test('sparklineData: last entry is current month', () => {
   assertEquals(data[5].label, label);
   assertEquals(data[5].isCurrent, true);
 });
+
+// --- importJSON ---
+test('importJSON: rejects invalid JSON', () => {
+  const result = importJSON('not json', 'replace');
+  assertEquals(result.ok, false);
+  assert(result.error.includes('parse'), result.error);
+});
+
+test('importJSON: rejects file with no subscriptions array', () => {
+  const result = importJSON(JSON.stringify({ foo: 'bar' }), 'replace');
+  assertEquals(result.ok, false);
+});
+
+test('importJSON replace: replaces all subs', () => {
+  localStorage.clear();
+  saveSubscription({ name: 'Old', cost: 5, status: 'Active',
+    category: 'Other', currency: 'GBP', billingCycle: 'Monthly', starred: false, notes: '' });
+  const newSubs = [{ id: 'abc', name: 'New', cost: 10, status: 'Active',
+    category: 'Streaming', currency: 'GBP', billingCycle: 'Monthly', starred: false, notes: '' }];
+  const result = importJSON(JSON.stringify({ subsight_subscriptions: newSubs }), 'replace');
+  assertEquals(result.ok, true);
+  assertEquals(getAllSubscriptions().length, 1);
+  assertEquals(getAllSubscriptions()[0].name, 'New');
+});
+
+test('importJSON merge: appends new ids, skips existing', () => {
+  localStorage.clear();
+  const existing = saveSubscription({ name: 'Existing', cost: 5, status: 'Active',
+    category: 'Other', currency: 'GBP', billingCycle: 'Monthly', starred: false, notes: '' });
+  const incoming = [
+    { ...existing, cost: 999 },                  // same id — should be skipped
+    { id: 'newid', name: 'New', cost: 10, status: 'Active',
+      category: 'Streaming', currency: 'GBP', billingCycle: 'Monthly', starred: false, notes: '' }
+  ];
+  const result = importJSON(JSON.stringify({ subsight_subscriptions: incoming }), 'merge');
+  assertEquals(result.ok, true);
+  assertEquals(getAllSubscriptions().length, 2);
+  // existing unchanged
+  assertEquals(getAllSubscriptions().find(s => s.id === existing.id).cost, 5);
+});
+
+test('importJSON: skips invalid individual entries, reports count', () => {
+  localStorage.clear();
+  const data = {
+    subsight_subscriptions: [
+      { id: 'a', name: 'Valid', cost: 10, status: 'Active',
+        category: 'Streaming', currency: 'GBP', billingCycle: 'Monthly', starred: false, notes: '' },
+      { id: 'b' } // missing required fields
+    ]
+  };
+  const result = importJSON(JSON.stringify(data), 'replace');
+  assertEquals(result.ok, true);
+  assertEquals(getAllSubscriptions().length, 1);
+  assertEquals(result.skipped, 1);
+});

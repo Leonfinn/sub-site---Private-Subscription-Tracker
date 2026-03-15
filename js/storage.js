@@ -120,6 +120,79 @@ function upcomingRenewals(subs, days = 30) {
     .sort((a, b) => a.daysUntil - b.daysUntil);
 }
 
+// --- Export / Import ---
+const REQUIRED_FIELDS = ['id', 'name', 'cost', 'category', 'billingCycle', 'status', 'currency'];
+
+function _isValidSub(s) {
+  return REQUIRED_FIELDS.every(f => s[f] !== undefined && s[f] !== null && s[f] !== '') &&
+    BILLING_CYCLES.includes(s.billingCycle) &&
+    STATUSES.includes(s.status) &&
+    CURRENCIES.includes(s.currency) &&
+    CATEGORIES.includes(s.category);
+}
+
+function importJSON(jsonString, mode) {
+  let data;
+  try { data = JSON.parse(jsonString); }
+  catch (e) { return { ok: false, error: 'Failed to parse JSON: ' + e.message }; }
+
+  if (!data.subsight_subscriptions || !Array.isArray(data.subsight_subscriptions)) {
+    return { ok: false, error: 'File must contain a subsight_subscriptions array.' };
+  }
+
+  const valid   = data.subsight_subscriptions.filter(_isValidSub);
+  const skipped = data.subsight_subscriptions.length - valid.length;
+
+  if (mode === 'replace') {
+    localStorage.setItem(KEYS.SUBS, JSON.stringify(valid));
+  } else {
+    const existing = getAllSubscriptions();
+    const existingIds = new Set(existing.map(s => s.id));
+    const toAdd = valid.filter(s => !existingIds.has(s.id));
+    localStorage.setItem(KEYS.SUBS, JSON.stringify([...existing, ...toAdd]));
+  }
+  _notify();
+  return { ok: true, skipped, imported: valid.length };
+}
+
+function exportJSON() {
+  const data = {
+    subsight_schema_version: SCHEMA_VERSION,
+    subsight_subscriptions: getAllSubscriptions(),
+    subsight_settings: getSettings()
+  };
+  _triggerDownload(
+    JSON.stringify(data, null, 2),
+    `subsight-backup-${new Date().toISOString().slice(0, 10)}.json`,
+    'application/json'
+  );
+}
+
+function exportCSV() {
+  const headers = ['Name','Category','Cost','Currency','Billing Cycle','Status','Next Billing Date','Notes'];
+  const rows = getAllSubscriptions().map(s => [
+    s.name, s.category, s.cost, s.currency, s.billingCycle,
+    s.status, s.nextBillingDate || '', s.notes || ''
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(_escapeCsv).join(',')).join('\n');
+  _triggerDownload(csv, `subsight-export-${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
+}
+
+function _escapeCsv(val) {
+  const str = String(val);
+  return str.includes(',') || str.includes('"') || str.includes('\n')
+    ? '"' + str.replace(/"/g, '""') + '"'
+    : str;
+}
+
+function _triggerDownload(content, filename, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type }));
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 function sparklineData(subs) {
   const now = new Date();
   const curYear  = now.getFullYear();
