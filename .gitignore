@@ -183,3 +183,4 @@ venv/
 
 # vscode specific files
 .vscode/
+.superpowers/
