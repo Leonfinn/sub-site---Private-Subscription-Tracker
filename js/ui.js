@@ -237,7 +237,164 @@ function renderSubscriptionsList(subs) {
 
 // ── Stub functions (filled in later tasks) ────────────────────────────────────
 
-function renderDashboard(subs, settings) { /* Task 13 */ }
+function renderDashboard(subs, settings) {
+  // Date subtitle
+  const dateEl = document.getElementById('dashboard-date');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Add button
+  const dashAddBtn = document.getElementById('dashAddBtn');
+  if (dashAddBtn && !dashAddBtn._bound) { dashAddBtn._bound = true; dashAddBtn.addEventListener('click', () => openModal(null)); }
+
+  // Trust banner
+  const bannerEl = document.getElementById('trust-banner');
+  if (bannerEl) {
+    bannerEl.innerHTML = '';
+    if (!isBannerDismissed()) {
+      const banner = document.createElement('div');
+      banner.className = 'trust-banner';
+      const text = document.createElement('div');
+      text.className = 'trust-banner-text';
+      text.innerHTML = '🔒 <strong>Your data never leaves this device.</strong> SubSight runs entirely in your browser — no accounts, no servers, no tracking.';
+      const dismiss = document.createElement('span');
+      dismiss.className = 'trust-dismiss';
+      dismiss.textContent = '×';
+      dismiss.addEventListener('click', () => { dismissBanner(); banner.style.display = 'none'; });
+      banner.appendChild(text);
+      banner.appendChild(dismiss);
+      bannerEl.appendChild(banner);
+    }
+  }
+
+  // Waste alert
+  const alertEl = document.getElementById('waste-alert');
+  if (alertEl) {
+    alertEl.innerHTML = '';
+    const multiCurr = isMultiCurrency(subs);
+    const monthly = totalMonthlySpend(subs);
+    const annual = monthly * 12;
+    const threshold = settings.wasteAlertThreshold || 1500;
+    if (!multiCurr && annual > threshold) {
+      const activeSubs = subs.filter(s => s.status === 'Active');
+      const currCode = activeSubs.length > 0 ? activeSubs[0].currency : (settings.defaultCurrency || 'GBP');
+      const sym = _currencySymbol(currCode);
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'waste-alert';
+      alertDiv.innerHTML = `⚠️ <strong>Heads up:</strong> You're spending ${sym}${annual.toFixed(0)}/year on subscriptions. The average person wastes £624/year on services they barely use — have you reviewed yours lately?`;
+      alertEl.appendChild(alertDiv);
+    }
+  }
+
+  // Stat cards
+  const statsRow = document.getElementById('stats-row');
+  if (statsRow) {
+    statsRow.innerHTML = '';
+    const multiCurr = isMultiCurrency(subs);
+    const monthly = totalMonthlySpend(subs);
+    const activeSubs = subs.filter(s => s.status === 'Active');
+    const currCode = activeSubs.length > 0 ? activeSubs[0].currency : (settings.defaultCurrency || 'GBP');
+    const sym = _currencySymbol(currCode);
+    const renewals = upcomingRenewals(subs, 30);
+
+    function makeStatCard(label, value, valueCls, sub) {
+      const card = document.createElement('div');
+      card.className = 'stat-card';
+      const lbl = document.createElement('div'); lbl.className = 'stat-label'; lbl.textContent = label;
+      const val = document.createElement('div'); val.className = 'stat-value' + (valueCls ? ' ' + valueCls : ''); val.textContent = value;
+      const s = document.createElement('div'); s.className = 'stat-sub'; s.textContent = sub;
+      card.appendChild(lbl); card.appendChild(val); card.appendChild(s);
+      return card;
+    }
+
+    const monthlyVal  = multiCurr ? 'Multiple currencies' : sym + monthly.toFixed(2);
+    const annualVal   = multiCurr ? 'Multiple currencies' : sym + (monthly * 12).toFixed(0);
+    statsRow.appendChild(makeStatCard('Monthly Spend',  monthlyVal, 'accent', `across ${activeSubs.length} active subscription${activeSubs.length !== 1 ? 's' : ''}`));
+    statsRow.appendChild(makeStatCard('Annual Spend',   annualVal,  '',       'projected this year'));
+    statsRow.appendChild(makeStatCard('Due This Month', String(renewals.length), '', 'renewals in next 30 days'));
+  }
+
+  // Charts column
+  const chartsCol = document.getElementById('charts-col');
+  if (chartsCol) {
+    chartsCol.innerHTML = '';
+
+    const catCard = document.createElement('div'); catCard.className = 'card';
+    const catTitle = document.createElement('div'); catTitle.className = 'card-title'; catTitle.textContent = 'Spend by Category';
+    catCard.appendChild(catTitle);
+    catCard.appendChild(renderCategoryChart(categoryBreakdown(subs)));
+    chartsCol.appendChild(catCard);
+
+    const trendCard = document.createElement('div'); trendCard.className = 'card';
+    const trendTitle = document.createElement('div'); trendTitle.className = 'card-title'; trendTitle.textContent = 'Monthly Trend';
+    trendCard.appendChild(trendTitle);
+    trendCard.appendChild(renderSparkline(sparklineData(subs)));
+    chartsCol.appendChild(trendCard);
+  }
+
+  // Right column
+  const rightCol = document.getElementById('right-col');
+  if (rightCol) {
+    rightCol.innerHTML = '';
+
+    // Upcoming renewals card
+    const renewCard = document.createElement('div'); renewCard.className = 'card';
+    const renewTitle = document.createElement('div'); renewTitle.className = 'card-title'; renewTitle.textContent = 'Upcoming Renewals';
+    renewCard.appendChild(renewTitle);
+    const renewals = upcomingRenewals(subs, 30).slice(0, 5);
+    if (renewals.length === 0) {
+      const none = document.createElement('div'); none.style.color = '#64748b'; none.style.fontSize = '13px'; none.textContent = 'No renewals in the next 30 days.';
+      renewCard.appendChild(none);
+    } else {
+      renewals.forEach(r => {
+        const item = document.createElement('div'); item.className = 'renewal-item';
+        const info = document.createElement('div');
+        const name = document.createElement('div'); name.className = 'renewal-name'; name.textContent = r.name;
+        const date = document.createElement('div'); date.className = 'renewal-date'; date.textContent = _formatDate(r.nextBillingDate);
+        info.appendChild(name); info.appendChild(date);
+        const badge = document.createElement('div');
+        badge.className = 'renewal-badge' + (r.daysUntil <= 7 ? ' soon' : '');
+        badge.textContent = r.daysUntil === 0 ? 'Today' : `${r.daysUntil} day${r.daysUntil !== 1 ? 's' : ''}`;
+        item.appendChild(info); item.appendChild(badge);
+        renewCard.appendChild(item);
+      });
+    }
+    rightCol.appendChild(renewCard);
+
+    // Possible savings card
+    const savCard = document.createElement('div'); savCard.className = 'card';
+    const savTitle = document.createElement('div'); savTitle.className = 'card-title'; savTitle.textContent = '💡 Possible Savings';
+    savCard.appendChild(savTitle);
+    const activeSorted = subs.filter(s => s.status === 'Active').sort((a, b) => monthlyEquivalent(b) - monthlyEquivalent(a));
+    let found = null;
+    for (const s of activeSorted) {
+      const key = s.name.trim().toLowerCase();
+      if (typeof KNOWN_SERVICES !== 'undefined' && KNOWN_SERVICES[key]) { found = { sub: s, data: KNOWN_SERVICES[key] }; break; }
+    }
+    if (found) {
+      const { sub: matchSub, data } = found;
+      const body = document.createElement('div'); body.style.fontSize = '12px'; body.style.color = '#94a3b8'; body.style.lineHeight = '1.6';
+      const costSpan = document.createElement('strong'); costSpan.style.color = '#e2e8f0';
+      costSpan.textContent = _currencySymbol(matchSub.currency) + parseFloat(matchSub.cost).toFixed(2) + '/mo';
+      body.appendChild(document.createTextNode('You\'re paying '));
+      body.appendChild(costSpan);
+      body.appendChild(document.createTextNode(' for ' + matchSub.name + '. '));
+      const altLink = document.createElement('a');
+      altLink.href = '#';
+      altLink.style.color = '#38bdf8';
+      altLink.textContent = data.alt;
+      altLink.addEventListener('click', (e) => { e.preventDefault(); navigate('alternatives'); });
+      body.appendChild(altLink);
+      body.appendChild(document.createTextNode(' could save you ' + data.saving + '.'));
+      const affNote = document.createElement('div'); affNote.style.marginTop = '8px'; affNote.style.fontSize = '11px'; affNote.style.color = '#475569'; affNote.textContent = 'Affiliate link · See Alternatives for more';
+      body.appendChild(affNote);
+      savCard.appendChild(body);
+    } else {
+      const none = document.createElement('div'); none.style.color = '#64748b'; none.style.fontSize = '13px'; none.textContent = 'No alternatives found for your current subscriptions.';
+      savCard.appendChild(none);
+    }
+    rightCol.appendChild(savCard);
+  }
+}
 function renderModal(sub) {
   const modal = document.getElementById('modal');
   const overlay = document.getElementById('modalOverlay');
