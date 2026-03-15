@@ -119,3 +119,40 @@ function upcomingRenewals(subs, days = 30) {
     .filter(s => s.daysUntil >= 0 && new Date(s.nextBillingDate) <= cutoff)
     .sort((a, b) => a.daysUntil - b.daysUntil);
 }
+
+function sparklineData(subs) {
+  const now = new Date();
+  const curYear  = now.getFullYear();
+  const curMonth = now.getMonth(); // 0-indexed
+
+  return Array.from({ length: 6 }, (_, i) => {
+    const offset = 5 - i;                          // 5 months ago → current
+    let tMonth = curMonth - offset;
+    let tYear  = curYear;
+    while (tMonth < 0) { tMonth += 12; tYear -= 1; }
+    const tAbs = tYear * 12 + tMonth;
+
+    let total = 0;
+    getActiveSubs(subs).forEach(s => {
+      if (!s.nextBillingDate) return;
+      const cost = parseFloat(s.cost) || 0;
+      const next = new Date(s.nextBillingDate);
+      const nAbs = next.getFullYear() * 12 + next.getMonth();
+      const diff = nAbs - tAbs;
+
+      switch (s.billingCycle) {
+        case 'Monthly':    if (diff >= 0)                    total += cost; break;
+        case 'Weekly':     total += (cost * 52) / 12;                       break;
+        case 'Quarterly':  if (diff >= 0 && diff % 3  === 0) total += cost; break;
+        case 'Annually':   if (diff >= 0 && diff % 12 === 0) total += cost; break;
+      }
+    });
+
+    const d = new Date(tYear, tMonth, 1);
+    return {
+      label: d.toLocaleString('default', { month: 'short' }),
+      total,
+      isCurrent: offset === 0
+    };
+  });
+}

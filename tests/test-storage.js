@@ -129,3 +129,32 @@ test('upcomingRenewals: returns subs due within 30 days', () => {
   assertEquals(renewals[0].name, 'A');
   assert(renewals[0].daysUntil <= 6);
 });
+
+// sparklineData
+test('sparklineData: returns 6 entries', () => {
+  assertEquals(sparklineData([]).length, 6);
+});
+
+test('sparklineData: monthly sub contributes to all 6 months', () => {
+  // nextBillingDate far in future so all months pass diff >= 0
+  const future = new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10);
+  const subs = [{ status: 'Active', cost: 10, billingCycle: 'Monthly',
+    currency: 'GBP', nextBillingDate: future, category: 'Streaming' }];
+  const data = sparklineData(subs);
+  data.forEach(d => assertClose(d.total, 10));
+});
+
+test('sparklineData: sub without nextBillingDate excluded', () => {
+  const subs = [{ status: 'Active', cost: 10, billingCycle: 'Monthly',
+    currency: 'GBP', nextBillingDate: null, category: 'Streaming' }];
+  const data = sparklineData(subs);
+  data.forEach(d => assertEquals(d.total, 0));
+});
+
+test('sparklineData: last entry is current month', () => {
+  const now = new Date();
+  const label = now.toLocaleString('default', { month: 'short' });
+  const data = sparklineData([]);
+  assertEquals(data[5].label, label);
+  assertEquals(data[5].isCurrent, true);
+});
