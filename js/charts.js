@@ -44,12 +44,12 @@ function renderSparkline(months) {
   container.className = 'sparkline';
   months.forEach(m => {
     const pct = maxTotal > 0 ? (m.total / maxTotal) * 100 : 0;
-    const heightPx = m.total > 0 ? Math.max(pct, (4 / 60) * 100) : 0;
     const col = document.createElement('div');
     col.className = 'spark-col';
     const bar = document.createElement('div');
     bar.className = 'spark-bar' + (m.isCurrent ? ' current' : '');
-    bar.style.height = heightPx.toFixed(1) + '%';
+    bar.style.height = pct.toFixed(1) + '%';
+    bar.style.minHeight = m.total > 0 ? '4px' : '0px';
     const label = document.createElement('div');
     label.className = 'spark-month' + (m.isCurrent ? ' current' : '');
     label.textContent = m.label;
