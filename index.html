@@ -7,7 +7,62 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <p>SubSight scaffold</p>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      SUBSIGHT
+      <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="dashboard">
+        <span class="nav-icon">◈</span> Dashboard
+      </button>
+      <button class="nav-item" data-view="subscriptions">
+        <span class="nav-icon">≡</span> Subscriptions
+      </button>
+      <button class="nav-item" data-view="alternatives">
+        <span class="nav-icon">↗</span> Alternatives
+      </button>
+      <button class="nav-item" data-view="export">
+        <span class="nav-icon">⤓</span> Export
+      </button>
+      <button class="nav-item" data-view="settings">
+        <span class="nav-icon">◎</span> Settings
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      🔒 100% private — all data stored locally on your device. Nothing is sent to any server.
+    </div>
+  </aside>
+
+  <!-- Mobile bottom tab bar -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="bottom-nav-item active" data-view="dashboard">◈<span>Dashboard</span></button>
+    <button class="bottom-nav-item" data-view="subscriptions">≡<span>Subs</span></button>
+    <button class="bottom-nav-item" data-view="alternatives">↗<span>Deals</span></button>
+    <button class="bottom-nav-item" data-view="export">⤓<span>Export</span></button>
+    <button class="bottom-nav-item" data-view="settings">◎<span>Settings</span></button>
+  </nav>
+
+  <!-- Main content area -->
+  <main class="main" id="main">
+    <section id="view-dashboard"     class="view active"></section>
+    <section id="view-subscriptions" class="view"></section>
+    <section id="view-alternatives"  class="view"></section>
+    <section id="view-export"        class="view"></section>
+    <section id="view-settings"      class="view"></section>
+  </main>
+
+  <!-- Add/Edit modal -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal" id="modal"></div>
+  </div>
+
+  <footer class="privacy-footer">
+    🔒 100% private — all data stored locally on your device. Nothing is sent to any server.
+  </footer>
+
   <script src="data/affiliates.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/charts.js"></script>
