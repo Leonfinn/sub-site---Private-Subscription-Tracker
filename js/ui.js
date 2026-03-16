@@ -558,6 +558,140 @@ function renderModal(sub) {
   // Focus name field
   setTimeout(() => nameInput.focus(), 50);
 }
-function renderAlternatives(subs) { /* Task 15 */ }
+function renderAlternatives(subs) {
+  const container = document.getElementById('alternatives-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const activeSubs = subs.filter(s => s.status === 'Active');
+
+  if (activeSubs.length === 0) {
+    container.appendChild(_emptyState('Add some subscriptions to see money-saving alternatives.'));
+    return;
+  }
+
+  // Disclosure
+  const disc = document.createElement('div');
+  disc.className = 'disclosure';
+  disc.textContent = 'SubSight may earn a small commission if you sign up via these links, at no extra cost to you. Suggestions are based on your actual subscriptions.';
+  container.appendChild(disc);
+
+  // Tier 1: known service matches
+  // Find matches — deduplicate by KNOWN_SERVICES key (keep highest-spend per key)
+  const matchMap = new Map(); // key -> sub with highest monthly
+  activeSubs.forEach(sub => {
+    const key = sub.name.trim().toLowerCase();
+    if (KNOWN_SERVICES[key]) {
+      const existing = matchMap.get(key);
+      if (!existing || monthlyEquivalent(sub) > monthlyEquivalent(existing)) {
+        matchMap.set(key, sub);
+      }
+    }
+  });
+
+  // Sort by monthly spend descending
+  const tier1 = [...matchMap.entries()].sort((a, b) => monthlyEquivalent(b[1]) - monthlyEquivalent(a[1]));
+  // Track which categories have tier1 matches
+  const matchedCategories = new Set(tier1.map(([, sub]) => sub.category));
+
+  if (tier1.length > 0) {
+    const tier1Label = document.createElement('div');
+    tier1Label.className = 'affiliate-tier-label';
+    tier1Label.textContent = 'Matched to your subscriptions';
+    container.appendChild(tier1Label);
+
+    const grid1 = document.createElement('div');
+    grid1.className = 'affiliate-grid';
+
+    tier1.forEach(([key, sub]) => {
+      const data = KNOWN_SERVICES[key];
+      const card = document.createElement('div');
+      card.className = 'affiliate-card';
+
+      const cardTitle = document.createElement('div');
+      cardTitle.className = 'affiliate-card-title';
+      cardTitle.textContent = sub.name + ' \u2192 ' + data.alt;
+
+      const cardSub = document.createElement('div');
+      cardSub.className = 'affiliate-card-sub';
+      cardSub.textContent = 'You\'re paying ' + _formatCost(sub) + '/' + _formatCycle(sub.billingCycle);
+
+      const saving = document.createElement('div');
+      saving.className = 'affiliate-saving';
+      saving.textContent = 'Save ' + data.saving;
+
+      const cta = document.createElement('div');
+      cta.className = 'affiliate-cta';
+      const btn = document.createElement('a');
+      btn.className = 'affiliate-btn';
+      btn.href = data.url;
+      btn.target = '_blank';
+      btn.rel = 'noopener';
+      btn.textContent = 'Switch & Save';
+      const note = document.createElement('span');
+      note.className = 'affiliate-link-note';
+      note.textContent = 'Affiliate link';
+      cta.appendChild(btn);
+      cta.appendChild(note);
+
+      card.appendChild(cardTitle);
+      card.appendChild(cardSub);
+      card.appendChild(saving);
+      card.appendChild(cta);
+      grid1.appendChild(card);
+    });
+
+    container.appendChild(grid1);
+  }
+
+  // Tier 2: category fallbacks for unmatched categories
+  const activeCategories = [...new Set(activeSubs.map(s => s.category))];
+  const tier2Categories = activeCategories.filter(cat => !matchedCategories.has(cat) && CATEGORY_FALLBACKS[cat]);
+
+  if (tier2Categories.length > 0) {
+    const tier2Label = document.createElement('div');
+    tier2Label.className = 'affiliate-tier-label';
+    tier2Label.textContent = 'General category suggestions';
+    container.appendChild(tier2Label);
+
+    const grid2 = document.createElement('div');
+    grid2.className = 'affiliate-grid';
+
+    tier2Categories.forEach(cat => {
+      const data = CATEGORY_FALLBACKS[cat];
+      const card = document.createElement('div');
+      card.className = 'affiliate-card';
+
+      const cardTitle = document.createElement('div');
+      cardTitle.className = 'affiliate-card-title';
+      cardTitle.textContent = cat + ' alternative';
+
+      const cardSub = document.createElement('div');
+      cardSub.className = 'affiliate-card-sub';
+      cardSub.textContent = data.alt;
+
+      const cta = document.createElement('div');
+      cta.className = 'affiliate-cta';
+      const btn = document.createElement('a');
+      btn.className = 'affiliate-btn';
+      btn.href = data.url;
+      btn.target = '_blank';
+      btn.rel = 'noopener';
+      btn.textContent = 'Learn More';
+      const note = document.createElement('span');
+      note.className = 'affiliate-link-note';
+      note.textContent = 'Affiliate link';
+      cta.appendChild(btn);
+      cta.appendChild(note);
+
+      card.appendChild(cardTitle);
+      card.appendChild(cardSub);
+      card.appendChild(cta);
+      grid2.appendChild(card);
+    });
+
+    container.appendChild(grid2);
+  }
+}
 function renderExport() { /* Task 16 */ }
 function renderSettings(settings) { /* Task 17 */ }
