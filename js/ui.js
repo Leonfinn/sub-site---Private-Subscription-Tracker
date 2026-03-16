@@ -693,5 +693,93 @@ function renderAlternatives(subs) {
     container.appendChild(grid2);
   }
 }
-function renderExport() { /* Task 16 */ }
+function renderExport() {
+  const container = document.getElementById('export-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // Section 1: Export JSON
+  const jsonSection = document.createElement('div');
+  jsonSection.className = 'export-section';
+  const jsonTitle = document.createElement('div'); jsonTitle.className = 'export-section-title'; jsonTitle.textContent = 'Export JSON';
+  const jsonDesc = document.createElement('div'); jsonDesc.className = 'export-section-desc'; jsonDesc.textContent = 'Download a full backup of all your data, including settings. Use this to move your data to another device.';
+  const jsonBtnRow = document.createElement('div'); jsonBtnRow.className = 'export-btn-row';
+  const jsonBtn = document.createElement('button'); jsonBtn.className = 'export-btn'; jsonBtn.textContent = '⤓ Export JSON';
+  jsonBtn.addEventListener('click', exportJSON);
+  jsonBtnRow.appendChild(jsonBtn);
+  const jsonPrivacy = document.createElement('div'); jsonPrivacy.className = 'export-privacy'; jsonPrivacy.textContent = 'Your backup file stays on your device. We never see it.';
+  jsonSection.appendChild(jsonTitle); jsonSection.appendChild(jsonDesc); jsonSection.appendChild(jsonBtnRow); jsonSection.appendChild(jsonPrivacy);
+  container.appendChild(jsonSection);
+
+  // Section 2: Export CSV
+  const csvSection = document.createElement('div');
+  csvSection.className = 'export-section';
+  const csvTitle = document.createElement('div'); csvTitle.className = 'export-section-title'; csvTitle.textContent = 'Export CSV';
+  const csvDesc = document.createElement('div'); csvDesc.className = 'export-section-desc'; csvDesc.textContent = 'Download your subscriptions as a spreadsheet. Useful for analysis in Excel or Google Sheets.';
+  const csvBtnRow = document.createElement('div'); csvBtnRow.className = 'export-btn-row';
+  const csvBtn = document.createElement('button'); csvBtn.className = 'export-btn'; csvBtn.textContent = '⤓ Export CSV';
+  csvBtn.addEventListener('click', exportCSV);
+  csvBtnRow.appendChild(csvBtn);
+  csvSection.appendChild(csvTitle); csvSection.appendChild(csvDesc); csvSection.appendChild(csvBtnRow);
+  container.appendChild(csvSection);
+
+  // Section 3: Import JSON
+  const importSection = document.createElement('div');
+  importSection.className = 'export-section';
+  const impTitle = document.createElement('div'); impTitle.className = 'export-section-title'; impTitle.textContent = 'Import JSON';
+  const impDesc = document.createElement('div'); impDesc.className = 'export-section-desc'; impDesc.textContent = 'Restore from a backup file. Choose whether to merge with or replace your existing data.';
+
+  // Mode radio buttons
+  const modeRow = document.createElement('div'); modeRow.className = 'import-mode-row';
+  function makeRadio(value, labelText, checked) {
+    const lbl = document.createElement('label'); lbl.className = 'import-mode-label';
+    const radio = document.createElement('input'); radio.type = 'radio'; radio.name = 'importMode'; radio.value = value;
+    if (checked) radio.checked = true;
+    lbl.appendChild(radio);
+    lbl.appendChild(document.createTextNode(labelText));
+    return lbl;
+  }
+  modeRow.appendChild(makeRadio('merge', 'Merge (keep existing, add new)', true));
+  modeRow.appendChild(makeRadio('replace', 'Replace (overwrite all)', false));
+
+  // Result message element
+  const resultDiv = document.createElement('div'); resultDiv.className = 'import-result'; resultDiv.style.display = 'none';
+
+  // Hidden file input
+  const fileInput = document.createElement('input'); fileInput.type = 'file'; fileInput.accept = '.json'; fileInput.style.display = 'none';
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const selectedRadio = importSection.querySelector('input[name="importMode"]:checked');
+      const mode = selectedRadio ? selectedRadio.value : 'merge';
+      const result = importJSON(e.target.result, mode);
+      resultDiv.style.display = 'block';
+      if (result.ok) {
+        resultDiv.className = 'import-result success';
+        resultDiv.textContent = `✓ Imported ${result.imported} subscription${result.imported !== 1 ? 's' : ''}. ${result.skipped} ${result.skipped !== 1 ? 'entries were' : 'entry was'} skipped (already exist or invalid).`;
+      } else {
+        resultDiv.className = 'import-result error';
+        resultDiv.textContent = result.error;
+      }
+      fileInput.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  // File picker button
+  const impBtnRow = document.createElement('div'); impBtnRow.className = 'export-btn-row';
+  const impBtn = document.createElement('button'); impBtn.className = 'export-btn'; impBtn.textContent = '📂 Choose backup file…';
+  impBtn.addEventListener('click', () => fileInput.click());
+  impBtnRow.appendChild(impBtn);
+
+  importSection.appendChild(impTitle);
+  importSection.appendChild(impDesc);
+  importSection.appendChild(modeRow);
+  importSection.appendChild(impBtnRow);
+  importSection.appendChild(fileInput);
+  importSection.appendChild(resultDiv);
+  container.appendChild(importSection);
+}
 function renderSettings(settings) { /* Task 17 */ }
