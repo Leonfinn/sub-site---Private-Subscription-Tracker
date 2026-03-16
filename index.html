@@ -56,6 +56,39 @@
         </div>
         <button class="add-btn" id="dashAddBtn">+ Add Subscription</button>
       </div>
+      <details class="help-block">
+        <summary>How to use SubSight</summary>
+        <div class="help-body">
+          <h4>What is SubSight?</h4>
+          <p>SubSight is a <strong>privacy-first subscription tracker</strong> that runs entirely in your browser. No account is needed — your data is never sent to any server.</p>
+
+          <h4>Your data lives in your browser</h4>
+          <p>All subscriptions are stored in your browser's local storage. This means:</p>
+          <ul>
+            <li>Data is private and stays on your device.</li>
+            <li>Data will be lost if you clear your browser history/cache.</li>
+            <li>Data does not follow you to other browsers or devices automatically.</li>
+          </ul>
+          <div class="help-tip"><strong>⚠ Important:</strong> Use <strong>Export &amp; Import</strong> (in the sidebar) to save a backup file regularly. Keep it somewhere safe — your Downloads folder, cloud storage, or a USB drive.</div>
+
+          <h4>Dashboard at a glance</h4>
+          <ul>
+            <li><strong>Stats row</strong> — monthly spend, annual projection, and renewals due this month.</li>
+            <li><strong>Spend by Category</strong> — horizontal bar chart showing where your money goes.</li>
+            <li><strong>Monthly Trend</strong> — 6-month sparkline of your total subscription spend.</li>
+            <li><strong>Upcoming Renewals</strong> — subscriptions billing in the next 30 days.</li>
+            <li><strong>Possible Savings</strong> — a cheaper alternative suggestion for your highest-cost subscription.</li>
+          </ul>
+
+          <h4>Navigation</h4>
+          <ul>
+            <li><strong>Subscriptions</strong> — add, edit, search, and manage all your subscriptions.</li>
+            <li><strong>Alternatives</strong> — browse cheaper alternatives matched to your services.</li>
+            <li><strong>Export &amp; Import</strong> — back up and restore your data.</li>
+            <li><strong>Settings</strong> — set your default currency and waste alert threshold.</li>
+          </ul>
+        </div>
+      </details>
       <div id="trust-banner"></div>
       <div id="waste-alert"></div>
       <div class="stats-row" id="stats-row"></div>
@@ -73,6 +106,32 @@
         </div>
         <button class="add-btn" id="addSubBtn">+ Add Subscription</button>
       </div>
+      <details class="help-block">
+        <summary>Managing your subscriptions</summary>
+        <div class="help-body">
+          <h4>Adding a subscription</h4>
+          <p>Click <strong>+ Add Subscription</strong> to open the form. Fill in the service name, cost, billing cycle, and next billing date, then click <strong>Save Subscription</strong>.</p>
+
+          <h4>Editing or deleting</h4>
+          <ul>
+            <li>Click <strong>Edit</strong> on any row to update the subscription details.</li>
+            <li>Click <strong>⋯</strong> to open the quick-action menu — change status to Active / Paused / Cancelled, or permanently delete the entry.</li>
+          </ul>
+
+          <h4>Search, filter &amp; sort</h4>
+          <p>Use the toolbar above the list to search by name, filter by category or status, or sort by name, cost, or upcoming renewal date.</p>
+
+          <h4>Starring</h4>
+          <p>Click the <strong>☆</strong> icon on any row to star a subscription. Starred items are highlighted for quick reference.</p>
+
+          <h4>Statuses</h4>
+          <ul>
+            <li><strong>Active</strong> — included in all spend calculations and charts.</li>
+            <li><strong>Paused</strong> — kept in your list but excluded from totals.</li>
+            <li><strong>Cancelled</strong> — marked as cancelled; excluded from totals.</li>
+          </ul>
+        </div>
+      </details>
       <div class="toolbar">
         <input type="text" class="search" id="subsSearch" placeholder="🔍  Search subscriptions…">
         <select class="filter-select" id="subsCategory">
@@ -102,6 +161,27 @@
           <p class="page-sub">Money-saving suggestions based on your subscriptions</p>
         </div>
       </div>
+      <details class="help-block">
+        <summary>About alternatives &amp; suggestions</summary>
+        <div class="help-body">
+          <h4>How suggestions work</h4>
+          <p>SubSight compares your active subscriptions against a list of well-known services. When a match is found, it suggests a cheaper or free alternative.</p>
+          <ul>
+            <li><strong>Matched suggestions</strong> — specific alternatives for services you subscribe to (e.g. Netflix → Amazon Prime Video).</li>
+            <li><strong>Category suggestions</strong> — general tips for subscription categories where no exact match was found.</li>
+          </ul>
+
+          <h4>Affiliate links</h4>
+          <p>Some links may be affiliate links. SubSight may earn a small commission if you sign up via a link — at no extra cost to you. This helps keep the site free.</p>
+
+          <h4>Tips for saving money</h4>
+          <ul>
+            <li>Consider switching annual billing to save up to 20% on many services.</li>
+            <li>Check whether family or group plans are available — they often halve the cost per person.</li>
+            <li>Pause rather than cancel services you use seasonally.</li>
+          </ul>
+        </div>
+      </details>
       <div id="alternatives-container"></div>
     </section>
 
@@ -112,6 +192,38 @@
           <p class="page-sub">Backup and restore your subscription data</p>
         </div>
       </div>
+      <details class="help-block">
+        <summary>How to back up and restore your data</summary>
+        <div class="help-body">
+          <h4>Why you need to export</h4>
+          <p>SubSight stores your data in your browser's local storage. Your data <strong>will be permanently lost</strong> if you:</p>
+          <ul>
+            <li>Clear your browser history, cache, or site data.</li>
+            <li>Use a different browser or a different device.</li>
+            <li>Reinstall your browser or operating system.</li>
+          </ul>
+          <div class="help-tip"><strong>⚠ Recommended:</strong> Export a JSON backup after making any significant changes. Store the file in a safe location such as your Documents folder, Dropbox, iCloud Drive, or Google Drive.</div>
+
+          <h4>Exporting JSON (full backup)</h4>
+          <p>Click <strong>Export JSON</strong> to download a complete backup of all your subscriptions and settings. This file can be imported back into SubSight at any time.</p>
+
+          <h4>Exporting CSV (spreadsheet)</h4>
+          <p>Click <strong>Export CSV</strong> to download your subscriptions as a spreadsheet. Open it in Excel, Numbers, or Google Sheets for custom analysis. <strong>Note:</strong> CSV files cannot be imported back into SubSight — use JSON for backups.</p>
+
+          <h4>Importing a backup</h4>
+          <ol style="padding-left:20px; margin-bottom:8px;">
+            <li>Choose <strong>Merge</strong> to add entries from the backup without overwriting your existing data, or <strong>Replace</strong> to start fresh from the backup.</li>
+            <li>Click <strong>Choose backup file…</strong> and select your saved <code style="background:var(--bg-raised);padding:1px 5px;border-radius:3px;">.json</code> file.</li>
+            <li>A confirmation message will show how many subscriptions were imported.</li>
+          </ol>
+
+          <h4>Merge vs Replace</h4>
+          <ul>
+            <li><strong>Merge</strong> — keeps all your current subscriptions and adds any new ones from the backup file. Duplicates (same ID) are skipped.</li>
+            <li><strong>Replace</strong> — deletes everything currently saved and loads only the subscriptions from the backup file.</li>
+          </ul>
+        </div>
+      </details>
       <div id="export-container"></div>
     </section>
 
@@ -122,6 +234,21 @@
           <p class="page-sub">Manage your SubSight preferences</p>
         </div>
       </div>
+      <details class="help-block">
+        <summary>Settings explained</summary>
+        <div class="help-body">
+          <h4>Default Currency</h4>
+          <p>Sets the currency that is pre-selected when you add a new subscription. You can still choose a different currency for individual subscriptions. Available currencies: GBP, USD, EUR, CAD, AUD.</p>
+          <p>Note: if you have subscriptions in multiple currencies, the dashboard will display "Multiple currencies" instead of a single total to avoid misleading conversions.</p>
+
+          <h4>Waste Alert Threshold</h4>
+          <p>When your total annual subscription spend exceeds this amount (in your default currency), a warning banner appears on the Dashboard to prompt a review. Set it to <strong>0</strong> to disable the alert, or a higher value if you have a larger budget.</p>
+
+          <h4>Danger Zone — Clear All Data</h4>
+          <p>This <strong>permanently deletes</strong> all your subscriptions and settings. This action cannot be undone.</p>
+          <div class="help-tip"><strong>⚠ Warning:</strong> Export a JSON backup from the <strong>Export &amp; Import</strong> page before clearing your data.</div>
+        </div>
+      </details>
       <div id="settings-container"></div>
     </section>
 
