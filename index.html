@@ -47,11 +47,84 @@
 
   <!-- Main content area -->
   <main class="main" id="main">
-    <section id="view-dashboard"     class="view active"></section>
-    <section id="view-subscriptions" class="view"></section>
-    <section id="view-alternatives"  class="view"></section>
-    <section id="view-export"        class="view"></section>
-    <section id="view-settings"      class="view"></section>
+
+    <section id="view-dashboard" class="view active">
+      <div class="view-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-sub" id="dashboard-date"></p>
+        </div>
+        <button class="add-btn" id="dashAddBtn">+ Add Subscription</button>
+      </div>
+      <div id="trust-banner"></div>
+      <div id="waste-alert"></div>
+      <div class="stats-row" id="stats-row"></div>
+      <div class="content-grid">
+        <div id="charts-col"></div>
+        <div class="right-col" id="right-col"></div>
+      </div>
+    </section>
+
+    <section id="view-subscriptions" class="view">
+      <div class="view-header">
+        <div>
+          <h1 class="page-title">Subscriptions</h1>
+          <p class="page-sub" id="subs-summary"></p>
+        </div>
+        <button class="add-btn" id="addSubBtn">+ Add Subscription</button>
+      </div>
+      <div class="toolbar">
+        <input type="text" class="search" id="subsSearch" placeholder="🔍  Search subscriptions…">
+        <select class="filter-select" id="subsCategory">
+          <option value="">All Categories</option>
+        </select>
+        <select class="filter-select" id="subsStatus">
+          <option value="">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Paused">Paused</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <select class="filter-select" id="subsSort">
+          <option value="name-asc">Sort: Name A–Z</option>
+          <option value="name-desc">Sort: Name Z–A</option>
+          <option value="cost-desc">Sort: Cost ↓</option>
+          <option value="cost-asc">Sort: Cost ↑</option>
+          <option value="renewal-asc">Sort: Next Renewal</option>
+        </select>
+      </div>
+      <div id="subsTableContainer"></div>
+    </section>
+
+    <section id="view-alternatives" class="view">
+      <div class="view-header">
+        <div>
+          <h1 class="page-title">Alternatives</h1>
+          <p class="page-sub">Money-saving suggestions based on your subscriptions</p>
+        </div>
+      </div>
+      <div id="alternatives-container"></div>
+    </section>
+
+    <section id="view-export" class="view">
+      <div class="view-header">
+        <div>
+          <h1 class="page-title">Export &amp; Import</h1>
+          <p class="page-sub">Backup and restore your subscription data</p>
+        </div>
+      </div>
+      <div id="export-container"></div>
+    </section>
+
+    <section id="view-settings" class="view">
+      <div class="view-header">
+        <div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-sub">Manage your SubSight preferences</p>
+        </div>
+      </div>
+      <div id="settings-container"></div>
+    </section>
+
   </main>
 
   <!-- Add/Edit modal -->
