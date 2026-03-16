@@ -452,13 +452,121 @@ function renderModal(sub) {
     return sel;
   }
 
-  // Name
+  // Name — wrapped in a relative container for the autocomplete dropdown
+  const nameWrapper = document.createElement('div');
+  nameWrapper.className = 'autocomplete-wrapper';
+
   const nameInput = document.createElement('input');
   nameInput.className = 'form-input';
   nameInput.type = 'text';
+  nameInput.autocomplete = 'off';
   nameInput.placeholder = 'e.g. Netflix, Spotify, Adobe CC…';
   if (isEdit) nameInput.value = sub.name;
-  grid.appendChild(makeField('Service Name *', nameInput, true));
+
+  const acDropdown = document.createElement('div');
+  acDropdown.className = 'autocomplete-dropdown';
+  acDropdown.style.display = 'none';
+
+  nameWrapper.appendChild(nameInput);
+  nameWrapper.appendChild(acDropdown);
+
+  // ── Autocomplete helpers ──────────────────────────────────────────────────
+
+  function toTitleCase(str) {
+    return str.replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  let acActiveIndex = -1;
+
+  function acHide() {
+    acDropdown.style.display = 'none';
+    acDropdown.innerHTML = '';
+    acActiveIndex = -1;
+  }
+
+  function acSelect(key) {
+    nameInput.value = toTitleCase(key);
+    if (KNOWN_SERVICE_CATEGORIES && KNOWN_SERVICE_CATEGORIES[key]) {
+      catSelect.value = KNOWN_SERVICE_CATEGORIES[key];
+    }
+    acHide();
+  }
+
+  function acShow(query) {
+    const q = query.toLowerCase();
+    const keys = Object.keys(KNOWN_SERVICES);
+    const matches = keys.filter(k => k.includes(q)).slice(0, 8);
+
+    if (matches.length === 0) { acHide(); return; }
+
+    acDropdown.innerHTML = '';
+    acActiveIndex = -1;
+
+    matches.forEach((key, idx) => {
+      const item = document.createElement('div');
+      item.className = 'autocomplete-item';
+      item.textContent = toTitleCase(key);
+      item.dataset.key = key;
+      item.addEventListener('mousedown', (e) => {
+        // mousedown fires before blur; prevent blur from hiding the dropdown first
+        e.preventDefault();
+        acSelect(key);
+      });
+      item.addEventListener('mouseover', () => {
+        acActiveIndex = idx;
+        acUpdateHighlight();
+      });
+      acDropdown.appendChild(item);
+    });
+
+    acDropdown.style.display = 'block';
+  }
+
+  function acUpdateHighlight() {
+    const items = acDropdown.querySelectorAll('.autocomplete-item');
+    items.forEach((item, i) => {
+      item.classList.toggle('autocomplete-item--active', i === acActiveIndex);
+    });
+  }
+
+  // Input event — filter and show
+  nameInput.addEventListener('input', () => {
+    const q = nameInput.value.trim();
+    if (q.length === 0) { acHide(); return; }
+    acShow(q);
+  });
+
+  // Keyboard navigation
+  nameInput.addEventListener('keydown', (e) => {
+    if (acDropdown.style.display === 'none') return;
+    const items = acDropdown.querySelectorAll('.autocomplete-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      acActiveIndex = Math.min(acActiveIndex + 1, items.length - 1);
+      acUpdateHighlight();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      acActiveIndex = Math.max(acActiveIndex - 1, 0);
+      acUpdateHighlight();
+    } else if (e.key === 'Enter') {
+      if (acActiveIndex >= 0 && items[acActiveIndex]) {
+        e.preventDefault();
+        acSelect(items[acActiveIndex].dataset.key);
+      }
+    } else if (e.key === 'Escape') {
+      acHide();
+    }
+  });
+
+  // Dismiss on outside click
+  document.addEventListener('click', function acOutsideClick(e) {
+    if (!nameWrapper.contains(e.target)) {
+      acHide();
+      document.removeEventListener('click', acOutsideClick);
+    }
+  });
+
+  grid.appendChild(makeField('Service Name *', nameWrapper, true));
 
   // Category
   const catSelect = makeSelect(CATEGORIES, isEdit ? sub.category : CATEGORIES[0]);
@@ -858,7 +966,6 @@ function renderSettings(settings) {
 
   threshSection.appendChild(threshField);
   threshSection.appendChild(threshSaveBtn);
-  threshSection.appendChild(threshSaved);
   container.appendChild(threshSection);
 
   // Section 3: Danger Zone

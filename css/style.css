@@ -10,8 +10,8 @@
   --border-mid: #334155;
   --text:       #e2e8f0;
   --text-muted: #94a3b8;
-  --text-dim:   #8899aa;   /* WCAG fix: was #64748b (~4.8:1), now slightly lighter */
-  --text-faint: #64748b;   /* WCAG fix: was #475569 (~3.8:1, fails AA); #64748b ~4.8:1 passes */
+  --text-dim:   #96a8bc;   /* WCAG AA: ≥4.5:1 on bg-raised (#1e293b) */
+  --text-faint: #768ba6;   /* WCAG AA: ≥4.5:1 on bg-panel (#111827) and bg-raised */
   --accent:     #38bdf8;
   --accent-btn: #0ea5e9;
   --amber:      #f59e0b;
@@ -193,7 +193,7 @@ input[type="radio"] {
 
 /* ── Stat cards ─────────────────────────────────────────── */
 .stat-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
-.stat-label { color: var(--text-dim); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+.stat-label { color: var(--text-dim); font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
 .stat-value { font-size: 32px; font-weight: 800; color: var(--text); line-height: 1; }
 .stat-value.accent { color: var(--accent); }
 .stat-sub { color: var(--text-faint); font-size: 12px; margin-top: 6px; }
@@ -241,7 +241,7 @@ input[type="radio"] {
   padding: 10px 12px; color: var(--text); font-size: 13px; width: 100%;
 }
 .form-input:focus, .form-select:focus { outline: none; border-color: var(--accent); }
-.form-label { font-size: 11px; font-weight: 600; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 6px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 6px; }
 .form-group { display: flex; flex-direction: column; }
 
 /* Form error */
@@ -281,7 +281,7 @@ input[type="radio"] {
 /* ── Table ──────────────────────────────────────────────── */
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th {
-  text-align: left; font-size: 11px; font-weight: 600; color: var(--text-faint);
+  text-align: left; font-size: 12px; font-weight: 600; color: var(--text-faint);
   letter-spacing: 1px; text-transform: uppercase; padding: 10px 12px;
   border-bottom: 1px solid var(--bg-raised);
 }
@@ -298,7 +298,7 @@ input[type="radio"] {
 /* sub-table alias for data-table */
 .sub-table { width: 100%; border-collapse: collapse; }
 .sub-table th {
-  text-align: left; font-size: 11px; font-weight: 600; color: var(--text-faint);
+  text-align: left; font-size: 12px; font-weight: 600; color: var(--text-faint);
   letter-spacing: 1px; text-transform: uppercase; padding: 10px 12px;
   border-bottom: 1px solid var(--bg-raised);
 }
@@ -392,6 +392,39 @@ input[type="radio"] {
 .form-grid .full { grid-column: 1 / -1; }
 .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
 
+/* ── Autocomplete dropdown ──────────────────────────────── */
+.autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
+.autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  z-index: 200;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.autocomplete-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.autocomplete-item:hover,
+.autocomplete-item--active {
+  background: var(--bg-hover);
+  color: var(--accent);
+}
+
 /* ── Alerts / empty states ──────────────────────────────── */
 .empty-state { text-align: center; padding: 64px 24px; color: var(--text-dim); }
 .empty-state h3 { font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
@@ -440,11 +473,11 @@ input[type="radio"] {
 .spark-bar { width: 100%; background: var(--border); border-radius: 3px 3px 0 0; }
 .spark-col.current .spark-bar { background: var(--accent); }
 .spark-bar.current { background: var(--accent); }    /* JS adds .current directly to bar */
-.spark-label { font-size: 10px; color: var(--text-faint); margin-top: 4px; text-align: center; }
+.spark-label { font-size: 11px; color: var(--text-faint); margin-top: 4px; text-align: center; }
 .spark-col.current .spark-label { color: var(--accent); }
 
 /* spark-month aliases for spark-label */
-.spark-month         { font-size: 10px; color: var(--text-faint); margin-top: 4px; text-align: center; }
+.spark-month         { font-size: 11px; color: var(--text-faint); margin-top: 4px; text-align: center; }
 .spark-month.current { color: var(--accent); }
 
 /* ── Dashboard extras ───────────────────────────────────── */
