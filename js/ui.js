@@ -782,4 +782,96 @@ function renderExport() {
   importSection.appendChild(resultDiv);
   container.appendChild(importSection);
 }
-function renderSettings(settings) { /* Task 17 */ }
+function renderSettings(settings) {
+  const container = document.getElementById('settings-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  function makeSection(extraClass) {
+    const s = document.createElement('div');
+    s.className = 'export-section' + (extraClass ? ' ' + extraClass : '');
+    return s;
+  }
+  function makeTitle(text) {
+    const t = document.createElement('div'); t.className = 'export-section-title'; t.textContent = text; return t;
+  }
+  function makeDesc(text) {
+    const d = document.createElement('div'); d.className = 'export-section-desc'; d.textContent = text; return d;
+  }
+  function makeSavedNote() {
+    const s = document.createElement('span'); s.className = 'settings-saved'; s.textContent = 'Saved!'; return s;
+  }
+  function showSaved(el) {
+    el.style.display = 'inline';
+    setTimeout(() => { el.style.display = 'none'; }, 2000);
+  }
+
+  // Section 1: Default Currency
+  const currSection = makeSection('');
+  currSection.appendChild(makeTitle('Default Currency'));
+  currSection.appendChild(makeDesc('Pre-fills the currency field when adding a new subscription.'));
+
+  const currField = document.createElement('div'); currField.className = 'settings-field';
+  const currLbl = document.createElement('label'); currLbl.className = 'settings-label'; currLbl.textContent = 'Currency';
+  const currSel = document.createElement('select'); currSel.className = 'settings-select';
+  CURRENCIES.forEach(c => {
+    const opt = document.createElement('option'); opt.value = c; opt.textContent = c;
+    if (c === settings.defaultCurrency) opt.selected = true;
+    currSel.appendChild(opt);
+  });
+  currField.appendChild(currLbl); currField.appendChild(currSel);
+
+  const currSaveBtn = document.createElement('button'); currSaveBtn.className = 'settings-save-btn'; currSaveBtn.textContent = 'Save';
+  const currSaved = makeSavedNote();
+  currSaveBtn.addEventListener('click', () => {
+    saveSettings({ defaultCurrency: currSel.value });
+    showSaved(currSaved);
+  });
+
+  currSection.appendChild(currField);
+  currSection.appendChild(currSaveBtn);
+  currSection.appendChild(currSaved);
+  container.appendChild(currSection);
+
+  // Section 2: Waste Alert Threshold
+  const threshSection = makeSection('');
+  threshSection.appendChild(makeTitle('Waste Alert Threshold'));
+  threshSection.appendChild(makeDesc('Show the waste alert on the dashboard when annual spend exceeds this amount (in your default currency).'));
+
+  const threshField = document.createElement('div'); threshField.className = 'settings-field';
+  const threshLbl = document.createElement('label'); threshLbl.className = 'settings-label'; threshLbl.textContent = 'Annual threshold';
+  const threshInput = document.createElement('input');
+  threshInput.className = 'settings-input'; threshInput.type = 'number'; threshInput.min = '0'; threshInput.step = '1';
+  threshInput.value = String(settings.wasteAlertThreshold ?? 1500);
+  threshField.appendChild(threshLbl); threshField.appendChild(threshInput);
+
+  const threshSaveBtn = document.createElement('button'); threshSaveBtn.className = 'settings-save-btn'; threshSaveBtn.textContent = 'Save';
+  const threshSaved = makeSavedNote();
+  threshSaveBtn.addEventListener('click', () => {
+    const val = Number(threshInput.value);
+    if (!isNaN(val) && val >= 0) {
+      saveSettings({ wasteAlertThreshold: val });
+      showSaved(threshSaved);
+    }
+  });
+
+  threshSection.appendChild(threshField);
+  threshSection.appendChild(threshSaveBtn);
+  threshSection.appendChild(threshSaved);
+  container.appendChild(threshSection);
+
+  // Section 3: Danger Zone
+  const dangerSection = makeSection('danger-zone');
+  dangerSection.appendChild(makeTitle('Danger Zone'));
+  dangerSection.appendChild(makeDesc('Permanently delete all subscription data and settings. This cannot be undone.'));
+
+  const clearBtn = document.createElement('button'); clearBtn.className = 'danger-btn'; clearBtn.textContent = 'Clear All Data';
+  clearBtn.addEventListener('click', () => {
+    if (confirm('Are you sure? This will permanently delete all your data and cannot be undone.')) {
+      clearAllData();
+      navigate('dashboard');
+    }
+  });
+  dangerSection.appendChild(clearBtn);
+  container.appendChild(dangerSection);
+}
