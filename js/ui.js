@@ -2,6 +2,15 @@
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
+// Toast notification — survives view re-renders (attached to body, not a view)
+function _showToast(msg, type) {
+  const t = document.createElement('div');
+  t.className = 'toast' + (type === 'error' ? ' toast-error' : '');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
 function _currencySymbol(code) {
   return { GBP: '£', USD: '$', EUR: '€', CAD: 'CA$', AUD: 'A$' }[code] || code;
 }
@@ -798,13 +807,6 @@ function renderSettings(settings) {
   function makeDesc(text) {
     const d = document.createElement('div'); d.className = 'export-section-desc'; d.textContent = text; return d;
   }
-  function makeSavedNote() {
-    const s = document.createElement('span'); s.className = 'settings-saved'; s.textContent = 'Saved!'; return s;
-  }
-  function showSaved(el) {
-    el.style.display = 'inline';
-    setTimeout(() => { el.style.display = 'none'; }, 2000);
-  }
 
   // Section 1: Default Currency
   const currSection = makeSection('');
@@ -822,15 +824,13 @@ function renderSettings(settings) {
   currField.appendChild(currLbl); currField.appendChild(currSel);
 
   const currSaveBtn = document.createElement('button'); currSaveBtn.className = 'settings-save-btn'; currSaveBtn.textContent = 'Save';
-  const currSaved = makeSavedNote();
   currSaveBtn.addEventListener('click', () => {
     saveSettings({ defaultCurrency: currSel.value });
-    showSaved(currSaved);
+    _showToast('Currency saved');
   });
 
   currSection.appendChild(currField);
   currSection.appendChild(currSaveBtn);
-  currSection.appendChild(currSaved);
   container.appendChild(currSection);
 
   // Section 2: Waste Alert Threshold
@@ -846,12 +846,13 @@ function renderSettings(settings) {
   threshField.appendChild(threshLbl); threshField.appendChild(threshInput);
 
   const threshSaveBtn = document.createElement('button'); threshSaveBtn.className = 'settings-save-btn'; threshSaveBtn.textContent = 'Save';
-  const threshSaved = makeSavedNote();
   threshSaveBtn.addEventListener('click', () => {
     const val = Number(threshInput.value);
     if (!isNaN(val) && val >= 0) {
       saveSettings({ wasteAlertThreshold: val });
-      showSaved(threshSaved);
+      _showToast('Threshold saved');
+    } else {
+      _showToast('Enter a valid number', 'error');
     }
   });
 
