@@ -1278,3 +1278,130 @@ html[data-theme="light"] .beta-banner strong { color: #b45309; }
   max-width: 440px;
   line-height: 1.6;
 }
+
+/* ── Mobile sticky header ────────────────────────────────── */
+.mobile-header {
+  display: none;
+}
+@media (max-width: 640px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    z-index: 20;
+  }
+  /* Push main content below the mobile header */
+  .main {
+    padding-top: calc(56px + 16px);
+  }
+}
+.mobile-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+}
+.mobile-header-wordmark {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+.mobile-header-page {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* ── Dashboard hero banner (desktop only) ───────────────── */
+.dashboard-banner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 20px 28px;
+  margin-bottom: 20px;
+}
+.dashboard-banner-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.dashboard-banner-wordmark {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.dashboard-banner-tagline {
+  font-size: 8px;
+  letter-spacing: 1.8px;
+  color: var(--text-faint);
+  font-weight: 500;
+  margin-top: 3px;
+}
+.dashboard-banner-headline {
+  text-align: center;
+}
+.dashboard-banner-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.dashboard-banner-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.dashboard-banner-privacy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+.dashboard-banner-icon {
+  color: var(--accent);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.dashboard-banner-privacy-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+.dashboard-banner-privacy-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Light mode dashboard banner */
+html[data-theme="light"] .dashboard-banner {
+  background: linear-gradient(135deg, #f0f6ff 0%, #ffffff 100%);
+  border-color: var(--border);
+  border-left-color: var(--accent);
+}
+
+/* Hide dashboard banner on mobile (sidebar hidden, mobile header takes over) */
+@media (max-width: 640px) {
+  .dashboard-banner { display: none; }
+}
