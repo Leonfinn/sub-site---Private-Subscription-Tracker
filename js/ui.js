@@ -105,7 +105,20 @@ function renderSubscriptionsList(subs) {
   // Render
   container.innerHTML = '';
   if (filtered.length === 0) {
-    container.appendChild(_emptyState('No subscriptions match your filters.'));
+    const emptyWrap = document.createElement('div');
+    emptyWrap.className = 'page-empty-state';
+    emptyWrap.innerHTML = `
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="empty-state-icon">
+        <rect x="8" y="14" width="40" height="28" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+        <path d="M8 22h40" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <rect x="16" y="28" width="10" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+        <rect x="16" y="33" width="6" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+        <circle cx="42" cy="42" r="8" fill="var(--bg-panel)" stroke="currentColor" stroke-width="2"/>
+        <path d="M42 38v4M42 44v1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="empty-state-text">No subscriptions found. Add your first one with the button above.</div>
+    `;
+    container.appendChild(emptyWrap);
     return;
   }
 
@@ -264,7 +277,7 @@ function renderDashboard(subs, settings) {
       banner.className = 'trust-banner';
       const text = document.createElement('div');
       text.className = 'trust-banner-text';
-      text.innerHTML = '🔒 <strong>Your data never leaves this device.</strong> SubSight runs entirely in your browser — no accounts, no servers, no tracking.';
+      text.innerHTML = '🔒 <strong>Your data never leaves this device.</strong> Sub-Site runs entirely in your browser — no accounts, no servers, no tracking.';
       const dismiss = document.createElement('span');
       dismiss.className = 'trust-dismiss';
       dismiss.textContent = '×';
@@ -327,6 +340,90 @@ function renderDashboard(subs, settings) {
   if (chartsCol) {
     chartsCol.innerHTML = '';
 
+    // Hero feature panels — only shown when no subscriptions yet
+    if (subs.filter(s => s.status === 'active').length === 0) {
+      const hero = document.createElement('div');
+      hero.className = 'hero-features';
+
+      const features = [
+        {
+          icon: `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="20" width="48" height="30" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+            <rect x="8" y="28" width="48" height="8" fill="currentColor" opacity="0.15"/>
+            <path d="M16 38h8M16 42h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M44 14l8 6-8 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 14h32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>`,
+          title: 'ADD SUBSCRIPTIONS',
+          desc: 'Track every subscription in one place — streaming, software, fitness and more.'
+        },
+        {
+          icon: `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="16" width="44" height="38" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+            <path d="M10 26h44" stroke="currentColor" stroke-width="2" opacity="0.4"/>
+            <rect x="20" y="10" width="4" height="12" rx="2" fill="currentColor"/>
+            <rect x="40" y="10" width="4" height="12" rx="2" fill="currentColor"/>
+            <rect x="18" y="32" width="8" height="8" rx="1.5" fill="currentColor" opacity="0.5"/>
+            <rect x="28" y="32" width="8" height="8" rx="1.5" fill="currentColor" opacity="0.8"/>
+            <rect x="38" y="32" width="8" height="8" rx="1.5" fill="currentColor" opacity="0.3"/>
+            <circle cx="46" cy="46" r="8" fill="var(--bg-panel)" stroke="currentColor" stroke-width="2"/>
+            <path d="M46 42v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>`,
+          title: 'TRACK RENEWALS',
+          desc: 'Never be surprised by a renewal. See upcoming charges weeks in advance.'
+        },
+        {
+          icon: `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 48l12-14 10 8 12-18 10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="48" cy="20" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M48 16v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M44 24c0 0 1.5 2.5 4 2.5s4-2.5 4-2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>`,
+          title: 'SAVE MONEY',
+          desc: 'Spot waste and find cheaper alternatives. Sub-Site shows you where to cut costs.'
+        }
+      ];
+
+      features.forEach((f, i) => {
+        const panel = document.createElement('div');
+        panel.className = 'hero-panel hero-panel-btn';
+        panel.setAttribute('role', 'button');
+        panel.setAttribute('tabindex', '0');
+        panel.innerHTML = `
+          <div class="hero-icon">${f.icon}</div>
+          <div class="hero-panel-title">${f.title}</div>
+          <div class="hero-panel-desc">${f.desc}</div>
+        `;
+        // Wire click action
+        if (i === 0) {
+          // ADD SUBSCRIPTIONS → open the add modal
+          panel.addEventListener('click', () => openModal(null));
+          panel.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(null); } });
+          panel.title = 'Click to add your first subscription';
+        } else if (i === 1) {
+          // TRACK RENEWALS → go to Subscriptions page, sort by renewal date
+          panel.addEventListener('click', () => {
+            navigate('subscriptions');
+            // Set sort dropdown to renewal after navigation (next tick)
+            setTimeout(() => {
+              const sortEl = document.getElementById('subsSort');
+              if (sortEl) { sortEl.value = 'renewal-asc'; sortEl.dispatchEvent(new Event('change')); }
+            }, 50);
+          });
+          panel.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); panel.click(); } });
+          panel.title = 'Click to view subscriptions sorted by renewal date';
+        } else if (i === 2) {
+          // SAVE MONEY → go to Alternatives page
+          panel.addEventListener('click', () => navigate('alternatives'));
+          panel.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('alternatives'); } });
+          panel.title = 'Click to see money-saving alternatives';
+        }
+        hero.appendChild(panel);
+      });
+
+      chartsCol.appendChild(hero);
+    }
+
     const catCard = document.createElement('div'); catCard.className = 'card';
     const catTitle = document.createElement('div'); catTitle.className = 'card-title'; catTitle.textContent = 'Spend by Category';
     catCard.appendChild(catTitle);
@@ -344,6 +441,29 @@ function renderDashboard(subs, settings) {
   const rightCol = document.getElementById('right-col');
   if (rightCol) {
     rightCol.innerHTML = '';
+
+    // Branded identity card at top of right column
+    const brandCard = document.createElement('div');
+    brandCard.className = 'card brand-card';
+    brandCard.innerHTML = `
+      <div class="brand-card-logo">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="20" cy="20" r="19" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="11" y="21" width="3" height="8" rx="0.5" fill="currentColor"/>
+          <rect x="16" y="21" width="3" height="8" rx="0.5" fill="currentColor"/>
+          <rect x="21" y="21" width="3" height="8" rx="0.5" fill="currentColor"/>
+          <rect x="26" y="21" width="3" height="8" rx="0.5" fill="currentColor"/>
+          <rect x="10" y="30" width="20" height="2" rx="0.5" fill="currentColor"/>
+          <polygon points="20,10 30,19 10,19" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="brand-card-text">
+        <div class="brand-card-name">SUB-SITE</div>
+        <div class="brand-card-sub">Subscription Tracker</div>
+      </div>
+      <div class="brand-card-tagline">Track · Analyse · Save</div>
+    `;
+    rightCol.appendChild(brandCard);
 
     // Upcoming renewals card
     const renewCard = document.createElement('div'); renewCard.className = 'card';
@@ -381,15 +501,14 @@ function renderDashboard(subs, settings) {
     }
     if (found) {
       const { sub: matchSub, data } = found;
-      const body = document.createElement('div'); body.style.fontSize = '12px'; body.style.color = '#94a3b8'; body.style.lineHeight = '1.6';
-      const costSpan = document.createElement('strong'); costSpan.style.color = '#e2e8f0';
+      const body = document.createElement('div'); body.className = 'savings-body';
+      const costSpan = document.createElement('strong'); costSpan.className = 'savings-amount';
       costSpan.textContent = _currencySymbol(matchSub.currency) + parseFloat(matchSub.cost).toFixed(2) + '/mo';
       body.appendChild(document.createTextNode('You\'re paying '));
       body.appendChild(costSpan);
       body.appendChild(document.createTextNode(' for ' + matchSub.name + '. '));
       const altLink = document.createElement('a');
       altLink.href = '#';
-      altLink.style.color = '#38bdf8';
       altLink.textContent = data.alt;
       altLink.addEventListener('click', (e) => { e.preventDefault(); navigate('alternatives'); });
       body.appendChild(altLink);
@@ -690,7 +809,7 @@ function renderAlternatives(subs) {
   // Disclosure
   const disc = document.createElement('div');
   disc.className = 'disclosure';
-  disc.textContent = 'SubSight may earn a small commission if you sign up via these links, at no extra cost to you. Suggestions are based on your actual subscriptions.';
+  disc.textContent = 'Sub-Site may earn a small commission if you sign up via these links, at no extra cost to you. Suggestions are based on your actual subscriptions.';
   container.appendChild(disc);
 
   // Tier 1: known service matches
@@ -714,7 +833,7 @@ function renderAlternatives(subs) {
   if (tier1.length > 0) {
     const tier1Label = document.createElement('div');
     tier1Label.className = 'affiliate-tier-label';
-    tier1Label.textContent = 'Matched to your subscriptions';
+    tier1Label.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M2 5h10M9 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11H4M7 8l-3 3 3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched to your subscriptions';
     container.appendChild(tier1Label);
 
     const grid1 = document.createElement('div');
@@ -768,7 +887,7 @@ function renderAlternatives(subs) {
   if (tier2Categories.length > 0) {
     const tier2Label = document.createElement('div');
     tier2Label.className = 'affiliate-tier-label';
-    tier2Label.textContent = 'General category suggestions';
+    tier2Label.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M8 2a4 4 0 0 1 2 7.46V11H6V9.46A4 4 0 0 1 8 2z" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M6 12h4M6.5 13.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>General category suggestions';
     container.appendChild(tier2Label);
 
     const grid2 = document.createElement('div');
@@ -818,7 +937,7 @@ function renderExport() {
   // Section 1: Export JSON
   const jsonSection = document.createElement('div');
   jsonSection.className = 'export-section';
-  const jsonTitle = document.createElement('div'); jsonTitle.className = 'export-section-title'; jsonTitle.textContent = 'Export JSON';
+  const jsonTitle = document.createElement('div'); jsonTitle.className = 'export-section-title'; jsonTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M8 5v4M6 7l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Export as JSON';
   const jsonDesc = document.createElement('div'); jsonDesc.className = 'export-section-desc'; jsonDesc.textContent = 'Download a full backup of all your data, including settings. Use this to move your data to another device.';
   const jsonBtnRow = document.createElement('div'); jsonBtnRow.className = 'export-btn-row';
   const jsonBtn = document.createElement('button'); jsonBtn.className = 'export-btn'; jsonBtn.textContent = '⤓ Export JSON';
@@ -831,7 +950,7 @@ function renderExport() {
   // Section 2: Export CSV
   const csvSection = document.createElement('div');
   csvSection.className = 'export-section';
-  const csvTitle = document.createElement('div'); csvTitle.className = 'export-section-title'; csvTitle.textContent = 'Export CSV';
+  const csvTitle = document.createElement('div'); csvTitle.className = 'export-section-title'; csvTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M1 7h14M6 3v10" stroke="currentColor" stroke-width="1.2" opacity="0.5"/></svg>Export as CSV';
   const csvDesc = document.createElement('div'); csvDesc.className = 'export-section-desc'; csvDesc.textContent = 'Download your subscriptions as a spreadsheet. Useful for analysis in Excel or Google Sheets.';
   const csvBtnRow = document.createElement('div'); csvBtnRow.className = 'export-btn-row';
   const csvBtn = document.createElement('button'); csvBtn.className = 'export-btn'; csvBtn.textContent = '⤓ Export CSV';
@@ -843,7 +962,7 @@ function renderExport() {
   // Section 3: Import JSON
   const importSection = document.createElement('div');
   importSection.className = 'export-section';
-  const impTitle = document.createElement('div'); impTitle.className = 'export-section-title'; impTitle.textContent = 'Import JSON';
+  const impTitle = document.createElement('div'); impTitle.className = 'export-section-title'; impTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M8 10V4M6 6l2-2 2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor" opacity="0.4"/></svg>Import Data';
   const impDesc = document.createElement('div'); impDesc.className = 'export-section-desc'; impDesc.textContent = 'Restore from a backup file. Choose whether to merge with or replace your existing data.';
 
   // Mode radio buttons
@@ -918,7 +1037,9 @@ function renderSettings(settings) {
 
   // Section 1: Default Currency
   const currSection = makeSection('');
-  currSection.appendChild(makeTitle('Default Currency'));
+  const currTitle = makeTitle('');
+  currTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v1.5M8 9.5V11M6.5 6.5a1.5 1.5 0 0 1 3 0c0 1-1.5 1.5-1.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Default Currency';
+  currSection.appendChild(currTitle);
   currSection.appendChild(makeDesc('Pre-fills the currency field when adding a new subscription.'));
 
   const currField = document.createElement('div'); currField.className = 'settings-field';
@@ -943,7 +1064,9 @@ function renderSettings(settings) {
 
   // Section 2: Waste Alert Threshold
   const threshSection = makeSection('');
-  threshSection.appendChild(makeTitle('Waste Alert Threshold'));
+  const threshTitle = makeTitle('');
+  threshTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M2 12l3-4 3 2 3-5 3-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="4" r="2" fill="currentColor" opacity="0.4"/></svg>Waste Alert Threshold';
+  threshSection.appendChild(threshTitle);
   threshSection.appendChild(makeDesc('Show the waste alert on the dashboard when annual spend exceeds this amount (in your default currency).'));
 
   const threshField = document.createElement('div'); threshField.className = 'settings-field';
@@ -970,7 +1093,9 @@ function renderSettings(settings) {
 
   // Section 3: Danger Zone
   const dangerSection = makeSection('danger-zone');
-  dangerSection.appendChild(makeTitle('Danger Zone'));
+  const dangerTitle = makeTitle('');
+  dangerTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M8 2L2 13h12L8 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/><path d="M8 6v3M8 11v1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Danger Zone';
+  dangerSection.appendChild(dangerTitle);
   dangerSection.appendChild(makeDesc('Permanently delete all subscription data and settings. This cannot be undone.'));
 
   const clearBtn = document.createElement('button'); clearBtn.className = 'danger-btn'; clearBtn.textContent = 'Clear All Data';

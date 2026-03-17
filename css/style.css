@@ -29,6 +29,26 @@
   --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* ── Light mode overrides ───────────────────────────────── */
+html[data-theme="light"] {
+  --bg-base:    #f0f4f8;
+  --bg-panel:   #ffffff;
+  --bg-raised:  #e8edf4;
+  --bg-hover:   #d8e4f0;
+  --border:     #b0c4d8;
+  --border-mid: #c8d8e8;
+  --text:       #1a2332;
+  --text-muted: #3d5166;
+  --text-dim:   #4a6278;
+  --text-faint: #556d88;   /* darkened from #5a7490: 4.54:1 on bg-raised, 4.84 on bg-base, 5.34 on bg-panel */
+  --accent:     #026aa1;   /* darkened from #0284c7: 4.55:1 on bg-hover, 4.99 on bg-raised, 5.31 on bg-base, 5.87 on bg-panel */
+  --accent-btn: #0369a1;
+  --amber:      #b45309;
+  --green:      #16a34a;
+  --red:        #dc2626;
+  --violet:     #4f46e5;
+}
+
 /* ── Reset ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; }
@@ -50,13 +70,13 @@ select:focus-visible,
 textarea:focus-visible,
 a:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid #38bdf8;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 /* WCAG 2.2 AA — radio buttons visible on dark backgrounds */
 input[type="radio"] {
-  accent-color: #38bdf8;
+  accent-color: var(--accent);
 }
 
 /* ── Layout ────────────────────────────────────────────── */
@@ -161,7 +181,16 @@ input[type="radio"] {
 .content-grid {
   display: grid;
   grid-template-columns: 1fr 320px;
-  gap: 20px;
+  gap: 16px;
+  align-items: start;
+}
+
+/* Cards stacked inside dashboard columns get uniform spacing */
+#charts-col,
+#right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* ── Stats row ──────────────────────────────────────────── */
@@ -361,9 +390,13 @@ input[type="radio"] {
   border-radius: var(--radius); padding: 12px 16px; margin-bottom: 24px;
   display: flex; align-items: center; justify-content: space-between;
 }
-.trust-banner-text { font-size: 13px; color: #93c5fd; }
+.trust-banner-text { font-size: 13px; color: var(--text-dim); }
 .trust-banner-text strong { color: var(--accent); }
 .trust-banner-close { color: var(--text-faint); font-size: 20px; background: none; border: none; cursor: pointer; padding: 0 4px; line-height: 1; }
+
+/* ── Possible savings card ──────────────────────────────── */
+.savings-body { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.savings-amount { color: var(--text); }
 
 /* trust-dismiss alias for trust-banner-close */
 .trust-dismiss { color: var(--text-faint); font-size: 20px; background: none; border: none; cursor: pointer; padding: 0 4px; line-height: 1; }
@@ -522,7 +555,7 @@ input[type="radio"] {
 .affiliate-card-title {
   font-size: 15px;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text);
   margin-bottom: 6px;
 }
 
@@ -598,7 +631,7 @@ input[type="radio"] {
 .export-section-title {
   font-size: 15px;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text);
   margin-bottom: 6px;
 }
 
@@ -781,6 +814,103 @@ input[type="radio"] {
 }
 .help-body .help-tip strong { color: var(--amber); }
 
+/* ── Dark mode toggle switch ─────────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.theme-toggle-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex: 1;
+}
+
+/* The toggle track */
+.toggle-track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--bg-raised);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+  flex-shrink: 0;
+}
+
+/* The toggle thumb */
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform 0.25s, background 0.25s;
+}
+
+/* When dark mode is active (default), thumb left; when light mode, thumb right */
+html[data-theme="light"] .toggle-track {
+  background: var(--accent);
+  border-color: var(--accent-btn);
+}
+
+html[data-theme="light"] .toggle-thumb {
+  transform: translateX(20px);
+  background: #ffffff;
+}
+
+/* Icon inside toggle — sun/moon */
+.toggle-icon {
+  font-size: 13px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ── Light mode specific tweaks ─────────────────────────── */
+html[data-theme="light"] .stat-card {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+html[data-theme="light"] .bar-fill {
+  opacity: 0.85;
+}
+
+html[data-theme="light"] .help-block {
+  border-color: var(--border);
+  background: var(--bg-raised);
+}
+
+html[data-theme="light"] .modal-box {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+html[data-theme="light"] .trust-banner {
+  background: #fef9c3;
+  border-color: #ca8a04;
+  color: #713f12;
+}
+html[data-theme="light"] .trust-banner-text { color: #5c4a1e; }
+html[data-theme="light"] .trust-banner-text strong { color: #713f12; }
+
+html[data-theme="light"] .waste-alert {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #7f1d1d;
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 768px) {
   body { flex-direction: column; }
@@ -828,4 +958,184 @@ input[type="radio"] {
 
   .data-table th:nth-child(2),
   .data-table td:nth-child(2) { display: none; } /* hide category on mobile */
+}
+
+/* Mobile: show toggle in bottom bar footer area */
+@media (max-width: 640px) {
+  .theme-toggle {
+    justify-content: center;
+    padding: 8px 16px;
+  }
+}
+
+/* ── Sidebar logo enhancements ──────────────────────────── */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px 24px;
+}
+.sidebar-logo-mark {
+  color: var(--accent);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.sidebar-logo-text {
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+.sidebar-tagline {
+  display: block;
+  font-size: 9px;
+  color: var(--text-faint);
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ── Hero feature panels ─────────────────────────────────── */
+.hero-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.hero-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 16px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.hero-panel:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.hero-icon {
+  color: var(--accent);
+  opacity: 0.9;
+  line-height: 0;
+}
+.hero-panel-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text);
+}
+.hero-panel-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ── Brand card (right column) ───────────────────────────── */
+.brand-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 16px;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-raised) 100%);
+  border-color: var(--accent);
+}
+.brand-card-logo {
+  color: var(--accent);
+  line-height: 0;
+}
+.brand-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.brand-card-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+.brand-card-sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.brand-card-tagline {
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 1px;
+}
+
+/* ── Nav icon alignment ──────────────────────────────────── */
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  flex-shrink: 0;
+}
+.nav-icon svg {
+  display: block;
+}
+
+/* Light mode brand card */
+html[data-theme="light"] .brand-card {
+  background: linear-gradient(135deg, #f0f6ff 0%, #e0eaf5 100%);
+  border-color: var(--accent);
+}
+
+/* Responsive hero panels */
+@media (max-width: 640px) {
+  .hero-features {
+    grid-template-columns: 1fr;
+  }
+  .hero-icon svg {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Hero panels as interactive buttons */
+.hero-panel-btn {
+  cursor: pointer;
+}
+.hero-panel-btn:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* ── Page empty state ────────────────────────────────────── */
+.page-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 24px;
+  text-align: center;
+}
+.empty-state-icon {
+  color: var(--text-faint);
+  opacity: 0.6;
+}
+.empty-state-text {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* ── Export / Settings section title icons ───────────────── */
+.export-section-title,
+.settings-section-title,
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0;
 }

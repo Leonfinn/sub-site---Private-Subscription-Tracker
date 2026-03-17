@@ -1,4 +1,47 @@
 // js/app.js
+
+/* ── Theme management ─────────────────────────────────── */
+const THEME_KEY = 'subsite_theme';
+
+function _applyTheme(mode) {
+  if (mode === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  // Update all toggle icons and aria state
+  const icon = document.getElementById('themeIcon');
+  const label = document.getElementById('themeLabel');
+  const toggle = document.getElementById('themeToggle');
+  const mobileToggle = document.getElementById('themeToggleMobile');
+  if (mode === 'light') {
+    if (icon) icon.textContent = '🌙';
+    if (label) label.textContent = 'Dark mode';
+    if (toggle) toggle.setAttribute('aria-checked', 'true');
+    if (mobileToggle) { mobileToggle.childNodes[0].textContent = '🌙'; }
+  } else {
+    if (icon) icon.textContent = '☀️';
+    if (label) label.textContent = 'Light mode';
+    if (toggle) toggle.setAttribute('aria-checked', 'false');
+    if (mobileToggle) { mobileToggle.childNodes[0].textContent = '☀️'; }
+  }
+}
+
+function _toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  localStorage.setItem(THEME_KEY, next);
+  _applyTheme(next);
+}
+
+// Apply saved theme immediately (before DOM ready to avoid flash)
+(function() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved !== 'dark') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+})();
+
 function initApp() {
   if (!localStorage.getItem(KEYS.VERSION)) {
     localStorage.setItem(KEYS.VERSION, SCHEMA_VERSION);
@@ -11,6 +54,21 @@ function initApp() {
     btn.addEventListener('click', () => navigate(btn.dataset.view));
   });
   document.addEventListener('subsight:updated', () => renderCurrentView());
+
+  // Wire theme toggle(s)
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', _toggleTheme);
+    themeToggle.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); _toggleTheme(); }
+    });
+  }
+  const themeToggleMobile = document.getElementById('themeToggleMobile');
+  if (themeToggleMobile) {
+    themeToggleMobile.addEventListener('click', _toggleTheme);
+  }
+  // Apply correct initial state for icons/labels
+  _applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 }
 
 let _currentView = 'dashboard';

@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+    // Apply saved theme before CSS paints to prevent flash
+    (function(){
+      var t=localStorage.getItem('subsite_theme');
+      if(t!=='dark'){document.documentElement.setAttribute('data-theme','light');}
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SubSight — Subscription Tracker</title>
+  <title>Sub-Site | Subscription Tracker</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,26 +18,48 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      SUBSIGHT
-      <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
+      <div class="sidebar-logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <!-- Bank building -->
+          <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+          <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-text">SUB-SITE</div>
+        <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
+      </div>
     </div>
     <nav class="sidebar-nav">
       <button class="nav-item active" data-view="dashboard">
-        <span class="nav-icon">◈</span> Dashboard
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span> Dashboard
       </button>
       <button class="nav-item" data-view="subscriptions">
-        <span class="nav-icon">≡</span> Subscriptions
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="2" rx="1" fill="currentColor"/><rect x="2" y="7" width="12" height="2" rx="1" fill="currentColor"/><rect x="2" y="11" width="8" height="2" rx="1" fill="currentColor"/></svg></span> Subscriptions
       </button>
       <button class="nav-item" data-view="alternatives">
-        <span class="nav-icon">↗</span> Alternatives
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13L13 3M13 3H7M13 3V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Alternatives
       </button>
       <button class="nav-item" data-view="export">
-        <span class="nav-icon">⤓</span> Export
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor"/></svg></span> Export
       </button>
       <button class="nav-item" data-view="settings">
-        <span class="nav-icon">◎</span> Settings
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> Settings
       </button>
     </nav>
+    <!-- Dark/Light mode toggle -->
+    <div class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="Toggle light mode" tabindex="0">
+      <span class="toggle-icon" id="themeIcon">☀️</span>
+      <span class="theme-toggle-label" id="themeLabel">Light mode</span>
+      <div class="toggle-track" id="toggleTrack">
+        <div class="toggle-thumb" id="toggleThumb"></div>
+      </div>
+    </div>
     <div class="sidebar-footer">
       🔒 100% private — all data stored locally on your device. Nothing is sent to any server.
     </div>
@@ -38,11 +67,12 @@
 
   <!-- Mobile bottom tab bar -->
   <nav class="bottom-nav" id="bottomNav">
-    <button class="bottom-nav-item active" data-view="dashboard">◈<span>Dashboard</span></button>
-    <button class="bottom-nav-item" data-view="subscriptions">≡<span>Subs</span></button>
-    <button class="bottom-nav-item" data-view="alternatives">↗<span>Deals</span></button>
-    <button class="bottom-nav-item" data-view="export">⤓<span>Export</span></button>
-    <button class="bottom-nav-item" data-view="settings">◎<span>Settings</span></button>
+    <button class="bottom-nav-item active" data-view="dashboard"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span><span>Dashboard</span></button>
+    <button class="bottom-nav-item" data-view="subscriptions"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="2" rx="1" fill="currentColor"/><rect x="2" y="7" width="12" height="2" rx="1" fill="currentColor"/><rect x="2" y="11" width="8" height="2" rx="1" fill="currentColor"/></svg></span><span>Subs</span></button>
+    <button class="bottom-nav-item" data-view="alternatives"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13L13 3M13 3H7M13 3V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Deals</span></button>
+    <button class="bottom-nav-item" data-view="export"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor"/></svg></span><span>Export</span></button>
+    <button class="bottom-nav-item" data-view="settings"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Settings</span></button>
+    <button class="bottom-nav-item" id="themeToggleMobile" aria-label="Toggle light/dark mode">☀️<span>Theme</span></button>
   </nav>
 
   <!-- Main content area -->
@@ -57,10 +87,10 @@
         <button class="add-btn" id="dashAddBtn">+ Add Subscription</button>
       </div>
       <details class="help-block">
-        <summary>How to use SubSight</summary>
+        <summary>How to use Sub-Site</summary>
         <div class="help-body">
-          <h4>What is SubSight?</h4>
-          <p>SubSight is a <strong>privacy-first subscription tracker</strong> that runs entirely in your browser. No account is needed — your data is never sent to any server.</p>
+          <h4>What is Sub-Site?</h4>
+          <p>Sub-Site is a <strong>privacy-first subscription tracker</strong> that runs entirely in your browser. No account is needed — your data is never sent to any server.</p>
 
           <h4>Your data lives in your browser</h4>
           <p>All subscriptions are stored in your browser's local storage. This means:</p>
@@ -165,14 +195,14 @@
         <summary>About alternatives &amp; suggestions</summary>
         <div class="help-body">
           <h4>How suggestions work</h4>
-          <p>SubSight compares your active subscriptions against a list of well-known services. When a match is found, it suggests a cheaper or free alternative.</p>
+          <p>Sub-Site compares your active subscriptions against a list of well-known services. When a match is found, it suggests a cheaper or free alternative.</p>
           <ul>
             <li><strong>Matched suggestions</strong> — specific alternatives for services you subscribe to (e.g. Netflix → Amazon Prime Video).</li>
             <li><strong>Category suggestions</strong> — general tips for subscription categories where no exact match was found.</li>
           </ul>
 
           <h4>Affiliate links</h4>
-          <p>Some links may be affiliate links. SubSight may earn a small commission if you sign up via a link — at no extra cost to you. This helps keep the site free.</p>
+          <p>Some links may be affiliate links. Sub-Site may earn a small commission if you sign up via a link — at no extra cost to you. This helps keep the site free.</p>
 
           <h4>Tips for saving money</h4>
           <ul>
@@ -196,7 +226,7 @@
         <summary>How to back up and restore your data</summary>
         <div class="help-body">
           <h4>Why you need to export</h4>
-          <p>SubSight stores your data in your browser's local storage. Your data <strong>will be permanently lost</strong> if you:</p>
+          <p>Sub-Site stores your data in your browser's local storage. Your data <strong>will be permanently lost</strong> if you:</p>
           <ul>
             <li>Clear your browser history, cache, or site data.</li>
             <li>Use a different browser or a different device.</li>
@@ -205,10 +235,10 @@
           <div class="help-tip"><strong>⚠ Recommended:</strong> Export a JSON backup after making any significant changes. Store the file in a safe location such as your Documents folder, Dropbox, iCloud Drive, or Google Drive.</div>
 
           <h4>Exporting JSON (full backup)</h4>
-          <p>Click <strong>Export JSON</strong> to download a complete backup of all your subscriptions and settings. This file can be imported back into SubSight at any time.</p>
+          <p>Click <strong>Export JSON</strong> to download a complete backup of all your subscriptions and settings. This file can be imported back into Sub-Site at any time.</p>
 
           <h4>Exporting CSV (spreadsheet)</h4>
-          <p>Click <strong>Export CSV</strong> to download your subscriptions as a spreadsheet. Open it in Excel, Numbers, or Google Sheets for custom analysis. <strong>Note:</strong> CSV files cannot be imported back into SubSight — use JSON for backups.</p>
+          <p>Click <strong>Export CSV</strong> to download your subscriptions as a spreadsheet. Open it in Excel, Numbers, or Google Sheets for custom analysis. <strong>Note:</strong> CSV files cannot be imported back into Sub-Site — use JSON for backups.</p>
 
           <h4>Importing a backup</h4>
           <ol style="padding-left:20px; margin-bottom:8px;">
@@ -231,7 +261,7 @@
       <div class="view-header">
         <div>
           <h1 class="page-title">Settings</h1>
-          <p class="page-sub">Manage your SubSight preferences</p>
+          <p class="page-sub">Manage your Sub-Site preferences</p>
         </div>
       </div>
       <details class="help-block">
