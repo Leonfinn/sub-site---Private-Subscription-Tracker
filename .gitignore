@@ -184,3 +184,7 @@ venv/
 # vscode specific files
 .vscode/
 .superpowers/
+
+# Cloudflare Wrangler
+.wrangler/
+.dev.vars

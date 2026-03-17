@@ -155,27 +155,27 @@ function importJSON(jsonString, mode) {
   return { ok: true, skipped, imported: valid.length };
 }
 
-function exportJSON() {
+async function exportJSON() {
   const data = {
     subsight_schema_version: SCHEMA_VERSION,
     subsight_subscriptions: getAllSubscriptions(),
     subsight_settings: getSettings()
   };
-  _triggerDownload(
+  await _triggerDownload(
     JSON.stringify(data, null, 2),
-    `subsight-backup-${new Date().toISOString().slice(0, 10)}.json`,
+    `subsite-backup-${new Date().toISOString().slice(0, 10)}.json`,
     'application/json'
   );
 }
 
-function exportCSV() {
+async function exportCSV() {
   const headers = ['Name','Category','Cost','Currency','Billing Cycle','Status','Next Billing Date','Notes'];
   const rows = getAllSubscriptions().map(s => [
     s.name, s.category, s.cost, s.currency, s.billingCycle,
     s.status, s.nextBillingDate || '', s.notes || ''
   ]);
   const csv = [headers, ...rows].map(r => r.map(_escapeCsv).join(',')).join('\n');
-  _triggerDownload(csv, `subsight-export-${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
+  await _triggerDownload(csv, `subsite-export-${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
 }
 
 function _escapeCsv(val) {
@@ -185,7 +185,28 @@ function _escapeCsv(val) {
     : str;
 }
 
-function _triggerDownload(content, filename, type) {
+async function _triggerDownload(content, filename, type) {
+  // Use File System Access API when available (Chrome/Edge) — gives native
+  // save dialog with folder picker and filename editing.
+  if (window.showSaveFilePicker) {
+    try {
+      const ext = filename.split('.').pop();
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{ description: type, accept: { [type]: ['.' + ext] } }],
+        startIn: 'downloads'
+      });
+      const writable = await handle.createWritable();
+      await writable.write(new Blob([content], { type }));
+      await writable.close();
+      return;
+    } catch (e) {
+      // User cancelled the dialog — do nothing
+      if (e.name === 'AbortError') return;
+      // API failed for another reason — fall through to legacy download
+    }
+  }
+  // Fallback for Firefox / Safari: standard anchor-click download
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([content], { type }));
   a.download = filename;

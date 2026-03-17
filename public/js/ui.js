@@ -934,70 +934,194 @@ function renderExport() {
   if (!container) return;
   container.innerHTML = '';
 
-  // Section 1: Export JSON
+  // ── Section 1: Save a backup (JSON) ─────────────────────
   const jsonSection = document.createElement('div');
   jsonSection.className = 'export-section';
-  const jsonTitle = document.createElement('div'); jsonTitle.className = 'export-section-title'; jsonTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M8 5v4M6 7l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Export as JSON';
-  const jsonDesc = document.createElement('div'); jsonDesc.className = 'export-section-desc'; jsonDesc.textContent = 'Download a full backup of all your data, including settings. Use this to move your data to another device.';
-  const jsonBtnRow = document.createElement('div'); jsonBtnRow.className = 'export-btn-row';
-  const jsonBtn = document.createElement('button'); jsonBtn.className = 'export-btn'; jsonBtn.textContent = '⤓ Export JSON';
+
+  const jsonHeading = document.createElement('div');
+  jsonHeading.className = 'export-section-heading';
+  jsonHeading.innerHTML = `
+    <div class="export-section-title">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px">
+        <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3" fill="none"/>
+        <path d="M8 5v4M6 7l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>Save a backup
+    </div>
+    <div class="export-format-label">.json file — for restoring your data</div>
+  `;
+
+  const jsonDesc = document.createElement('div');
+  jsonDesc.className = 'export-section-desc';
+  jsonDesc.innerHTML = 'Your subscriptions are only saved in this browser, on this device — there is no automatic backup anywhere else. They will be lost if you:' +
+    '<ul class="export-loss-list">' +
+    '<li>Clear your browser history or cache</li>' +
+    '<li>Switch to a different browser or device</li>' +
+    '<li>Use private / incognito mode</li>' +
+    '</ul>' +
+    'Downloading a backup is the only way to protect your data.';
+
+  const jsonBtnRow = document.createElement('div');
+  jsonBtnRow.className = 'export-btn-row';
+  const jsonBtn = document.createElement('button');
+  jsonBtn.className = 'export-btn';
+  jsonBtn.textContent = '⬇ Download Backup (.json)';
   jsonBtn.addEventListener('click', exportJSON);
   jsonBtnRow.appendChild(jsonBtn);
-  const jsonPrivacy = document.createElement('div'); jsonPrivacy.className = 'export-privacy'; jsonPrivacy.textContent = 'Your backup file stays on your device. We never see it.';
-  jsonSection.appendChild(jsonTitle); jsonSection.appendChild(jsonDesc); jsonSection.appendChild(jsonBtnRow); jsonSection.appendChild(jsonPrivacy);
+
+  const jsonPrivacy = document.createElement('div');
+  jsonPrivacy.className = 'export-privacy';
+  jsonPrivacy.textContent = 'Your backup file stays on your device. We never see it.';
+
+  const cloudTip = document.createElement('div');
+  cloudTip.className = 'export-tip';
+  cloudTip.innerHTML = `
+    <strong>💡 Tip: Save your backup somewhere safe</strong>
+    <span>After downloading, move the file to Google Drive, iCloud, Dropbox, or OneDrive. This lets you restore your data on any device. Sub-Site does not sync automatically — this is a manual step.</span>
+  `;
+
+  jsonSection.appendChild(jsonHeading);
+  jsonSection.appendChild(jsonDesc);
+  jsonSection.appendChild(jsonBtnRow);
+  jsonSection.appendChild(jsonPrivacy);
+  jsonSection.appendChild(cloudTip);
   container.appendChild(jsonSection);
 
-  // Section 2: Export CSV
+  // ── Section 2: Export to spreadsheet (CSV) ──────────────
   const csvSection = document.createElement('div');
   csvSection.className = 'export-section';
-  const csvTitle = document.createElement('div'); csvTitle.className = 'export-section-title'; csvTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M1 7h14M6 3v10" stroke="currentColor" stroke-width="1.2" opacity="0.5"/></svg>Export as CSV';
-  const csvDesc = document.createElement('div'); csvDesc.className = 'export-section-desc'; csvDesc.textContent = 'Download your subscriptions as a spreadsheet. Useful for analysis in Excel or Google Sheets.';
-  const csvBtnRow = document.createElement('div'); csvBtnRow.className = 'export-btn-row';
-  const csvBtn = document.createElement('button'); csvBtn.className = 'export-btn'; csvBtn.textContent = '⤓ Export CSV';
+
+  const csvHeading = document.createElement('div');
+  csvHeading.className = 'export-section-heading';
+  csvHeading.innerHTML = `
+    <div class="export-section-title">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px">
+        <rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/>
+        <path d="M1 7h14M6 3v10" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+      </svg>Export to a spreadsheet
+    </div>
+    <div class="export-format-label">.csv file — for Excel, Google Sheets, Numbers</div>
+  `;
+
+  const csvDesc = document.createElement('div');
+  csvDesc.className = 'export-section-desc';
+  csvDesc.textContent = 'Downloads a simple list of your subscriptions — one row per subscription. Useful for reviewing or charting your spending. Note: this file cannot be used to restore your data in Sub-Site.';
+
+  const csvBtnRow = document.createElement('div');
+  csvBtnRow.className = 'export-btn-row';
+  const csvBtn = document.createElement('button');
+  csvBtn.className = 'export-btn';
+  csvBtn.textContent = '⬇ Download Spreadsheet (.csv)';
   csvBtn.addEventListener('click', exportCSV);
   csvBtnRow.appendChild(csvBtn);
-  csvSection.appendChild(csvTitle); csvSection.appendChild(csvDesc); csvSection.appendChild(csvBtnRow);
+
+  csvSection.appendChild(csvHeading);
+  csvSection.appendChild(csvDesc);
+  csvSection.appendChild(csvBtnRow);
   container.appendChild(csvSection);
 
-  // Section 3: Import JSON
+  // ── Section 3: Restore from a backup ───────────────────
   const importSection = document.createElement('div');
   importSection.className = 'export-section';
-  const impTitle = document.createElement('div'); impTitle.className = 'export-section-title'; impTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M8 10V4M6 6l2-2 2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor" opacity="0.4"/></svg>Import Data';
-  const impDesc = document.createElement('div'); impDesc.className = 'export-section-desc'; impDesc.textContent = 'Restore from a backup file. Choose whether to merge with or replace your existing data.';
 
-  // Mode radio buttons
-  const modeRow = document.createElement('div'); modeRow.className = 'import-mode-row';
-  function makeRadio(value, labelText, checked) {
-    const lbl = document.createElement('label'); lbl.className = 'import-mode-label';
-    const radio = document.createElement('input'); radio.type = 'radio'; radio.name = 'importMode'; radio.value = value;
+  const impHeading = document.createElement('div');
+  impHeading.className = 'export-section-heading';
+  impHeading.innerHTML = `
+    <div class="export-section-title">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px">
+        <path d="M8 10V4M6 6l2-2 2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor" opacity="0.4"/>
+      </svg>Restore from a backup
+    </div>
+  `;
+
+  const impDesc = document.createElement('div');
+  impDesc.className = 'export-section-desc';
+  impDesc.textContent = 'Upload a backup file to bring your subscriptions back. Only .json backup files exported from Sub-Site can be imported.';
+
+  // Radio buttons
+  const modeRow = document.createElement('div');
+  modeRow.className = 'import-mode-row';
+
+  function makeRadio(value, labelText, helperText, helperClass, checked) {
+    const wrap = document.createElement('label');
+    wrap.className = 'import-mode-label';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'importMode';
+    radio.value = value;
     if (checked) radio.checked = true;
-    lbl.appendChild(radio);
-    lbl.appendChild(document.createTextNode(labelText));
-    return lbl;
+    const lbl = document.createElement('span');
+    lbl.textContent = labelText;
+    const helper = document.createElement('div');
+    helper.className = 'import-mode-helper' + (helperClass ? ' ' + helperClass : '');
+    helper.textContent = helperText;
+    wrap.appendChild(radio);
+    wrap.appendChild(lbl);
+    wrap.appendChild(helper);
+    return wrap;
   }
-  modeRow.appendChild(makeRadio('merge', 'Merge (keep existing, add new)', true));
-  modeRow.appendChild(makeRadio('replace', 'Replace (overwrite all)', false));
 
-  // Result message element
-  const resultDiv = document.createElement('div'); resultDiv.className = 'import-result'; resultDiv.style.display = 'none';
+  modeRow.appendChild(makeRadio(
+    'merge',
+    'Add to my current list',
+    'Your existing subscriptions stay. New ones from the backup are added alongside them.',
+    '',
+    true
+  ));
+  modeRow.appendChild(makeRadio(
+    'replace',
+    'Replace everything',
+    '⚠ All your current subscriptions will be permanently deleted and replaced. This cannot be undone.',
+    'import-mode-helper-warn',
+    false
+  ));
+
+  // Warning shown when Replace is selected
+  const replaceWarn = document.createElement('div');
+  replaceWarn.className = 'import-replace-warning';
+  replaceWarn.style.display = 'none';
+  replaceWarn.textContent = 'Warning: clicking the button below will immediately and permanently delete all your current data.';
+
+  // Wire radio change to show/hide warning
+  modeRow.querySelectorAll('input[name="importMode"]').forEach(r => {
+    r.addEventListener('change', () => {
+      replaceWarn.style.display = r.value === 'replace' && r.checked ? 'block' : 'none';
+    });
+  });
+
+  // Result message
+  const resultDiv = document.createElement('div');
+  resultDiv.className = 'import-result';
+  resultDiv.style.display = 'none';
 
   // Hidden file input
-  const fileInput = document.createElement('input'); fileInput.type = 'file'; fileInput.accept = '.json'; fileInput.style.display = 'none';
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.json';
+  fileInput.style.display = 'none';
   fileInput.addEventListener('change', () => {
     const file = fileInput.files[0];
     if (!file) return;
+
+    const selectedRadio = importSection.querySelector('input[name="importMode"]:checked');
+    const mode = selectedRadio ? selectedRadio.value : 'merge';
+
+    // Confirmation for replace mode
+    if (mode === 'replace') {
+      const confirmed = confirm('This will permanently delete all your current subscriptions and replace them with the ones in the backup file. This cannot be undone.\n\nAre you sure?');
+      if (!confirmed) { fileInput.value = ''; return; }
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
-      const selectedRadio = importSection.querySelector('input[name="importMode"]:checked');
-      const mode = selectedRadio ? selectedRadio.value : 'merge';
       const result = importJSON(e.target.result, mode);
       resultDiv.style.display = 'block';
       if (result.ok) {
         resultDiv.className = 'import-result success';
-        resultDiv.textContent = `✓ Imported ${result.imported} subscription${result.imported !== 1 ? 's' : ''}. ${result.skipped} ${result.skipped !== 1 ? 'entries were' : 'entry was'} skipped (already exist or invalid).`;
+        resultDiv.textContent = `✓ ${result.imported} subscription${result.imported !== 1 ? 's' : ''} added. ${result.skipped} skipped (already existed or could not be read).`;
       } else {
         resultDiv.className = 'import-result error';
-        resultDiv.textContent = result.error;
+        resultDiv.textContent = result.error || 'Could not read the file. Make sure you are using a .json backup file exported from Sub-Site.';
       }
       fileInput.value = '';
     };
@@ -1005,16 +1129,20 @@ function renderExport() {
   });
 
   // File picker button
-  const impBtnRow = document.createElement('div'); impBtnRow.className = 'export-btn-row';
-  const impBtn = document.createElement('button'); impBtn.className = 'export-btn'; impBtn.textContent = '📂 Choose backup file…';
+  const impBtnRow = document.createElement('div');
+  impBtnRow.className = 'export-btn-row';
+  const impBtn = document.createElement('button');
+  impBtn.className = 'export-btn';
+  impBtn.textContent = '📂 Choose backup file…';
   impBtn.addEventListener('click', () => fileInput.click());
   impBtnRow.appendChild(impBtn);
+  impBtnRow.appendChild(fileInput);
 
-  importSection.appendChild(impTitle);
+  importSection.appendChild(impHeading);
   importSection.appendChild(impDesc);
   importSection.appendChild(modeRow);
+  importSection.appendChild(replaceWarn);
   importSection.appendChild(impBtnRow);
-  importSection.appendChild(fileInput);
   importSection.appendChild(resultDiv);
   container.appendChild(importSection);
 }
