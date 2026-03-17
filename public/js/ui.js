@@ -260,6 +260,16 @@ function renderSubscriptionsList(subs) {
 // ── Stub functions (filled in later tasks) ────────────────────────────────────
 
 function renderDashboard(subs, settings) {
+  // Beta banner
+  const betaBannerEl = document.getElementById('trust-banner');
+  if (betaBannerEl && !document.getElementById('beta-banner')) {
+    const betaBanner = document.createElement('div');
+    betaBanner.id = 'beta-banner';
+    betaBanner.className = 'beta-banner';
+    betaBanner.innerHTML = '🚧 <strong>Beta:</strong> This is an early version of Sub-Site. Some features are still in development — alternative subscription suggestions are not working yet. Your feedback is welcome.';
+    betaBannerEl.parentElement.insertBefore(betaBanner, betaBannerEl);
+  }
+
   // Date subtitle
   const dateEl = document.getElementById('dashboard-date');
   if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -799,6 +809,24 @@ function renderAlternatives(subs) {
   if (!container) return;
   container.innerHTML = '';
 
+  // Beta: feature not yet available
+  const notice = document.createElement('div');
+  notice.className = 'beta-feature-notice';
+  notice.innerHTML = `
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+      <path d="M20 12v10M20 26v2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div class="beta-feature-title">Coming soon — not available in beta</div>
+    <div class="beta-feature-desc">
+      Alternative subscription suggestions are still being set up. This feature will recommend cheaper alternatives based on what you're currently paying.<br><br>
+      All your subscriptions are being tracked correctly — this page will populate automatically once the feature is live.
+    </div>
+  `;
+  container.appendChild(notice);
+  return;
+
+  // eslint-disable-next-line no-unreachable
   const activeSubs = subs.filter(s => s.status === 'Active');
 
   if (activeSubs.length === 0) {
