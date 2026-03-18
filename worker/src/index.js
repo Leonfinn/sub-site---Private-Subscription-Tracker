@@ -80,7 +80,7 @@ export default {
       );
       await env.EMAIL.send(emailMessage);
     } catch (err) {
-      return new Response(JSON.stringify({ error: "Failed to send email. Please try again later." }), {
+      return new Response(JSON.stringify({ error: String(err) }), {
         status: 500,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
