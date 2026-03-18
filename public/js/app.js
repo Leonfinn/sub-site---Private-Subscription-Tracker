@@ -15,15 +15,15 @@ function _applyTheme(mode) {
   const toggle = document.getElementById('themeToggle');
   const mobileToggle = document.getElementById('themeToggleMobile');
   if (mode === 'light') {
+    if (icon) icon.textContent = '☀️';
+    if (label) label.textContent = 'Dark mode';
+    if (toggle) toggle.setAttribute('aria-checked', 'false');
+    if (mobileToggle) { mobileToggle.childNodes[0].textContent = '☀️'; }
+  } else {
     if (icon) icon.textContent = '🌙';
     if (label) label.textContent = 'Dark mode';
     if (toggle) toggle.setAttribute('aria-checked', 'true');
     if (mobileToggle) { mobileToggle.childNodes[0].textContent = '🌙'; }
-  } else {
-    if (icon) icon.textContent = '☀️';
-    if (label) label.textContent = 'Light mode';
-    if (toggle) toggle.setAttribute('aria-checked', 'false');
-    if (mobileToggle) { mobileToggle.childNodes[0].textContent = '☀️'; }
   }
 }
 

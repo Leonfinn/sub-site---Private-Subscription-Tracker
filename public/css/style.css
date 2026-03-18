@@ -842,8 +842,8 @@ input[type="radio"] {
   width: 44px;
   height: 24px;
   border-radius: 12px;
-  background: var(--bg-raised);
-  border: 1.5px solid var(--border);
+  background: var(--accent);
+  border: 1.5px solid var(--accent-btn);
   cursor: pointer;
   transition: background 0.25s, border-color 0.25s;
   flex-shrink: 0;
@@ -857,19 +857,20 @@ input[type="radio"] {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--text-muted);
+  background: #ffffff;
+  transform: translateX(20px);
   transition: transform 0.25s, background 0.25s;
 }
 
-/* When dark mode is active (default), thumb left; when light mode, thumb right */
+/* Dark mode (default): blue track, thumb right = ON. Light mode: grey track, thumb left = OFF. */
 html[data-theme="light"] .toggle-track {
-  background: var(--accent);
-  border-color: var(--accent-btn);
+  background: var(--bg-raised);
+  border-color: var(--border);
 }
 
 html[data-theme="light"] .toggle-thumb {
-  transform: translateX(20px);
-  background: #ffffff;
+  transform: translateX(0);
+  background: var(--text-muted);
 }
 
 /* Icon inside toggle — sun/moon */
