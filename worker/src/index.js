@@ -65,26 +65,27 @@ export default {
       });
     }
 
-    const textBody = [
-      `Type:    ${safeFeedbackType}`,
-      `Name:    ${safeName}`,
+    // Build raw MIME — \r\n line endings required by RFC 5322
+    const headers = [
+      `From: Sub-Site Feedback <admin@sub-site.com>`,
+      `To: ${dest}`,
+      `Subject: Sub-Site Feedback: ${safeFeedbackType}`,
+      ...(safeReplyEmail ? [`Reply-To: ${safeReplyEmail}`] : []),
+      `MIME-Version: 1.0`,
+      `Content-Type: text/plain; charset=UTF-8`,
+      `Content-Transfer-Encoding: 7bit`,
+    ];
+    const bodyLines = [
+      `Type:     ${safeFeedbackType}`,
+      `Name:     ${safeName}`,
       `Reply-To: ${safeReplyEmail || "Not provided"}`,
       ``,
-      `Message:`,
       safeMessage,
-    ].join("\n");
+    ];
+    const rawEmail = [...headers, ``, ...bodyLines].join("\r\n");
 
     try {
-      // Object-format constructor — avoids raw MIME fragility
-      const emailMessage = new EmailMessage({
-        from: "admin@sub-site.com",
-        to: dest,
-        subject: `Sub-Site Feedback: ${safeFeedbackType}`,
-        textBody,
-        headers: {
-          ...(safeReplyEmail ? { "Reply-To": safeReplyEmail } : {}),
-        },
-      });
+      const emailMessage = new EmailMessage("admin@sub-site.com", dest, rawEmail);
       await env.EMAIL.send(emailMessage);
     } catch (err) {
       console.error("send_email failed:", err.message);
