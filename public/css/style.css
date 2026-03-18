@@ -1094,12 +1094,9 @@ html[data-theme="light"] .brand-card {
 
 /* Responsive hero panels */
 @media (max-width: 640px) {
-  .hero-features {
-    grid-template-columns: 1fr;
-  }
-  .hero-icon svg {
-    width: 48px;
-    height: 48px;
+  .hero-features,
+  .brand-card {
+    display: none;
   }
 }
 
