@@ -9,8 +9,7 @@ const CORS_HEADERS = {
 
 export default {
   async fetch(request, env) {
-
-    // Handle CORS preflight
+    // CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
@@ -34,7 +33,7 @@ export default {
 
     const { name, replyEmail, feedbackType, message, honeypot } = body;
 
-    // Bot trap — silently accept and return 200
+    // Bot trap — silently accept
     if (honeypot) {
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
@@ -52,43 +51,43 @@ export default {
     }
 
     // Sanitise inputs
-    const safeName = (name || "").trim() || "Anonymous";
-    const safeReplyEmail = (replyEmail || "").trim() || "Not provided";
-    const safeFeedbackType = (feedbackType || "").trim() || "General feedback";
-    const safeMessage = trimmedMessage.slice(0, 2000);
+    const safeName         = (name        || "").trim().slice(0, 200) || "Anonymous";
+    const safeReplyEmail   = (replyEmail  || "").trim().slice(0, 200) || "";
+    const safeFeedbackType = (feedbackType|| "").trim().slice(0, 100) || "General feedback";
+    const safeMessage      = trimmedMessage.slice(0, 2000);
 
-    // Destination: verified Email Routing address (set via: wrangler secret put DEST_EMAIL)
     const dest = env.DEST_EMAIL;
     if (!dest) {
+      console.error("DEST_EMAIL secret is not set");
       return new Response(JSON.stringify({ error: "Server misconfiguration." }), {
         status: 500,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
     }
 
-    // Build raw MIME email
-    const rawEmail = [
-      `From: Sub-Site Feedback <admin@sub-site.com>`,
-      `To: ${dest}`,
-      `Subject: Sub-Site Feedback: ${safeFeedbackType}`,
-      `MIME-Version: 1.0`,
-      `Content-Type: text/plain; charset=UTF-8`,
+    const textBody = [
+      `Type:    ${safeFeedbackType}`,
+      `Name:    ${safeName}`,
+      `Reply-To: ${safeReplyEmail || "Not provided"}`,
       ``,
-      `Name: ${safeName}`,
-      `Reply-to: ${safeReplyEmail}`,
-      `Type: ${safeFeedbackType}`,
-      ``,
+      `Message:`,
       safeMessage,
-    ].join("\r\n");
+    ].join("\n");
 
     try {
-      const emailMessage = new EmailMessage(
-        "admin@sub-site.com",
-        dest,
-        rawEmail
-      );
+      // Object-format constructor — avoids raw MIME fragility
+      const emailMessage = new EmailMessage({
+        from: "admin@sub-site.com",
+        to: dest,
+        subject: `Sub-Site Feedback: ${safeFeedbackType}`,
+        textBody,
+        headers: {
+          ...(safeReplyEmail ? { "Reply-To": safeReplyEmail } : {}),
+        },
+      });
       await env.EMAIL.send(emailMessage);
     } catch (err) {
+      console.error("send_email failed:", err.message);
       return new Response(JSON.stringify({ error: "Failed to send email. Please try again later." }), {
         status: 500,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
