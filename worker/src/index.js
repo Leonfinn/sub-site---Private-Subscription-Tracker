@@ -57,10 +57,19 @@ export default {
     const safeFeedbackType = (feedbackType || "").trim() || "General feedback";
     const safeMessage = trimmedMessage.slice(0, 2000);
 
+    // Destination: verified Email Routing address (set via: wrangler secret put DEST_EMAIL)
+    const dest = env.DEST_EMAIL;
+    if (!dest) {
+      return new Response(JSON.stringify({ error: "Server misconfiguration." }), {
+        status: 500,
+        headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+      });
+    }
+
     // Build raw MIME email
     const rawEmail = [
       `From: Sub-Site Feedback <admin@sub-site.com>`,
-      `To: admin@sub-site.com`,
+      `To: ${dest}`,
       `Subject: Sub-Site Feedback: ${safeFeedbackType}`,
       `MIME-Version: 1.0`,
       `Content-Type: text/plain; charset=UTF-8`,
@@ -75,12 +84,12 @@ export default {
     try {
       const emailMessage = new EmailMessage(
         "admin@sub-site.com",
-        "admin@sub-site.com",
+        dest,
         rawEmail
       );
       await env.EMAIL.send(emailMessage);
     } catch (err) {
-      return new Response(JSON.stringify({ error: String(err) }), {
+      return new Response(JSON.stringify({ error: "Failed to send email. Please try again later." }), {
         status: 500,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
