@@ -1418,7 +1418,8 @@ html[data-theme="light"] .dashboard-banner {
 }
 
 /* ── Feedback form ── */
-.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+#feedback-card { padding: 30px 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
 .form-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .form-input, .form-select, .form-textarea {
   background: var(--bg-raised);
@@ -1437,7 +1438,8 @@ html[data-theme="light"] .dashboard-banner {
 }
 .form-textarea { resize: vertical; min-height: 100px; }
 .form-hint { font-size: 11px; color: var(--text-faint); }
-.form-error { font-size: 13px; color: var(--red); margin-top: 8px; }
+.form-error { font-size: 13px; color: var(--red); margin-top: 16px; }
+#submitBtn { margin-top: 8px; }
 html[data-theme="light"] .form-input,
 html[data-theme="light"] .form-select,
 html[data-theme="light"] .form-textarea { background: var(--bg-base); }

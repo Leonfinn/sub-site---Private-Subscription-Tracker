@@ -66,7 +66,7 @@ export default {
 
     // Build raw MIME email
     const rawEmail = [
-      `From: Sub-Site Feedback <noreply@sub-site.com>`,
+      `From: Sub-Site Feedback <admin@sub-site.com>`,
       `To: admin@sub-site.com`,
       `Subject: Sub-Site Feedback: ${safeFeedbackType}`,
       `MIME-Version: 1.0`,
@@ -81,7 +81,7 @@ export default {
 
     try {
       const emailMessage = new EmailMessage(
-        "noreply@sub-site.com",
+        "admin@sub-site.com",
         "admin@sub-site.com",
         rawEmail
       );
