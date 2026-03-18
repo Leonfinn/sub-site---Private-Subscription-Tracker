@@ -70,6 +70,7 @@ export default {
       `From: Sub-Site Feedback <admin@sub-site.com>`,
       `To: ${dest}`,
       `Subject: Sub-Site Feedback: ${safeFeedbackType}`,
+      `Message-ID: <${Date.now()}.feedback@sub-site.com>`,
       ...(safeReplyEmail ? [`Reply-To: ${safeReplyEmail}`] : []),
       `MIME-Version: 1.0`,
       `Content-Type: text/plain; charset=UTF-8`,
