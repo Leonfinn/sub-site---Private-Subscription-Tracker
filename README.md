@@ -49,11 +49,19 @@ Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](ht
 │   │   ├── charts.js           # Category bar chart & trend sparkline
 │   │   └── ui.js               # All view renders and templates
 │   └── data/
-│       └── affiliates.js       # 173 known services + category fallbacks
+│       ├── affiliates.js       # 200 known services + category fallbacks (homepage, price, lastVerified)
+│       └── monitored-urls.json # ~20 high-volatility services monitored for price changes
 ├── worker/                     # Cloudflare Worker — feedback form email relay
 │   ├── wrangler.toml           # Worker config (send_email binding)
 │   └── src/
 │       └── index.js            # Worker handler
+├── scripts/
+│   └── check-prices.mjs        # Node 20 ESM price-change monitor script
+├── .gitea/
+│   └── workflows/
+│       └── price-monitor.yml   # Weekly Gitea Actions cron — detects pricing page changes
+├── data/
+│   └── price-hashes.json       # Stored content hashes (updated by price-monitor workflow)
 ├── tests/
 │   ├── runner.html             # Browser-based test harness
 │   ├── lib/assert.js           # Test utilities
@@ -109,6 +117,110 @@ wrangler deploy --config worker/wrangler.toml
 The Worker uses the `send_email` binding with Cloudflare Email Routing. `DEST_EMAIL` must be a verified destination address in your Email Routing configuration.
 
 After deploying the Worker, update the `WORKER_URL` constant in `public/feedback.html` to match the deployed Workers URL.
+
+---
+
+## Price Monitoring (Gitea Actions)
+
+A weekly workflow detects content changes on tracked pricing pages and opens a PR for manual review. This is **not scraping** — it just detects whether the page has changed.
+
+### Prerequisites
+
+- A self-hosted Gitea Actions runner registered to this repository (see below)
+- Node.js 20+ available on the runner (installed automatically by `actions/setup-node@v4`)
+- A Gitea personal access token stored as repository secret `GITEA_TOKEN`
+
+### How it works
+
+1. `.gitea/workflows/price-monitor.yml` runs on a weekly cron (Monday 08:00 UTC)
+2. `scripts/check-prices.mjs` fetches each URL in `public/data/monitored-urls.json`
+3. Page content (title + first price pattern) is hashed and compared against `data/price-hashes.json`
+4. If any hash changed: the script exits with code 1; the workflow commits updated hashes to a new branch and opens a PR via the Gitea API
+5. Review the PR, manually verify the changed service's pricing page, update `price` + `lastVerified` in `public/data/affiliates.js`, and merge
+
+Manual trigger: use the `workflow_dispatch` event in the Gitea Actions UI.
+
+### Runner setup on TrueNAS Scale / Docker
+
+Gitea runs as a Docker container in TrueNAS Scale. The runner must also run as a container.
+
+**Step 1 — Get a registration token**
+
+Gitea: **Repository → Settings → Actions → Runners → Create new runner**
+
+**Step 2 — Create a persistent volume and config**
+
+```bash
+# Create volume directory on your ZFS pool
+mkdir -p /mnt/pool/gitea-runner
+```
+
+Create `/mnt/pool/gitea-runner/config.yaml`:
+
+```yaml
+log:
+  level: info
+runner:
+  file: .runner
+  capacity: 1
+  timeout: 3h
+  insecure: false
+cache:
+  enabled: false
+```
+
+**Step 3 — Register the runner (one-off)**
+
+```bash
+docker run --rm \
+  -v /mnt/pool/gitea-runner:/data \
+  gitea/act_runner:latest \
+  register \
+  --no-interactive \
+  --instance http://192.168.68.67:3003 \
+  --token <TOKEN_FROM_STEP_1> \
+  --name "truenas-runner" \
+  --labels "self-hosted,linux,x64"
+```
+
+**Step 4 — Deploy the runner (Docker Compose)**
+
+Create `/mnt/pool/gitea-runner/docker-compose.yml`:
+
+```yaml
+services:
+  act_runner:
+    image: gitea/act_runner:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/pool/gitea-runner:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      GITEA_INSTANCE_URL: http://192.168.68.67:3003
+      GITEA_RUNNER_REGISTRATION_TOKEN: ""
+    network_mode: host
+```
+
+```bash
+docker compose -f /mnt/pool/gitea-runner/docker-compose.yml up -d
+```
+
+Alternatively, use the **TrueNAS Scale Custom App GUI**: Apps → Custom App → Add, with image `gitea/act_runner:latest`, the volume mount and environment variable above, and host networking.
+
+**Notes:**
+- Do **not** install the runner natively on TrueNAS Scale's OS — use Docker only
+- The runner volume should be on a ZFS dataset so it survives TrueNAS updates
+- If Gitea uses a custom Docker network, add the runner to the same network instead of host networking
+
+**Step 5 — Add the Gitea token as a repo secret**
+
+Gitea: **Repository → Settings → Secrets → Add Secret**
+- Name: `GITEA_TOKEN`
+- Value: personal access token with `repo` scope (Settings → Applications → Generate Token)
+
+**Step 6 — Verify**
+
+Gitea: **Repository → Settings → Actions → Runners** — runner should appear as `truenas-runner` (green/online).
 
 ---
 

@@ -349,6 +349,17 @@
   </div>
 
   <script src="data/affiliates.js"></script>
+  <script>
+    (function () {
+      var allPlaceholders = Object.values(KNOWN_SERVICES).every(function (v) {
+        return v.url === 'AFFILIATE_URL';
+      });
+      if (allPlaceholders) {
+        var el = document.querySelector('.affiliate-disclosure');
+        if (el) el.style.display = 'none';
+      }
+    }());
+  </script>
   <script src="js/storage.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/ui.js"></script>
