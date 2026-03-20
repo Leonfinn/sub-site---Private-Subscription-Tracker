@@ -181,6 +181,9 @@
         </div>
       </div>
 
+      <!-- App data banner (shown only to existing users) -->
+      <div id="appDataBanner" style="display:none; background:var(--bg-raised); border:1px solid var(--accent); border-left:3px solid var(--accent); border-radius:var(--radius); padding:12px 16px; margin-bottom:1rem; font-size:13px; color:var(--text); line-height:1.5;"></div>
+
       <!-- Calculator card -->
       <div class="card" style="margin-bottom:1rem;">
 
@@ -289,12 +292,44 @@
       }
     }
 
-    // Start with 4 blank rows
-    addRow('Netflix', '', 'monthly');
-    addRow('Spotify', '', 'monthly');
-    addRow('', '', 'monthly');
-    addRow('', '', 'monthly');
-  </script>
+    // billingCycle mapping: main app uses capitalised values
+    const CYCLE_MAP = { Monthly: 'monthly', Annually: 'annual', Weekly: 'weekly', Quarterly: 'quarterly' };
+
+    function loadFromApp() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('subsight_subscriptions') || '[]');
+        const active = saved.filter(s => s.status === 'Active' || !s.status);
+        if (!active.length) return;
+        document.getElementById('calcRows').innerHTML = '';
+        rowId = 0;
+        active.forEach(s => {
+          addRow(s.name, s.cost, CYCLE_MAP[s.billingCycle] || 'monthly');
+        });
+        document.getElementById('appDataBanner').style.display = 'none';
+      } catch(e) {}
+    }
+
+    // Check for existing app data and show banner
+    (function() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('subsight_subscriptions') || '[]');
+        const active = saved.filter(s => s.status === 'Active' || !s.status);
+        if (active.length) {
+          const banner = document.getElementById('appDataBanner');
+          banner.innerHTML = `You have <strong>${active.length} subscription${active.length > 1 ? 's' : ''}</strong> saved in Sub-Site. <button onclick="loadFromApp()" style="background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:4px 12px;font-size:13px;cursor:pointer;margin-left:8px;">Load them →</button> <a href="index.html" style="color:var(--text-faint);font-size:12px;margin-left:10px;">Go to dashboard</a>`;
+          banner.style.display = 'block';
+        }
+      } catch(e) {}
+    })();
+
+    // Default rows for new visitors (only if no app data loaded)
+    if (!document.getElementById('calcRows').children.length) {
+      addRow('Netflix', '', 'monthly');
+      addRow('Spotify', '', 'monthly');
+      addRow('', '', 'monthly');
+      addRow('', '', 'monthly');
+    }
+</script>
 
 </body>
 </html>
