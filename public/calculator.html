@@ -223,7 +223,9 @@
         <p style="margin:0 0 14px; color:var(--text-muted); font-size:13px; line-height:1.6;">
           This calculator is part of Sub-Site — a free, private tracker that stores your subscriptions, flags upcoming renewals, and shows spending over time. No login, no account, all data in your browser.
         </p>
-        <a href="index.html" class="btn-primary" style="display:inline-block; text-decoration:none;">Open the full tracker →</a>
+        <button onclick="saveToApp()" class="btn-primary" style="margin-right:10px;">Save to my dashboard →</button>
+        <a href="index.html" style="color:var(--text-faint); font-size:13px; text-decoration:none;">Browse first</a>
+        <div id="saveMsg" style="display:none; margin-top:10px; font-size:13px; color:var(--accent);"></div>
       </div>
 
     </section>
@@ -293,7 +295,49 @@
     }
 
     // billingCycle mapping: main app uses capitalised values
-    const CYCLE_MAP = { Monthly: 'monthly', Annually: 'annual', Weekly: 'weekly', Quarterly: 'quarterly' };
+    const CYCLE_MAP     = { Monthly: 'monthly', Annually: 'annual', Weekly: 'weekly', Quarterly: 'quarterly' };
+    const CYCLE_MAP_REV = { monthly: 'Monthly', annual: 'Annually', weekly: 'Weekly', quarterly: 'Quarterly' };
+
+    function saveToApp() {
+      const rows = document.querySelectorAll('.calc-row');
+      const toSave = [];
+      rows.forEach(row => {
+        const name = row.querySelector('input[type="text"]').value.trim();
+        const cost = row.querySelector('input[type="number"]').value.trim();
+        if (!name || !cost) return;
+        toSave.push({
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+          name,
+          cost: parseFloat(cost),
+          billingCycle: CYCLE_MAP_REV[row.querySelector('select').value] || 'Monthly',
+          category: 'Other',
+          status: 'Active',
+          currency: 'GBP',
+          startDate: new Date().toISOString().split('T')[0],
+          notes: ''
+        });
+      });
+
+      if (!toSave.length) {
+        const msg = document.getElementById('saveMsg');
+        msg.textContent = 'Add at least one subscription name and cost first.';
+        msg.style.display = 'block';
+        return;
+      }
+
+      try {
+        const settings = JSON.parse(localStorage.getItem('subsight_settings') || '{}');
+        const currency = settings.defaultCurrency || 'GBP';
+        toSave.forEach(s => s.currency = currency);
+
+        const existing = JSON.parse(localStorage.getItem('subsight_subscriptions') || '[]');
+        localStorage.setItem('subsight_subscriptions', JSON.stringify([...existing, ...toSave]));
+        window.location.href = 'index.html';
+      } catch(e) {
+        document.getElementById('saveMsg').textContent = 'Something went wrong. Please try again.';
+        document.getElementById('saveMsg').style.display = 'block';
+      }
+    }
 
     function loadFromApp() {
       try {
