@@ -186,18 +186,11 @@ there is evidence of a real crawl problem.
 
 ## Feature Roadmap for Promotion Support
 
-### Priority 1: CSV Export
-Build before share card. A "Export to CSV" feature is:
-- Genuinely useful (users ask for it)
-- A concrete, promotable feature for Reddit/HN/PH listings
-- A reason to return ("I use it for my annual finances review")
+### Already shipped — mention in Reddit/HN posts
+- **CSV Export** — built and live. Promotable feature; mention it when posting ("exports to CSV for your own records").
+- **Savings Calculator** — built and live at `/calculator.html`, linked from the sidebar. Pre-populates from existing app data via shared localStorage.
 
-### Priority 2: Savings Calculator *(Gemini insight — validated by DeepSeek V3)*
-An interactive widget on the landing page: "Enter your subscriptions → see your annual spend".
-Demonstrates the app's core value in 30 seconds without any commitment. High conversion
-potential. Build using client-side JS, no backend required.
-
-### Priority 3: "My subscriptions cost £X/year" Share Card
+### Priority 1: "My subscriptions cost £X/year" Share Card
 DeepSeek R1 rated this highly; DeepSeek V3 cautioned that users may hesitate to share
 subscription costs publicly (privacy/stigma). Build it, but after CSV export and calculator.
 Implementation: `html2canvas` (client-side, no server needed).
