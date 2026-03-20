@@ -26,6 +26,12 @@ Update this file whenever a page is added or removed.
 | `https://sub-site.com/guide/cancel-disney-plus.html` | `public/guide/cancel-disney-plus.html` | How to cancel Disney+ UK |
 | `https://sub-site.com/guide/cancel-microsoft-365.html` | `public/guide/cancel-microsoft-365.html` | How to cancel Microsoft 365 UK |
 | `https://sub-site.com/guide/cancel-youtube-premium.html` | `public/guide/cancel-youtube-premium.html` | How to cancel YouTube Premium UK |
+| `https://sub-site.com/guide/cancel-apple-tv-plus.html` | `public/guide/cancel-apple-tv-plus.html` | How to cancel Apple TV+ UK |
+| `https://sub-site.com/guide/cancel-apple-music.html` | `public/guide/cancel-apple-music.html` | How to cancel Apple Music UK |
+| `https://sub-site.com/guide/cancel-xbox-game-pass.html` | `public/guide/cancel-xbox-game-pass.html` | How to cancel Xbox Game Pass UK |
+| `https://sub-site.com/guide/cancel-playstation-plus.html` | `public/guide/cancel-playstation-plus.html` | How to cancel PlayStation Plus UK |
+| `https://sub-site.com/guide/cancel-audible.html` | `public/guide/cancel-audible.html` | How to cancel Audible UK |
+| `https://sub-site.com/guide/cancel-now-tv.html` | `public/guide/cancel-now-tv.html` | How to cancel NOW TV UK |
 
 ---
 
