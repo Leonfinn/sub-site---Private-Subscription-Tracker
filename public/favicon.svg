@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark rounded background — matches site dark theme, stands out in any browser tab -->
+  <rect width="32" height="32" rx="7" fill="#0d1425"/>
+  <!-- Circular arc: starts at top, sweeps clockwise 270° to the left side -->
+  <!-- Center (16,16) radius 9 — start (16,7) end (7,16) -->
+  <path d="M16 7 A9 9 0 1 1 7 16"
+        stroke="#38bdf8" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- Arrowhead at arc end (7,16), pointing downward (direction of travel) -->
+  <path d="M3 14 L7 22 L11 14 Z" fill="#38bdf8"/>
+</svg>
