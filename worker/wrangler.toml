@@ -1,0 +1,7 @@
+name = "sub-site-feedback"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[[send_email]]
+name = "EMAIL"
+# destination_address removed — Worker sends to env.DEST_EMAIL (set via wrangler secret)

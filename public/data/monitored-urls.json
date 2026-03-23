@@ -1,0 +1,22 @@
+[
+  { "key": "netflix",             "url": "https://www.netflix.com/gb/signup" },
+  { "key": "disney+",             "url": "https://www.disneyplus.com/en-gb/signup" },
+  { "key": "amazon prime",        "url": "https://www.amazon.co.uk/prime" },
+  { "key": "spotify",             "url": "https://www.spotify.com/gb/premium/" },
+  { "key": "apple music",         "url": "https://www.apple.com/uk/apple-music/" },
+  { "key": "chatgpt plus",        "url": "https://openai.com/chatgpt/pricing/" },
+  { "key": "claude pro",          "url": "https://claude.ai/upgrade" },
+  { "key": "github copilot",      "url": "https://github.com/features/copilot" },
+  { "key": "cursor",              "url": "https://www.cursor.com/pricing" },
+  { "key": "midjourney",          "url": "https://www.midjourney.com/account/plans" },
+  { "key": "adobe cc",            "url": "https://www.adobe.com/uk/creativecloud/plans.html" },
+  { "key": "microsoft 365",       "url": "https://www.microsoft.com/en-gb/microsoft-365/personal" },
+  { "key": "notion",              "url": "https://www.notion.so/pricing" },
+  { "key": "dropbox",             "url": "https://www.dropbox.com/plans" },
+  { "key": "google one",          "url": "https://one.google.com/about/plans" },
+  { "key": "nordvpn",             "url": "https://nordvpn.com/pricing/" },
+  { "key": "1password",           "url": "https://1password.com/sign-up/" },
+  { "key": "headspace",           "url": "https://www.headspace.com/plans" },
+  { "key": "calm",                "url": "https://www.calm.com/subscribe" },
+  { "key": "ynab",                "url": "https://www.ynab.com/pricing" }
+]

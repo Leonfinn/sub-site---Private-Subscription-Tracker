@@ -279,7 +279,8 @@ input[type="radio"] {
 /* ── Toolbar ─────────────────────────────────────────────── */
 .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
 .page-title  { font-size: 24px; font-weight: 700; color: var(--text); }   /* WCAG fix: was 22px */
-.page-sub    { color: var(--text-dim); font-size: 13px; margin-top: 2px; }
+.page-sub    { color: var(--text-dim); font-size: 13px; margin-top: 2px; margin-bottom: 16px; }
+.affiliate-disclosure { font-size: 12px; color: var(--text-faint); margin: 0 0 16px; }
 .toolbar     { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 .toolbar-search { width: 220px; }
 .toolbar-filter { width: auto; }
@@ -842,8 +843,8 @@ input[type="radio"] {
   width: 44px;
   height: 24px;
   border-radius: 12px;
-  background: var(--bg-raised);
-  border: 1.5px solid var(--border);
+  background: var(--accent);
+  border: 1.5px solid var(--accent-btn);
   cursor: pointer;
   transition: background 0.25s, border-color 0.25s;
   flex-shrink: 0;
@@ -857,19 +858,20 @@ input[type="radio"] {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--text-muted);
+  background: #ffffff;
+  transform: translateX(20px);
   transition: transform 0.25s, background 0.25s;
 }
 
-/* When dark mode is active (default), thumb left; when light mode, thumb right */
+/* Dark mode (default): blue track, thumb right = ON. Light mode: grey track, thumb left = OFF. */
 html[data-theme="light"] .toggle-track {
-  background: var(--accent);
-  border-color: var(--accent-btn);
+  background: var(--bg-raised);
+  border-color: var(--border);
 }
 
 html[data-theme="light"] .toggle-thumb {
-  transform: translateX(20px);
-  background: #ffffff;
+  transform: translateX(0);
+  background: var(--text-muted);
 }
 
 /* Icon inside toggle — sun/moon */
@@ -1094,12 +1096,9 @@ html[data-theme="light"] .brand-card {
 
 /* Responsive hero panels */
 @media (max-width: 640px) {
-  .hero-features {
-    grid-template-columns: 1fr;
-  }
-  .hero-icon svg {
-    width: 48px;
-    height: 48px;
+  .hero-features,
+  .brand-card {
+    display: none;
   }
 }
 
@@ -1223,3 +1222,225 @@ html[data-theme="light"] .import-replace-warning {
   border-color: #dc2626;
   color: #7f1d1d;
 }
+
+/* ── Beta branding ───────────────────────────────────────── */
+.beta-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  background: var(--amber);
+  color: #000;
+  padding: 1px 5px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.beta-banner {
+  background: #2d1f00;
+  border: 1px solid var(--amber);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #fde68a;
+  line-height: 1.5;
+}
+.beta-banner strong { color: var(--amber); }
+
+html[data-theme="light"] .beta-banner {
+  background: #fffbeb;
+  border-color: #d97706;
+  color: #78350f;
+}
+html[data-theme="light"] .beta-banner strong { color: #b45309; }
+
+.beta-feature-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 64px 32px;
+  gap: 16px;
+  color: var(--text-muted);
+}
+.beta-feature-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.beta-feature-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 440px;
+  line-height: 1.6;
+}
+
+/* ── Mobile sticky header ────────────────────────────────── */
+.mobile-header {
+  display: none;
+}
+@media (max-width: 640px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    z-index: 20;
+  }
+  /* Push main content below the mobile header */
+  .main {
+    padding-top: calc(56px + 16px);
+  }
+}
+.mobile-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+}
+.mobile-header-wordmark {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+.mobile-header-page {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* ── Dashboard hero banner (desktop only) ───────────────── */
+.dashboard-banner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 20px 28px;
+  margin-bottom: 20px;
+}
+.dashboard-banner-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.dashboard-banner-wordmark {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.dashboard-banner-tagline {
+  font-size: 8px;
+  letter-spacing: 1.8px;
+  color: var(--text-faint);
+  font-weight: 500;
+  margin-top: 3px;
+}
+.dashboard-banner-headline {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+.dashboard-banner-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.dashboard-banner-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.dashboard-banner-privacy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+.dashboard-banner-icon {
+  color: var(--accent);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.dashboard-banner-privacy-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+.dashboard-banner-privacy-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Light mode dashboard banner */
+html[data-theme="light"] .dashboard-banner {
+  background: linear-gradient(135deg, #f0f6ff 0%, #ffffff 100%);
+  border-color: var(--border);
+  border-left-color: var(--accent);
+}
+
+/* Stack banner on tablet (641–900px too narrow for 3 columns) */
+@media (max-width: 900px) {
+  .dashboard-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .dashboard-banner-headline {
+    text-align: left;
+  }
+}
+
+/* Hide dashboard banner on mobile (sidebar hidden, mobile header takes over) */
+@media (max-width: 640px) {
+  .dashboard-banner { display: none; }
+}
+
+/* ── Feedback form ── */
+#feedback-card { padding: 30px 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input, .form-select, .form-textarea {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-hint { font-size: 11px; color: var(--text-faint); }
+.form-error { font-size: 13px; color: var(--red); margin-top: 16px; }
+#submitBtn { margin-top: 8px; }
+html[data-theme="light"] .form-input,
+html[data-theme="light"] .form-select,
+html[data-theme="light"] .form-textarea { background: var(--bg-base); }

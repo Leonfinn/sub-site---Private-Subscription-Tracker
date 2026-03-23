@@ -260,6 +260,16 @@ function renderSubscriptionsList(subs) {
 // ── Stub functions (filled in later tasks) ────────────────────────────────────
 
 function renderDashboard(subs, settings) {
+  // Beta banner
+  const betaBannerEl = document.getElementById('trust-banner');
+  if (betaBannerEl && !document.getElementById('beta-banner')) {
+    const betaBanner = document.createElement('div');
+    betaBanner.id = 'beta-banner';
+    betaBanner.className = 'beta-banner';
+    betaBanner.innerHTML = '🚧 <strong>Beta:</strong> This is an early version of Sub-Site. Some features are still in development — alternative subscription suggestions are not working yet. Your feedback is welcome.';
+    betaBannerEl.parentElement.insertBefore(betaBanner, betaBannerEl);
+  }
+
   // Date subtitle
   const dateEl = document.getElementById('dashboard-date');
   if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -809,7 +819,10 @@ function renderAlternatives(subs) {
   // Disclosure
   const disc = document.createElement('div');
   disc.className = 'disclosure';
-  disc.textContent = 'Sub-Site may earn a small commission if you sign up via these links, at no extra cost to you. Suggestions are based on your actual subscriptions.';
+  const allPlaceholders = Object.values(KNOWN_SERVICES).every(v => v.url === 'AFFILIATE_URL');
+  disc.textContent = allPlaceholders
+    ? 'These are direct links to each service\'s pricing page. Sub-Site has no affiliate relationship with these services.'
+    : 'Sub-Site may earn a small commission if you sign up via these links, at no extra cost to you. Suggestions are based on your actual subscriptions.';
   container.appendChild(disc);
 
   // Tier 1: known service matches
@@ -854,21 +867,23 @@ function renderAlternatives(subs) {
 
       const saving = document.createElement('div');
       saving.className = 'affiliate-saving';
-      saving.textContent = 'Save ' + data.saving;
+      saving.textContent = data.price ? data.price : 'Save ' + data.saving;
 
       const cta = document.createElement('div');
       cta.className = 'affiliate-cta';
-      const btn = document.createElement('a');
-      btn.className = 'affiliate-btn';
-      btn.href = data.url;
-      btn.target = '_blank';
-      btn.rel = 'noopener';
-      btn.textContent = 'Switch & Save';
-      const note = document.createElement('span');
-      note.className = 'affiliate-link-note';
-      note.textContent = 'Affiliate link';
-      cta.appendChild(btn);
-      cta.appendChild(note);
+      if (data.homepage) {
+        const btn = document.createElement('a');
+        btn.className = 'affiliate-btn';
+        btn.href = data.homepage;
+        btn.target = '_blank';
+        btn.rel = 'noopener noreferrer';
+        btn.textContent = 'Visit';
+        const note = document.createElement('span');
+        note.className = 'affiliate-link-note';
+        note.textContent = data.url === 'AFFILIATE_URL' ? 'Direct link, not affiliated' : 'Affiliate link';
+        cta.appendChild(btn);
+        cta.appendChild(note);
+      }
 
       card.appendChild(cardTitle);
       card.appendChild(cardSub);
@@ -908,17 +923,19 @@ function renderAlternatives(subs) {
 
       const cta = document.createElement('div');
       cta.className = 'affiliate-cta';
-      const btn = document.createElement('a');
-      btn.className = 'affiliate-btn';
-      btn.href = data.url;
-      btn.target = '_blank';
-      btn.rel = 'noopener';
-      btn.textContent = 'Learn More';
-      const note = document.createElement('span');
-      note.className = 'affiliate-link-note';
-      note.textContent = 'Affiliate link';
-      cta.appendChild(btn);
-      cta.appendChild(note);
+      if (data.homepage) {
+        const btn = document.createElement('a');
+        btn.className = 'affiliate-btn';
+        btn.href = data.homepage;
+        btn.target = '_blank';
+        btn.rel = 'noopener noreferrer';
+        btn.textContent = 'Learn More';
+        const note = document.createElement('span');
+        note.className = 'affiliate-link-note';
+        note.textContent = data.url === 'AFFILIATE_URL' ? 'Direct link, not affiliated' : 'Affiliate link';
+        cta.appendChild(btn);
+        cta.appendChild(note);
+      }
 
       card.appendChild(cardTitle);
       card.appendChild(cardSub);

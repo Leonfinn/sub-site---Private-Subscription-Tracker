@@ -1,0 +1,54 @@
+name: Price Monitor
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'   # Every Monday at 08:00 UTC
+  workflow_dispatch:        # Allow manual trigger from Gitea Actions UI
+
+jobs:
+  check-prices:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run price monitor
+        id: monitor
+        run: node scripts/check-prices.mjs
+        continue-on-error: true   # exit 1 means "changes detected" — don't fail the job here
+
+      - name: Open PR if prices changed
+        if: steps.monitor.outcome == 'failure'
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          GITEA_API:   http://192.168.68.67:3003/api/v1
+          REPO:        Leon/Subscription-Tracker
+        run: |
+          BRANCH="price-update-$(date +%Y%m%d-%H%M)"
+          git config user.email "price-monitor@sub-site.local"
+          git config user.name  "Price Monitor Bot"
+          git checkout -b "$BRANCH"
+          git add data/price-hashes.json
+          git commit -m "chore: update price hashes $(date +%Y-%m-%d)"
+
+          # Push using the token for authentication
+          REMOTE_URL="http://price-monitor:${GITEA_TOKEN}@192.168.68.67:3003/Leon/Subscription-Tracker.git"
+          git push "$REMOTE_URL" "$BRANCH"
+
+          # Open a pull request via the Gitea API
+          curl -s -X POST "${GITEA_API}/repos/${REPO}/pulls" \
+            -H "Authorization: token ${GITEA_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"title\": \"Price change detected — $(date +%Y-%m-%d)\",
+              \"body\": \"The weekly price monitor detected content changes on one or more tracked pricing pages.\n\n**Action required:**\n1. Check which services changed in \`data/price-hashes.json\`\n2. Visit each changed service's pricing page and verify the current price\n3. Update the \`price\` and \`lastVerified\` fields in \`public/data/affiliates.js\`\n4. Merge this PR\",
+              \"head\": \"${BRANCH}\",
+              \"base\": \"main\"
+            }"

@@ -15,15 +15,15 @@ function _applyTheme(mode) {
   const toggle = document.getElementById('themeToggle');
   const mobileToggle = document.getElementById('themeToggleMobile');
   if (mode === 'light') {
+    if (icon) icon.textContent = '☀️';
+    if (label) label.textContent = 'Dark mode';
+    if (toggle) toggle.setAttribute('aria-checked', 'false');
+    if (mobileToggle) { mobileToggle.childNodes[0].textContent = '☀️'; }
+  } else {
     if (icon) icon.textContent = '🌙';
     if (label) label.textContent = 'Dark mode';
     if (toggle) toggle.setAttribute('aria-checked', 'true');
     if (mobileToggle) { mobileToggle.childNodes[0].textContent = '🌙'; }
-  } else {
-    if (icon) icon.textContent = '☀️';
-    if (label) label.textContent = 'Light mode';
-    if (toggle) toggle.setAttribute('aria-checked', 'false');
-    if (mobileToggle) { mobileToggle.childNodes[0].textContent = '☀️'; }
   }
 }
 
@@ -81,6 +81,10 @@ function navigate(view) {
   document.querySelectorAll('.view').forEach(el => {
     el.classList.toggle('active', el.id === 'view-' + view);
   });
+  // Update mobile header page title
+  const pageTitles = { dashboard: 'Dashboard', subscriptions: 'Subscriptions', alternatives: 'Alternatives', export: 'Export & Import', settings: 'Settings' };
+  const mpt = document.getElementById('mobilePageTitle');
+  if (mpt) mpt.textContent = pageTitles[view] || '';
   renderCurrentView();
 }
 

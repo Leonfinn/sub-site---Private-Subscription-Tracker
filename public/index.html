@@ -10,9 +10,21 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sub-Site | Subscription Tracker</title>
+  <title>Sub-Site | Free Private Subscription Tracker</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Free subscription tracker. No login required — all your data stays in your browser. Track spending, set renewal alerts, and find cheaper alternatives.">
+  <meta property="og:title" content="Sub-Site — Free Private Subscription Tracker">
+  <meta property="og:description" content="Track all your subscriptions privately. No account needed. 100% in your browser. Find cheaper alternatives and cut costs.">
+  <meta property="og:url" content="https://sub-site.com">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://sub-site.com/og-image.png">
+  <meta property="og:site_name" content="Sub-Site">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sub-Site — Free Private Subscription Tracker">
+  <meta name="twitter:description" content="Track all your subscriptions privately. No account needed. 100% in your browser.">
+  <meta name="twitter:image" content="https://sub-site.com/og-image.png">
+  <link rel="canonical" href="https://sub-site.com/">
+  <link rel="stylesheet" href="css/style.css?v=1.1">
 </head>
 <body>
 
@@ -32,7 +44,7 @@
         </svg>
       </div>
       <div>
-        <div class="sidebar-logo-text">SUB-SITE</div>
+        <div class="sidebar-logo-text">SUB-SITE <span class="beta-badge">BETA</span></div>
         <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
       </div>
     </div>
@@ -49,22 +61,45 @@
       <button class="nav-item" data-view="export">
         <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor"/></svg></span> Export
       </button>
+      <a class="nav-item" href="calculator.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> Calculator
+      </a>
       <button class="nav-item" data-view="settings">
         <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> Settings
       </button>
     </nav>
     <!-- Dark/Light mode toggle -->
-    <div class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="Toggle light mode" tabindex="0">
+    <div class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="Dark mode" tabindex="0">
       <span class="toggle-icon" id="themeIcon">☀️</span>
-      <span class="theme-toggle-label" id="themeLabel">Light mode</span>
+      <span class="theme-toggle-label" id="themeLabel">Dark mode</span>
       <div class="toggle-track" id="toggleTrack">
         <div class="toggle-thumb" id="toggleThumb"></div>
       </div>
     </div>
     <div class="sidebar-footer">
       🔒 100% private — all data stored locally on your device. Nothing is sent to any server.
+      <br><a href="privacy.html" style="color:var(--text-faint);font-size:11px;">Privacy Policy</a>
+      <br><a href="feedback.html" style="color:var(--text-faint);font-size:11px;">Feedback</a>
     </div>
   </aside>
+
+  <!-- Mobile sticky top header (hidden on desktop) -->
+  <header class="mobile-header" id="mobileHeader">
+    <div class="mobile-header-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+        <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+      </svg>
+      <span class="mobile-header-wordmark">SUB-SITE</span>
+      <span class="beta-badge">BETA</span>
+    </div>
+    <span class="mobile-header-page" id="mobilePageTitle">Dashboard</span>
+  </header>
 
   <!-- Mobile bottom tab bar -->
   <nav class="bottom-nav" id="bottomNav">
@@ -80,6 +115,40 @@
   <main class="main" id="main">
 
     <section id="view-dashboard" class="view active">
+      <!-- Dashboard-only branded hero banner -->
+      <div class="dashboard-banner" id="dashboardBanner">
+        <div class="dashboard-banner-logo">
+          <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+            <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+            <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+            <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+            <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+            <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+          </svg>
+          <div>
+            <div class="dashboard-banner-wordmark">SUB-SITE</div>
+            <div class="dashboard-banner-tagline">SUBSCRIPTION TRACKER</div>
+          </div>
+        </div>
+        <div class="dashboard-banner-headline">
+          <div class="dashboard-banner-title">TAKE CONTROL OF YOUR SUBSCRIPTIONS.</div>
+          <div class="dashboard-banner-sub">Track, analyse, and discover savings.</div>
+        </div>
+        <div class="dashboard-banner-privacy">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" class="dashboard-banner-icon">
+            <circle cx="14" cy="10" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <circle cx="6" cy="20" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <circle cx="22" cy="20" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M14 13v4M14 17l-6 2M14 17l6 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="dashboard-banner-privacy-title">100% Private, Local First</div>
+            <div class="dashboard-banner-privacy-sub">All data stored on your device.</div>
+          </div>
+        </div>
+      </div>
       <div class="view-header">
         <div>
           <h1 class="page-title">Dashboard</h1>
@@ -213,6 +282,7 @@
           </ul>
         </div>
       </details>
+      <p class="affiliate-disclosure">Some links on this page are affiliate links. We may earn a small commission at no extra cost to you. <a href="privacy.html#affiliate-links" style="color:var(--accent);">Learn more</a></p>
       <div id="alternatives-container"></div>
     </section>
 
@@ -295,6 +365,17 @@
   </div>
 
   <script src="data/affiliates.js"></script>
+  <script>
+    (function () {
+      var allPlaceholders = Object.values(KNOWN_SERVICES).every(function (v) {
+        return v.url === 'AFFILIATE_URL';
+      });
+      if (allPlaceholders) {
+        var el = document.querySelector('.affiliate-disclosure');
+        if (el) el.style.display = 'none';
+      }
+    }());
+  </script>
   <script src="js/storage.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/ui.js"></script>

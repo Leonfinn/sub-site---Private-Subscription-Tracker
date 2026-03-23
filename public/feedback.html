@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function(){var t=localStorage.getItem('subsite_theme');if(t!=='dark'){document.documentElement.setAttribute('data-theme','light');}})();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback | Sub-Site</title>
+  <link rel="stylesheet" href="css/style.css?v=1.1">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+          <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-text">SUB-SITE <span class="beta-badge">BETA</span></div>
+        <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="index.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span> Dashboard
+      </a>
+      <a class="nav-item active" href="feedback.html" aria-current="page">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 2h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5l-3 2V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Feedback
+      </a>
+      <a class="nav-item" href="privacy.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1L2 4v4c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V4L8 1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Privacy Policy
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      &#128274; 100% private &#8212; all data stored locally on your device. Nothing is sent to any server.
+      <br><a href="privacy.html" style="color:var(--text-faint);font-size:11px;">Privacy Policy</a>
+      <br><a href="feedback.html" style="color:var(--text-faint);font-size:11px;">Feedback</a>
+    </div>
+  </aside>
+
+  <!-- Mobile sticky top header -->
+  <header class="mobile-header" id="mobileHeader">
+    <div class="mobile-header-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+        <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+      </svg>
+      <span class="mobile-header-wordmark">SUB-SITE</span>
+      <span class="beta-badge">BETA</span>
+    </div>
+    <span class="mobile-header-page">Feedback</span>
+  </header>
+
+  <!-- Main content area -->
+  <main class="main" id="main">
+    <section class="view active" id="view-feedback">
+
+      <h1 class="page-title">Feedback</h1>
+      <p class="page-sub">Help us improve Sub-Site &nbsp;&middot;&nbsp; <a href="index.html" style="color:var(--accent);">&#8592; Back to App</a></p>
+
+      <div class="card" style="margin-bottom:2rem;" id="feedback-card">
+        <form id="feedbackForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="feedbackType">Feedback type</label>
+            <select class="form-select" id="feedbackType" name="feedbackType">
+              <option value="General feedback">General feedback</option>
+              <option value="Bug report">Bug report</option>
+              <option value="Feature request">Feature request</option>
+              <option value="Privacy concern">Privacy concern</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="name">Your name <span class="form-hint" style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+            <input class="form-input" type="text" id="name" name="name" placeholder="Anonymous" autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="replyEmail">Reply email <span class="form-hint" style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+            <input class="form-input" type="email" id="replyEmail" name="replyEmail" placeholder="Leave blank if you don't want a reply" autocomplete="email">
+            <span class="form-hint">We'll only use this to reply to your message.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="message">Message <span style="color:var(--red);">*</span></label>
+            <textarea class="form-textarea" id="message" name="message" rows="5" placeholder="Tell us what you think..." required></textarea>
+          </div>
+
+          <!-- Honeypot — hidden from real users, catches bots -->
+          <input name="honeypot" type="text" style="display:none;" tabindex="-1" autocomplete="off">
+
+          <button type="submit" class="add-btn" id="submitBtn">Send Feedback</button>
+          <div class="form-error" id="formError" style="display:none;"></div>
+        </form>
+      </div>
+
+      <p style="text-align:center; margin-bottom:2rem;">
+        <a href="index.html" style="color:var(--accent); font-size:0.9rem;">&#8592; Back to App</a>
+      </p>
+
+    </section>
+  </main>
+
+  <script>
+    // Update this URL after deploying the Worker with:
+    // wrangler deploy --config worker/wrangler.toml
+    const WORKER_URL = "https://sub-site-feedback.leonfinnerty.workers.dev/";
+
+    const form = document.getElementById("feedbackForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const formError = document.getElementById("formError");
+    const feedbackCard = document.getElementById("feedback-card");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      // Clear any previous error
+      formError.style.display = "none";
+      formError.textContent = "";
+
+      // Gather field values
+      const feedbackType = form.elements["feedbackType"].value;
+      const name = form.elements["name"].value;
+      const replyEmail = form.elements["replyEmail"].value;
+      const message = form.elements["message"].value;
+      const honeypot = form.elements["honeypot"].value;
+
+      // Client-side validation
+      if (!message.trim() || message.trim().length < 5) {
+        formError.textContent = "Please enter a message of at least 5 characters.";
+        formError.style.display = "block";
+        return;
+      }
+
+      // Loading state
+      submitBtn.textContent = "Sending\u2026";
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, replyEmail, feedbackType, message, honeypot }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Replace form with success message
+          feedbackCard.innerHTML = `
+            <div style="text-align:center; padding:2rem 1rem;">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" style="margin-bottom:1rem; color:var(--green);">
+                <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M14 24l7 7 13-14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <h2 style="font-size:1.1rem; font-weight:700; color:var(--text); margin:0 0 0.5rem;">Thanks for your feedback!</h2>
+              <p style="color:var(--text-muted); margin:0; line-height:1.7;">We read every message.</p>
+            </div>
+          `;
+        } else {
+          throw new Error(data.error || "Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        formError.textContent = err.message || "Could not send your message. Please try again later.";
+        formError.style.display = "block";
+        submitBtn.textContent = "Send Feedback";
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
