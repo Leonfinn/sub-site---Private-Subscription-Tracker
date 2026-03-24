@@ -149,8 +149,14 @@ function _hasUnsavedChanges() {
   const subs = getAllSubscriptions();
   if (!subs.length) return false;                                    // nothing to lose
   if (!exportTs) return true;                                        // never exported, has data
-  if (!changeTs) return true;                                        // old user — conservative
-  return parseInt(changeTs, 10) > parseInt(exportTs, 10);           // changed since last export
+  if (!changeTs) {
+    // Legacy user: exported before change-tracking existed — self-heal to avoid false positive
+    try { localStorage.setItem(_CHANGE_TS_KEY, exportTs); } catch (_) {}
+    return false;
+  }
+  const c = Number(changeTs), e = Number(exportTs);
+  if (isNaN(c) || isNaN(e)) return true;                            // corrupted data — be conservative
+  return c > e;                                                      // changed since last export
 }
 
 function _initSaveStatus() {
