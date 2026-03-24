@@ -185,19 +185,18 @@ function _timeAgo(ts) {
 }
 
 function _renderSaveStatus() {
-  const saveTs   = localStorage.getItem(_SAVE_TS_KEY);
   const exportTs = localStorage.getItem(_EXPORT_TS_KEY);
   const daysSinceExport = exportTs
     ? Math.floor((Date.now() - parseInt(exportTs, 10)) / 86_400_000)
     : Infinity;
 
   const needsBackup = daysSinceExport > _BACKUP_NUDGE_DAYS;
-  const timeLabel   = _timeAgo(saveTs);
+  const exportLabel = exportTs ? _timeAgo(exportTs) : null;
 
-  const text  = needsBackup ? 'Back up your data' : `Saved · ${timeLabel}`;
+  const text  = needsBackup ? 'Back up your data' : `Backed up · ${exportLabel}`;
   const title = needsBackup
     ? `No backup in ${daysSinceExport === Infinity ? 'a while' : daysSinceExport + ' days'} — click to export`
-    : `Last saved: ${timeLabel}. Click to export a backup.`;
+    : `Last export: ${exportLabel}. Click to export another backup.`;
 
   const configs = [
     { id: 'saveStatus',       nudgeClass: 'save-status--nudge' },

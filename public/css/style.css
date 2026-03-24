@@ -137,45 +137,53 @@ input[type="radio"] {
 .save-status {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 20px;
+  gap: 8px;
+  padding: 10px 20px;
   width: 100%;
   background: none;
   border: none;
   border-top: 1px solid var(--border);
   cursor: pointer;
   text-align: left;
-  font-size: 11px;
-  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
   transition: color 0.2s, background 0.15s;
 }
-.save-status:hover { background: var(--bg-hover); color: var(--text-muted); }
-.save-status--nudge { color: var(--amber); }
-.save-status--nudge:hover { color: var(--amber); opacity: 0.85; }
+.save-status:hover { background: var(--bg-hover); }
+.save-status--nudge {
+  color: var(--amber);
+  background: rgba(245, 158, 11, 0.08);
+}
+.save-status--nudge:hover { background: rgba(245, 158, 11, 0.14); }
 
 .save-status-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--green);
   flex-shrink: 0;
   transition: background 0.3s;
 }
-.save-status--nudge .save-status-dot { background: var(--amber); }
+.save-status--nudge .save-status-dot {
+  background: var(--amber);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
 
 /* Mobile strip — sits just above the bottom nav */
 .save-status-mobile {
   display: none;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
   width: 100%;
-  padding: 5px 16px;
+  padding: 7px 16px;
   background: var(--bg-panel);
   border: none;
   border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
   cursor: pointer;
   position: fixed;
   bottom: var(--bottom-nav-h);
@@ -183,7 +191,10 @@ input[type="radio"] {
   right: 0;
   z-index: 9;
 }
-.save-status-mobile--nudge { color: var(--amber); }
+.save-status-mobile--nudge {
+  color: var(--amber);
+  background: rgba(245, 158, 11, 0.08);
+}
 .save-status-mobile--nudge .save-status-dot { background: var(--amber); }
 
 .sidebar-footer {
