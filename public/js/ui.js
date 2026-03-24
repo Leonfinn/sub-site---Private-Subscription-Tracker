@@ -71,7 +71,10 @@ function renderSubscriptionsList(subs) {
     const active    = subs.filter(s => s.status === 'Active').length;
     const paused    = subs.filter(s => s.status === 'Paused').length;
     const cancelled = subs.filter(s => s.status === 'Cancelled').length;
-    summary.textContent = `${active} active · ${paused} paused · ${cancelled} cancelled`;
+    const wishlist  = subs.filter(s => s.status === 'Wishlist').length;
+    const parts = [`${active} active`, `${paused} paused`, `${cancelled} cancelled`];
+    if (wishlist) parts.push(`${wishlist} wishlist`);
+    summary.textContent = parts.join(' · ');
   }
 
   // Filter
@@ -131,6 +134,7 @@ function renderSubscriptionsList(subs) {
 
   filtered.forEach(sub => {
     const tr = document.createElement('tr');
+    if (sub.status === 'Wishlist') tr.className = 'sub-row--wishlist';
 
     // Star cell
     const starTd = document.createElement('td');
@@ -165,12 +169,37 @@ function renderSubscriptionsList(subs) {
     const costTd = document.createElement('td');
     const costDiv = document.createElement('div');
     costDiv.className = 'cost';
-    costDiv.textContent = _formatCost(sub);
+    const fullCost = _formatCost(sub);
+    if (sub.splitWays && sub.splitWays > 1) {
+      const share = (parseFloat(sub.cost) / sub.splitWays);
+      costDiv.textContent = _currencySymbol(sub.currency) + share.toFixed(2);
+      const splitBadge = document.createElement('span');
+      splitBadge.className = 'split-badge';
+      splitBadge.title = `Full plan: ${fullCost} ÷ ${sub.splitWays} people`;
+      splitBadge.textContent = `÷${sub.splitWays}`;
+      costDiv.appendChild(splitBadge);
+    } else {
+      costDiv.textContent = fullCost;
+    }
     const cycleDiv = document.createElement('div');
     cycleDiv.className = 'cycle';
     cycleDiv.textContent = _formatCycle(sub.billingCycle);
     costTd.appendChild(costDiv);
     costTd.appendChild(cycleDiv);
+
+    // Annual savings nudge (Monthly Active only)
+    if (sub.status === 'Active' && sub.billingCycle === 'Monthly') {
+      const cost = parseFloat(sub.cost) || 0;
+      const saving = cost * 12 * 0.175;
+      if (saving >= 1) {
+        const nudge = document.createElement('div');
+        nudge.className = 'savings-nudge';
+        nudge.title = 'Switch to annual billing to save this amount';
+        nudge.textContent = `💡 Save ~${_currencySymbol(sub.currency)}${saving.toFixed(0)}/yr`;
+        nudge.addEventListener('click', (e) => { e.stopPropagation(); _showAnnualSavingsModal(sub); });
+        costTd.appendChild(nudge);
+      }
+    }
 
     // Renewal cell
     const renewTd = document.createElement('td');
@@ -182,7 +211,7 @@ function renderSubscriptionsList(subs) {
     const statusTd = document.createElement('td');
     const statusBadge = document.createElement('span');
     statusBadge.className = 'status-badge ' + sub.status.toLowerCase();
-    statusBadge.textContent = sub.status;
+    statusBadge.textContent = sub.status === 'Wishlist' ? '🗂 Wishlist' : sub.status;
     statusTd.appendChild(statusBadge);
 
     // Actions cell
@@ -302,6 +331,31 @@ function renderDashboard(subs, settings) {
     }
   }
 
+  // Audit banner
+  const auditBannerEl = document.getElementById('audit-banner');
+  if (auditBannerEl) {
+    auditBannerEl.innerHTML = '';
+    const auditTs = localStorage.getItem(KEYS.AUDIT_TS);
+    const daysSinceAudit = auditTs ? Math.floor((Date.now() - parseInt(auditTs, 10)) / 86400000) : null;
+    const activeSubs = subs.filter(s => s.status === 'Active');
+    if (activeSubs.length > 0 && (auditTs === null || daysSinceAudit >= 90)) {
+      const banner = document.createElement('div');
+      banner.className = 'audit-banner';
+      const txt = auditTs
+        ? `⏰ Time for your quarterly subscription review — last audit was ${daysSinceAudit} days ago.`
+        : '⏰ Ready for your first subscription audit? Review each subscription and cut what you don\'t need.';
+      const textSpan = document.createElement('span');
+      textSpan.textContent = txt;
+      const startBtn = document.createElement('button');
+      startBtn.className = 'audit-banner-btn';
+      startBtn.textContent = 'Start Audit';
+      startBtn.addEventListener('click', () => showAuditModal());
+      banner.appendChild(textSpan);
+      banner.appendChild(startBtn);
+      auditBannerEl.appendChild(banner);
+    }
+  }
+
   // Waste alert
   const alertEl = document.getElementById('waste-alert');
   if (alertEl) {
@@ -347,6 +401,17 @@ function renderDashboard(subs, settings) {
     statsRow.appendChild(makeStatCard('Monthly Spend',  monthlyVal, 'accent', `across ${activeSubs.length} active subscription${activeSubs.length !== 1 ? 's' : ''}`));
     statsRow.appendChild(makeStatCard('Annual Spend',   annualVal,  '',       'projected this year'));
     statsRow.appendChild(makeStatCard('Due This Month', String(renewals.length), '', 'renewals in next 30 days'));
+
+    // Potential annual savings from switching monthly → annual
+    if (!multiCurr) {
+      const monthlySubs = activeSubs.filter(s => s.billingCycle === 'Monthly');
+      if (monthlySubs.length > 0) {
+        const potSaving = monthlySubs.reduce((sum, s) => sum + (parseFloat(s.cost) || 0) * 12 * 0.175, 0);
+        if (potSaving >= 1) {
+          statsRow.appendChild(makeStatCard('Potential Savings', sym + potSaving.toFixed(0) + '/yr', 'stat-savings', 'switching monthly → annual'));
+        }
+      }
+    }
   }
 
   // Charts column
@@ -734,6 +799,44 @@ function renderModal(sub) {
   if (isEdit && sub.nextBillingDate) dateInput.value = sub.nextBillingDate;
   grid.appendChild(makeField('Next Billing Date', dateInput, false));
 
+  // Shared plan (splitWays)
+  const splitRow = document.createElement('div');
+  splitRow.className = 'form-group full split-row';
+  const splitCheck = document.createElement('input');
+  splitCheck.type = 'checkbox';
+  splitCheck.id = 'splitShared';
+  splitCheck.className = 'split-checkbox';
+  if (isEdit && sub.splitWays && sub.splitWays > 1) splitCheck.checked = true;
+  const splitLbl = document.createElement('label');
+  splitLbl.htmlFor = 'splitShared';
+  splitLbl.className = 'split-label';
+  splitLbl.textContent = 'Shared plan — split cost between people';
+  const splitWrap = document.createElement('div');
+  splitWrap.className = 'split-wrap';
+  splitWrap.appendChild(splitCheck);
+  splitWrap.appendChild(splitLbl);
+  const splitDetail = document.createElement('div');
+  splitDetail.className = 'split-detail';
+  splitDetail.style.display = splitCheck.checked ? 'flex' : 'none';
+  const splitNum = document.createElement('input');
+  splitNum.type = 'number';
+  splitNum.className = 'form-input split-num';
+  splitNum.min = '2';
+  splitNum.max = '20';
+  splitNum.placeholder = '2';
+  splitNum.value = (isEdit && sub.splitWays && sub.splitWays > 1) ? sub.splitWays : '2';
+  const splitHint = document.createElement('span');
+  splitHint.className = 'split-hint';
+  splitDetail.appendChild(document.createTextNode('Split between '));
+  splitDetail.appendChild(splitNum);
+  splitDetail.appendChild(document.createTextNode(' people'));
+  splitRow.appendChild(splitWrap);
+  splitRow.appendChild(splitDetail);
+  splitCheck.addEventListener('change', () => {
+    splitDetail.style.display = splitCheck.checked ? 'flex' : 'none';
+  });
+  grid.appendChild(splitRow);
+
   // Notes
   const notesInput = document.createElement('input');
   notesInput.className = 'form-input';
@@ -772,6 +875,7 @@ function renderModal(sub) {
       errorDiv.style.display = 'block';
       return;
     }
+    const splitWays = splitCheck.checked ? Math.max(2, parseInt(splitNum.value, 10) || 2) : undefined;
     const updated = {
       ...(isEdit ? sub : {}),
       name,
@@ -783,6 +887,7 @@ function renderModal(sub) {
       nextBillingDate: dateInput.value || null,
       notes: notesInput.value.trim(),
       starred: isEdit ? sub.starred : false,
+      ...(splitWays ? { splitWays } : { splitWays: undefined }),
     };
     saveSubscription(updated);
     closeModal();
@@ -1100,6 +1205,233 @@ function showImportModal() {
   }
 
   setTimeout(() => textarea.focus(), 50);
+}
+
+// ── Annual Savings Calculator ─────────────────────────────
+
+function _showAnnualSavingsModal(sub) {
+  const modal   = document.getElementById('modal');
+  const overlay = document.getElementById('modalOverlay');
+  if (!modal) return;
+  modal.innerHTML = '';
+
+  const cost    = parseFloat(sub.cost) || 0;
+  const sym     = _currencySymbol(sub.currency);
+  const annualFull = cost * 12;
+  const saving  = annualFull * 0.175;
+  const annualPrice = annualFull - saving;
+
+  const title = document.createElement('div');
+  title.className = 'modal-title';
+  title.textContent = 'Switch to Annual Billing';
+
+  const sub2 = document.createElement('div');
+  sub2.className = 'modal-sub';
+  sub2.textContent = `${sub.name} — estimate based on typical 15–20% annual discount`;
+
+  const table = document.createElement('div');
+  table.className = 'savings-table';
+  function row(label, val, cls) {
+    const r = document.createElement('div');
+    r.className = 'savings-row' + (cls ? ' ' + cls : '');
+    r.innerHTML = `<span>${label}</span><strong>${val}</strong>`;
+    return r;
+  }
+  table.appendChild(row('Current cost (monthly)',   `${sym}${cost.toFixed(2)}/mo`));
+  table.appendChild(row('Current cost (annual)',    `${sym}${annualFull.toFixed(2)}/yr`));
+  table.appendChild(row('Estimated annual price',  `${sym}${annualPrice.toFixed(2)}/yr`, 'savings-row--annual'));
+  table.appendChild(row('Your estimated saving',   `${sym}${saving.toFixed(2)}/yr`, 'savings-row--saving'));
+
+  const hint = document.createElement('p');
+  hint.className = 'savings-hint';
+  hint.textContent = 'Actual annual price varies by provider. Check their website before switching.';
+
+  const costInput = document.createElement('input');
+  costInput.className = 'form-input';
+  costInput.type = 'number';
+  costInput.step = '0.01';
+  costInput.value = annualPrice.toFixed(2);
+  const costGroup = document.createElement('div');
+  costGroup.className = 'form-group';
+  const costLbl = document.createElement('label');
+  costLbl.className = 'form-label';
+  costLbl.textContent = 'Confirm annual cost (edit if you know the exact price)';
+  costGroup.appendChild(costLbl);
+  costGroup.appendChild(costInput);
+
+  const actions = document.createElement('div');
+  actions.className = 'modal-actions';
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'btn-cancel';
+  cancelBtn.textContent = 'Keep Monthly';
+  cancelBtn.addEventListener('click', closeModal);
+  const convertBtn = document.createElement('button');
+  convertBtn.className = 'btn-save';
+  convertBtn.textContent = 'Convert to Annual';
+  convertBtn.addEventListener('click', () => {
+    const newCost = parseFloat(costInput.value);
+    if (isNaN(newCost) || newCost <= 0) return;
+    saveSubscription({ ...sub, billingCycle: 'Annually', cost: newCost });
+    closeModal();
+    _showToast(`${sub.name} converted to annual billing`, 'success');
+  });
+  actions.appendChild(cancelBtn);
+  actions.appendChild(convertBtn);
+
+  modal.appendChild(title);
+  modal.appendChild(sub2);
+  modal.appendChild(table);
+  modal.appendChild(hint);
+  modal.appendChild(costGroup);
+  modal.appendChild(actions);
+  overlay.classList.remove('hidden');
+
+  if (!overlay._modalBackdropBound) {
+    overlay._modalBackdropBound = true;
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  }
+}
+
+// ── Quarterly Audit Mode ──────────────────────────────────
+
+function showAuditModal() {
+  const subs   = getAllSubscriptions().filter(s => s.status === 'Active');
+  const modal  = document.getElementById('modal');
+  const overlay = document.getElementById('modalOverlay');
+  if (!modal || subs.length === 0) return;
+
+  let idx = 0;
+  const changes = [];
+
+  function renderStep() {
+    modal.innerHTML = '';
+    if (idx >= subs.length) { renderSummary(); return; }
+    const sub = subs[idx];
+
+    const progress = document.createElement('div');
+    progress.className = 'audit-progress';
+    progress.textContent = `Reviewing ${idx + 1} of ${subs.length}`;
+
+    const bar = document.createElement('div');
+    bar.className = 'audit-progress-bar';
+    const fill = document.createElement('div');
+    fill.className = 'audit-progress-fill';
+    fill.style.width = ((idx / subs.length) * 100) + '%';
+    bar.appendChild(fill);
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'audit-sub-name';
+    nameEl.textContent = sub.name;
+
+    const meta = document.createElement('div');
+    meta.className = 'audit-sub-meta';
+    const cost = parseFloat(sub.cost) || 0;
+    const sym = _currencySymbol(sub.currency);
+    const monthly = monthlyEquivalent(sub);
+    meta.textContent = `${sym}${cost.toFixed(2)} ${_formatCycle(sub.billingCycle)} · ${sub.category}`;
+    if (sub.billingCycle !== 'Monthly') {
+      meta.textContent += ` (${sym}${monthly.toFixed(2)}/mo)`;
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'audit-actions';
+
+    function makeBtn(label, cls, action) {
+      const btn = document.createElement('button');
+      btn.className = 'audit-btn ' + cls;
+      btn.textContent = label;
+      btn.addEventListener('click', () => {
+        if (action !== 'keep') {
+          changes.push({ sub, action });
+          saveSubscription({ ...sub, status: action === 'wishlist' ? 'Wishlist' : action === 'pause' ? 'Paused' : 'Cancelled' });
+        }
+        idx++;
+        renderStep();
+      });
+      return btn;
+    }
+    actions.appendChild(makeBtn('✓ Keep', 'audit-btn--keep', 'keep'));
+    actions.appendChild(makeBtn('⏸ Pause', 'audit-btn--pause', 'pause'));
+    actions.appendChild(makeBtn('✕ Cancel', 'audit-btn--cancel', 'cancel'));
+    actions.appendChild(makeBtn('🗂 Wishlist', 'audit-btn--wishlist', 'wishlist'));
+
+    const skipLink = document.createElement('button');
+    skipLink.className = 'audit-skip';
+    skipLink.textContent = 'Stop audit for now';
+    skipLink.addEventListener('click', closeModal);
+
+    modal.appendChild(progress);
+    modal.appendChild(bar);
+    modal.appendChild(nameEl);
+    modal.appendChild(meta);
+    modal.appendChild(actions);
+    modal.appendChild(skipLink);
+  }
+
+  function renderSummary() {
+    // Stamp audit date
+    try { localStorage.setItem(KEYS.AUDIT_TS, Date.now().toString()); } catch (_) {}
+
+    modal.innerHTML = '';
+
+    const title = document.createElement('div');
+    title.className = 'modal-title';
+    title.textContent = '✓ Audit Complete';
+
+    const paused    = changes.filter(c => c.action === 'pause').length;
+    const cancelled = changes.filter(c => c.action === 'cancel').length;
+    const wishlisted = changes.filter(c => c.action === 'wishlist').length;
+
+    // Calculate savings from changes
+    const allSubs = getAllSubscriptions();
+    const savedMonthly = changes
+      .filter(c => c.action === 'cancel' || c.action === 'pause')
+      .reduce((sum, c) => sum + (parseFloat(c.sub.cost) / (c.sub.billingCycle === 'Annually' ? 12 : c.sub.billingCycle === 'Quarterly' ? 3 : 1)), 0);
+    const savedAnnual = savedMonthly * 12;
+
+    const stats = document.createElement('div');
+    stats.className = 'audit-summary-stats';
+    stats.innerHTML = `
+      <div class="audit-stat"><span class="audit-stat-n">${subs.length}</span><span>reviewed</span></div>
+      ${paused ? `<div class="audit-stat"><span class="audit-stat-n">${paused}</span><span>paused</span></div>` : ''}
+      ${cancelled ? `<div class="audit-stat"><span class="audit-stat-n">${cancelled}</span><span>cancelled</span></div>` : ''}
+      ${wishlisted ? `<div class="audit-stat"><span class="audit-stat-n">${wishlisted}</span><span>wishlisted</span></div>` : ''}
+    `;
+
+    const savingsEl = document.createElement('div');
+    savingsEl.className = 'audit-savings';
+    if (savedAnnual > 0) {
+      const firstSub = changes.find(c => c.action === 'cancel' || c.action === 'pause');
+      const sym = firstSub ? _currencySymbol(firstSub.sub.currency) : '£';
+      savingsEl.textContent = `Potential saving: ${sym}${savedAnnual.toFixed(0)}/yr`;
+      savingsEl.classList.add('audit-savings--positive');
+    } else {
+      savingsEl.textContent = 'No changes made — all subscriptions kept.';
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn-save';
+    closeBtn.style.width = '100%';
+    closeBtn.textContent = 'Done';
+    closeBtn.addEventListener('click', () => {
+      closeModal();
+      // Refresh the dashboard audit banner
+      document.dispatchEvent(new CustomEvent('subsight:updated', { detail: {} }));
+    });
+
+    modal.appendChild(title);
+    modal.appendChild(stats);
+    modal.appendChild(savingsEl);
+    modal.appendChild(closeBtn);
+  }
+
+  renderStep();
+  overlay.classList.remove('hidden');
+
+  if (!overlay._modalBackdropBound) {
+    overlay._modalBackdropBound = true;
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  }
 }
 
 function renderAlternatives(subs) {

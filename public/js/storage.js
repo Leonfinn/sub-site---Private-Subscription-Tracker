@@ -6,19 +6,22 @@ const CATEGORIES = [
 ];
 const CURRENCIES   = ['GBP', 'USD', 'EUR', 'CAD', 'AUD'];
 const BILLING_CYCLES = ['Monthly', 'Quarterly', 'Annually', 'Weekly'];
-const STATUSES     = ['Active', 'Paused', 'Cancelled'];
+const STATUSES     = ['Active', 'Paused', 'Cancelled', 'Wishlist'];
 const SCHEMA_VERSION = 1;
 
 const KEYS = {
-  VERSION:  'subsight_schema_version',
-  SUBS:     'subsight_subscriptions',
-  BANNER:   'subsight_trust_banner_dismissed',
-  SETTINGS: 'subsight_settings'
+  VERSION:   'subsight_schema_version',
+  SUBS:      'subsight_subscriptions',
+  BANNER:    'subsight_trust_banner_dismissed',
+  SETTINGS:  'subsight_settings',
+  CHANGE_TS: 'subsight_last_change_ts',
+  AUDIT_TS:  'subsight_last_audit_ts',
 };
 
 const DEFAULT_SETTINGS = { defaultCurrency: 'GBP', wasteAlertThreshold: 1500 };
 
 function _notify() {
+  try { localStorage.setItem(KEYS.CHANGE_TS, Date.now().toString()); } catch (_) {}
   const subs = typeof getAllSubscriptions === 'function' ? getAllSubscriptions() : [];
   document.dispatchEvent(new CustomEvent('subsight:updated', {
     detail: { subscriptions: subs, settings: getSettings() }
@@ -82,12 +85,15 @@ function clearAllData() {
 function monthlyEquivalent(sub) {
   if (sub.status !== 'Active') return 0;
   const cost = parseFloat(sub.cost) || 0;
+  const split = (sub.splitWays && sub.splitWays > 1) ? sub.splitWays : 1;
+  let monthly;
   switch (sub.billingCycle) {
-    case 'Weekly':    return (cost * 52) / 12;
-    case 'Quarterly': return cost / 3;
-    case 'Annually':  return cost / 12;
-    default:          return cost;
+    case 'Weekly':    monthly = (cost * 52) / 12; break;
+    case 'Quarterly': monthly = cost / 3; break;
+    case 'Annually':  monthly = cost / 12; break;
+    default:          monthly = cost; break;
   }
+  return monthly / split;
 }
 
 function getActiveSubs(subs) {

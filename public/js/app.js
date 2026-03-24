@@ -55,7 +55,7 @@ function initApp() {
   });
   document.addEventListener('subsight:updated', () => {
     renderCurrentView();
-    _updateSaveStatus('saved');
+    _renderSaveStatus();
   });
   document.addEventListener('subsight:exported', () => _renderSaveStatus());
 
@@ -123,13 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function _initUnloadGuard() {
   window.addEventListener('beforeunload', e => {
-    const subs = getAllSubscriptions();
-    if (!subs.length) return; // nothing to lose
-    const exportTs = localStorage.getItem(_EXPORT_TS_KEY);
-    const daysSinceExport = exportTs
-      ? Math.floor((Date.now() - parseInt(exportTs, 10)) / 86_400_000)
-      : Infinity;
-    if (daysSinceExport > _BACKUP_NUDGE_DAYS) {
+    if (_hasUnsavedChanges()) {
       e.preventDefault();
       e.returnValue = ''; // required for Chrome
     }
@@ -146,36 +140,26 @@ function _wireImportButton() {
 
 // ── Save status indicator ─────────────────────────────────
 
-const _SAVE_TS_KEY  = 'subsight_last_save_ts';
 const _EXPORT_TS_KEY = 'subsight_last_export_ts';
-const _BACKUP_NUDGE_DAYS = 30;
-let _saveStatusTimer = null;
+const _CHANGE_TS_KEY = 'subsight_last_change_ts'; // stamped by storage.js _notify()
+
+function _hasUnsavedChanges() {
+  const changeTs = localStorage.getItem(_CHANGE_TS_KEY);
+  const exportTs = localStorage.getItem(_EXPORT_TS_KEY);
+  const subs = getAllSubscriptions();
+  if (!subs.length) return false;                                    // nothing to lose
+  if (!exportTs) return true;                                        // never exported, has data
+  if (!changeTs) return true;                                        // old user — conservative
+  return parseInt(changeTs, 10) > parseInt(exportTs, 10);           // changed since last export
+}
 
 function _initSaveStatus() {
-  // Wire click → Export view on both desktop and mobile indicators
   ['saveStatus', 'saveStatusMobile'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('click', () => navigate('export'));
   });
-
-  // Record a save timestamp now if one doesn't exist (first visit)
-  if (!localStorage.getItem(_SAVE_TS_KEY)) {
-    localStorage.setItem(_SAVE_TS_KEY, Date.now().toString());
-  }
-
   _renderSaveStatus();
-
-  // Refresh the time-ago label every 60 seconds
   setInterval(_renderSaveStatus, 60_000);
-}
-
-function _updateSaveStatus(event) {
-  if (event === 'saved') {
-    try {
-      localStorage.setItem(_SAVE_TS_KEY, Date.now().toString());
-    } catch (_) { /* QuotaExceededError — storage full */ }
-  }
-  _renderSaveStatus();
 }
 
 function _timeAgo(ts) {
@@ -193,17 +177,27 @@ function _timeAgo(ts) {
 
 function _renderSaveStatus() {
   const exportTs = localStorage.getItem(_EXPORT_TS_KEY);
-  const daysSinceExport = exportTs
-    ? Math.floor((Date.now() - parseInt(exportTs, 10)) / 86_400_000)
-    : Infinity;
+  const subs = getAllSubscriptions();
+  const noSubs  = !subs.length;
+  const unsaved = _hasUnsavedChanges();
 
-  const needsBackup = daysSinceExport > _BACKUP_NUDGE_DAYS;
-  const exportLabel = exportTs ? _timeAgo(exportTs) : null;
+  let text, title;
+  if (noSubs) {
+    text  = 'Nothing to back up';
+    title = 'No subscriptions yet.';
+  } else if (unsaved && !exportTs) {
+    text  = 'No backup yet';
+    title = 'You have never exported a backup — click to export';
+  } else if (unsaved) {
+    text  = 'Unsaved changes';
+    title = 'Data changed since last backup — click to export';
+  } else {
+    const lbl = _timeAgo(exportTs);
+    text  = `Backed up · ${lbl}`;
+    title = `Last export: ${lbl}. Click to export another backup.`;
+  }
 
-  const text  = needsBackup ? 'Back up your data' : `Backed up · ${exportLabel}`;
-  const title = needsBackup
-    ? `No backup in ${daysSinceExport === Infinity ? 'a while' : daysSinceExport + ' days'} — click to export`
-    : `Last export: ${exportLabel}. Click to export another backup.`;
+  const needsNudge = !noSubs && unsaved;
 
   const configs = [
     { id: 'saveStatus',       nudgeClass: 'save-status--nudge' },
@@ -212,7 +206,7 @@ function _renderSaveStatus() {
   configs.forEach(({ id, nudgeClass }) => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.classList.toggle(nudgeClass, needsBackup);
+    el.classList.toggle(nudgeClass, needsNudge);
     el.title = title;
     const textEl = el.querySelector('[id$="Text"]');
     if (textEl) textEl.textContent = text;
