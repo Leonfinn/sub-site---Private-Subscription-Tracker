@@ -133,6 +133,59 @@ input[type="radio"] {
 .nav-item.active { color: var(--accent); background: var(--bg-hover); border-left-color: var(--accent); }
 .nav-icon { width: 20px; text-align: center; }
 
+/* ── Save status indicator ──────────────────────────────── */
+.save-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 20px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  text-align: left;
+  font-size: 11px;
+  color: var(--text-faint);
+  transition: color 0.2s, background 0.15s;
+}
+.save-status:hover { background: var(--bg-hover); color: var(--text-muted); }
+.save-status--nudge { color: var(--amber); }
+.save-status--nudge:hover { color: var(--amber); opacity: 0.85; }
+
+.save-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.save-status--nudge .save-status-dot { background: var(--amber); }
+
+/* Mobile strip — sits just above the bottom nav */
+.save-status-mobile {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 16px;
+  background: var(--bg-panel);
+  border: none;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-faint);
+  cursor: pointer;
+  position: fixed;
+  bottom: var(--bottom-nav-h);
+  left: 0;
+  right: 0;
+  z-index: 9;
+}
+.save-status-mobile--nudge { color: var(--amber); }
+.save-status-mobile--nudge .save-status-dot { background: var(--amber); }
+
 .sidebar-footer {
   padding: 16px 20px;
   border-top: 1px solid var(--border);
@@ -1115,9 +1168,11 @@ html[data-theme="light"] .waste-alert {
 
   .main {
     margin-left: 0;
-    margin-bottom: var(--bottom-nav-h);
+    margin-bottom: calc(var(--bottom-nav-h) + 28px); /* extra room for save-status-mobile */
     min-height: calc(100vh - var(--bottom-nav-h));
   }
+
+  .save-status-mobile { display: flex; }
 
   .view { padding: 20px 16px; }
 

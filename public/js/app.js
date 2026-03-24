@@ -53,7 +53,11 @@ function initApp() {
   document.querySelectorAll('.bottom-nav-item[data-view]').forEach(btn => {
     btn.addEventListener('click', () => navigate(btn.dataset.view));
   });
-  document.addEventListener('subsight:updated', () => renderCurrentView());
+  document.addEventListener('subsight:updated', () => {
+    renderCurrentView();
+    _updateSaveStatus('saved');
+  });
+  document.addEventListener('subsight:exported', () => _renderSaveStatus());
 
   // Wire theme toggle(s)
   const themeToggle = document.getElementById('themeToggle');
@@ -112,7 +116,9 @@ function closeModal() {
 document.addEventListener('DOMContentLoaded', () => {
   initApp();
   _wireImportButton();
+  _wireDashImportButton();
   _handleUrlParams();
+  _initSaveStatus();
 });
 
 function _wireImportButton() {
@@ -121,6 +127,90 @@ function _wireImportButton() {
     btn._bound = true;
     btn.addEventListener('click', () => showImportModal());
   }
+}
+
+function _wireDashImportButton() {
+  const btn = document.getElementById('dashImportBtn');
+  if (btn && !btn._bound) {
+    btn._bound = true;
+    btn.addEventListener('click', () => showImportModal());
+  }
+}
+
+// ── Save status indicator ─────────────────────────────────
+
+const _SAVE_TS_KEY  = 'subsight_last_save_ts';
+const _EXPORT_TS_KEY = 'subsight_last_export_ts';
+const _BACKUP_NUDGE_DAYS = 30;
+let _saveStatusTimer = null;
+
+function _initSaveStatus() {
+  // Wire click → Export view on both desktop and mobile indicators
+  ['saveStatus', 'saveStatusMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', () => navigate('export'));
+  });
+
+  // Record a save timestamp now if one doesn't exist (first visit)
+  if (!localStorage.getItem(_SAVE_TS_KEY)) {
+    localStorage.setItem(_SAVE_TS_KEY, Date.now().toString());
+  }
+
+  _renderSaveStatus();
+
+  // Refresh the time-ago label every 60 seconds
+  setInterval(_renderSaveStatus, 60_000);
+}
+
+function _updateSaveStatus(event) {
+  if (event === 'saved') {
+    try {
+      localStorage.setItem(_SAVE_TS_KEY, Date.now().toString());
+    } catch (_) { /* QuotaExceededError — storage full */ }
+  }
+  _renderSaveStatus();
+}
+
+function _timeAgo(ts) {
+  if (!ts) return 'just now';
+  const secs = Math.floor((Date.now() - parseInt(ts, 10)) / 1000);
+  if (secs < 10)  return 'just now';
+  if (secs < 60)  return `${secs}s ago`;
+  const mins = Math.floor(secs / 60);
+  if (mins < 60)  return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24)   return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
+
+function _renderSaveStatus() {
+  const saveTs   = localStorage.getItem(_SAVE_TS_KEY);
+  const exportTs = localStorage.getItem(_EXPORT_TS_KEY);
+  const daysSinceExport = exportTs
+    ? Math.floor((Date.now() - parseInt(exportTs, 10)) / 86_400_000)
+    : Infinity;
+
+  const needsBackup = daysSinceExport > _BACKUP_NUDGE_DAYS;
+  const timeLabel   = _timeAgo(saveTs);
+
+  const text  = needsBackup ? 'Back up your data' : `Saved · ${timeLabel}`;
+  const title = needsBackup
+    ? `No backup in ${daysSinceExport === Infinity ? 'a while' : daysSinceExport + ' days'} — click to export`
+    : `Last saved: ${timeLabel}. Click to export a backup.`;
+
+  const configs = [
+    { id: 'saveStatus',       nudgeClass: 'save-status--nudge' },
+    { id: 'saveStatusMobile', nudgeClass: 'save-status-mobile--nudge' },
+  ];
+  configs.forEach(({ id, nudgeClass }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle(nudgeClass, needsBackup);
+    el.title = title;
+    const textEl = el.querySelector('[id$="Text"]');
+    if (textEl) textEl.textContent = text;
+  });
 }
 
 // iOS Shortcut flow: ?text=<encoded>, or ?name=&cost=&currency=&cycle=&date=

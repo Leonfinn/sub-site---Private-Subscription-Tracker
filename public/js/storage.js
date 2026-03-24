@@ -166,6 +166,7 @@ async function exportJSON() {
     `subsite-backup-${new Date().toISOString().slice(0, 10)}.json`,
     'application/json'
   );
+  _recordExport();
 }
 
 async function exportCSV() {
@@ -176,6 +177,13 @@ async function exportCSV() {
   ]);
   const csv = [headers, ...rows].map(r => r.map(_escapeCsv).join(',')).join('\n');
   await _triggerDownload(csv, `subsite-export-${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
+  _recordExport();
+}
+
+function _recordExport() {
+  try { localStorage.setItem('subsight_last_export_ts', Date.now().toString()); } catch (_) {}
+  // Notify app.js to refresh the save status indicator
+  document.dispatchEvent(new CustomEvent('subsight:exported'));
 }
 
 function _escapeCsv(val) {

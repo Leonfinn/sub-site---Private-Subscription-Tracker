@@ -77,6 +77,10 @@
         <div class="toggle-thumb" id="toggleThumb"></div>
       </div>
     </div>
+    <button class="save-status" id="saveStatus" aria-live="polite" aria-label="Data save status" title="Click to go to Export &amp; backup">
+      <span class="save-status-dot"></span>
+      <span class="save-status-text" id="saveStatusText">Saved</span>
+    </button>
     <div class="sidebar-footer">
       🔒 100% private — all data stored locally on your device. Nothing is sent to any server.
       <br><a href="privacy.html" style="color:var(--text-faint);font-size:11px;">Privacy Policy</a>
@@ -101,6 +105,12 @@
     </div>
     <span class="mobile-header-page" id="mobilePageTitle">Dashboard</span>
   </header>
+
+  <!-- Mobile save status strip (sits above bottom nav) -->
+  <button class="save-status-mobile" id="saveStatusMobile" aria-live="polite" aria-label="Data save status">
+    <span class="save-status-dot"></span>
+    <span id="saveStatusMobileText">Saved</span>
+  </button>
 
   <!-- Mobile bottom tab bar -->
   <nav class="bottom-nav" id="bottomNav">
@@ -155,7 +165,10 @@
           <h1 class="page-title">Dashboard</h1>
           <p class="page-sub" id="dashboard-date"></p>
         </div>
-        <button class="add-btn" id="dashAddBtn">+ Add Subscription</button>
+        <div class="view-header-btns">
+          <button class="btn-import" id="dashImportBtn">✉ Import from Email</button>
+          <button class="add-btn" id="dashAddBtn">+ Add Subscription</button>
+        </div>
       </div>
       <details class="help-block">
         <summary>How to use Sub-Site</summary>
