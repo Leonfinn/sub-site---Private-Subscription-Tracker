@@ -295,7 +295,7 @@ function renderDashboard(subs, settings) {
     const betaBanner = document.createElement('div');
     betaBanner.id = 'beta-banner';
     betaBanner.className = 'beta-banner';
-    betaBanner.innerHTML = '🚧 <strong>Beta:</strong> This is an early version of Sub-Site. Some features are still in development — alternative subscription suggestions are not working yet. Your feedback is welcome.';
+    betaBanner.innerHTML = '🚧 <strong>Beta:</strong> This is an early version of Sub-Site. Some features are still in development — alternative subscription suggestions are not working yet. Your feedback is welcome. <a href="feedback.html" class="beta-feedback-link">Leave feedback →</a>';
     betaBannerEl.parentElement.insertBefore(betaBanner, betaBannerEl);
   }
 

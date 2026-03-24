@@ -1509,6 +1509,9 @@ html[data-theme="light"] .import-replace-warning {
   line-height: 1.5;
 }
 .beta-banner strong { color: var(--amber); }
+.beta-feedback-link { color: var(--amber); font-weight: 600; white-space: nowrap; margin-left: 6px; }
+.beta-feedback-link:hover { text-decoration: underline; }
+html[data-theme="light"] .beta-feedback-link { color: #b45309; }
 
 html[data-theme="light"] .beta-banner {
   background: #fffbeb;
