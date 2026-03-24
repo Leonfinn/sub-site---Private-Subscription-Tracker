@@ -137,6 +137,17 @@ function _isValidSub(s) {
     CATEGORIES.includes(s.category);
 }
 
+function _contentFingerprint(s) {
+  return [
+    (s.name || '').trim().toLowerCase(),
+    String(s.cost),
+    (s.currency || '').toUpperCase(),
+    s.billingCycle,
+    s.status,
+    s.category
+  ].join('|');
+}
+
 function importJSON(jsonString, mode) {
   let data;
   try { data = JSON.parse(jsonString); }
@@ -147,18 +158,43 @@ function importJSON(jsonString, mode) {
   }
 
   const valid   = data.subsight_subscriptions.filter(_isValidSub);
-  const skipped = data.subsight_subscriptions.length - valid.length;
+  const invalid = data.subsight_subscriptions.length - valid.length;
 
   if (mode === 'replace') {
     localStorage.setItem(KEYS.SUBS, JSON.stringify(valid));
-  } else {
-    const existing = getAllSubscriptions();
-    const existingIds = new Set(existing.map(s => s.id));
-    const toAdd = valid.filter(s => !existingIds.has(s.id));
-    localStorage.setItem(KEYS.SUBS, JSON.stringify([...existing, ...toAdd]));
+    _notify();
+    return { ok: true, added: valid.length, dupeSkipped: 0, invalid };
   }
+
+  // Merge mode: deduplicate by ID first, then by content fingerprint
+  const existing = getAllSubscriptions();
+  const existingById          = new Map(existing.map(s => [s.id, s]));
+  const existingByFingerprint = new Map(existing.map(s => [_contentFingerprint(s), s]));
+
+  let added = 0, dupeSkipped = 0;
+
+  for (const s of valid) {
+    if (existingById.has(s.id)) { dupeSkipped++; continue; }
+
+    const fpMatch = existingByFingerprint.get(_contentFingerprint(s));
+    if (fpMatch) {
+      // Content duplicate — keep existing record; refresh next billing date if imported is newer
+      if (s.nextBillingDate && s.nextBillingDate > (fpMatch.nextBillingDate || '')) {
+        fpMatch.nextBillingDate = s.nextBillingDate;
+      }
+      dupeSkipped++;
+      continue;
+    }
+
+    existing.push(s);
+    existingById.set(s.id, s);
+    existingByFingerprint.set(_contentFingerprint(s), s);
+    added++;
+  }
+
+  localStorage.setItem(KEYS.SUBS, JSON.stringify(existing));
   _notify();
-  return { ok: true, skipped, imported: valid.length };
+  return { ok: true, added, dupeSkipped, invalid };
 }
 
 async function exportJSON() {
