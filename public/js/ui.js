@@ -420,7 +420,7 @@ function renderDashboard(subs, settings) {
     chartsCol.innerHTML = '';
 
     // Hero feature panels — only shown when no subscriptions yet
-    if (subs.filter(s => s.status === 'active').length === 0) {
+    if (subs.filter(s => s.status === 'Active').length === 0) {
       const hero = document.createElement('div');
       hero.className = 'hero-features';
 
