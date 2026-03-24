@@ -895,12 +895,36 @@ function showImportModal() {
   actions.appendChild(cancelBtn);
   actions.appendChild(continueBtn);
 
+  // How it works — collapsible guide (Gemini-authored content)
+  const howTo = document.createElement('details');
+  howTo.className = 'import-howto';
+  const howToSum = document.createElement('summary');
+  howToSum.className = 'import-howto-summary';
+  howToSum.textContent = '? How does this work?';
+  howTo.appendChild(howToSum);
+  const howToBody = document.createElement('div');
+  howToBody.className = 'import-howto-body';
+  howToBody.innerHTML = `
+    <ol class="import-steps">
+      <li><strong>Find your receipt</strong> — open the renewal or "upcoming charge" email for the service you want to add (Netflix, Spotify, your gym, etc.).</li>
+      <li><strong>Copy the text</strong> — select and copy the entire body of the email. Or save it as a <code>.eml</code> file and drag it into this panel.</li>
+      <li><strong>Paste it here</strong> — paste into the box above. The app reads your clipboard automatically if you've allowed it.</li>
+      <li><strong>Review the preview</strong> — the parser shows what it found: price, currency, billing cycle, and next date.</li>
+      <li><strong>Fill any gaps</strong> — fields highlighted in amber weren't found in the email. You'll fill those in on the next screen.</li>
+      <li><strong>Click Continue</strong> — the Add Subscription form opens pre-filled. Check the details and save.</li>
+    </ol>
+    <p class="import-howto-tips"><strong>Tips:</strong> Copy the whole email for best results. Some providers (like mobile carriers) don't include a price in their renewal emails — just enter it manually. Check that the next billing date shown is for your <em>next</em> payment, not the last one.</p>
+    <p class="import-howto-privacy">🔒 <strong>Privacy:</strong> Your email text is processed entirely inside your browser. Nothing is ever sent to a server — not even a character.</p>
+  `;
+  howTo.appendChild(howToBody);
+
   modal.appendChild(titleEl);
   modal.appendChild(subEl);
   modal.appendChild(dropZone);
   modal.appendChild(btnRow);
   modal.appendChild(fileInput);
   modal.appendChild(preview);
+  modal.appendChild(howTo);
   modal.appendChild(actions);
 
   overlay.classList.remove('hidden');

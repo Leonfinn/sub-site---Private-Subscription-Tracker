@@ -11,6 +11,7 @@ Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](ht
 - **Dashboard** — Overview with monthly/annual spend, trend sparkline, upcoming renewals, category breakdown, and possible savings widget
 - **Subscriptions** — Add, edit, delete, search, filter, and sort your subscriptions
 - **Alternatives** — Discover cheaper alternatives via tier-1 per-service matches and tier-2 category fallbacks (see [ALTERNATIVES-LOGIC.md](ALTERNATIVES-LOGIC.md))
+- **Import from Email** — Client-side parser for renewal emails via paste, .eml file drop, or direct OS share (Android/iOS). Extracts service, cost, cycle, and next date; pre-fills the Add Subscription form. Zero network requests — email text never leaves the device.
 - **Export & Import** — Download as JSON backup or CSV; restore with merge or replace
 - **Settings** — Default currency (GBP/USD/EUR/CAD/AUD), waste alert threshold, data management
 - **Light/Dark mode** — Persistent theme toggle, WCAG 2.2 AA compliant in both modes
@@ -44,10 +45,12 @@ Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](ht
 │   ├── css/
 │   │   └── style.css           # All styles (light/dark, responsive)
 │   ├── js/
-│   │   ├── app.js              # Routing, navigation, theme management
+│   │   ├── app.js              # Routing, navigation, theme management, URL param reader
 │   │   ├── storage.js          # localStorage CRUD + JSON/CSV export
 │   │   ├── charts.js           # Category bar chart & trend sparkline
-│   │   └── ui.js               # All view renders and templates
+│   │   ├── ui.js               # All view renders and templates
+│   │   └── email-parser.js     # MIME decoder + two-pass regex extraction engine
+│   ├── manifest.json           # PWA manifest — share_target for Android email sharing
 │   └── data/
 │       ├── affiliates.js       # 200 known services + category fallbacks (homepage, price, lastVerified)
 │       └── monitored-urls.json # ~20 high-volatility services monitored for price changes
@@ -229,6 +232,30 @@ Gitea: **Repository → Settings → Actions → Runners** — runner should app
 - Replace all `AFFILIATE_URL` placeholders in `data/affiliates.js` with real affiliate links
 - Update `public/feedback.html` `WORKER_URL` if the Worker URL changes
 - Review and update `public/privacy.html` contact email if needed
+
+---
+
+## Email Import
+
+A client-side email parser that extracts subscription details (service name, cost, billing cycle, next date) from renewal emails without any network requests. All parsing happens in the browser.
+
+**Three input methods:**
+- **Paste** — copy the email body text, the modal auto-reads the clipboard on open (if permission granted)
+- **.eml file** — drag-and-drop or file picker; parses MIME structure including base64 and quoted-printable encoded parts
+- **OS share** — Android and iOS can share emails directly to the app (see below)
+
+**How the parser works:** Two-pass regex. First pass targets labeled patterns (e.g. `Next billing date:`, `Renews on:`). Second pass does a generic date/price scan, picking the soonest future date. A confidence score (0–100%) reflects how many fields were found.
+
+**Android (PWA share target):** Install Sub-Site as a PWA (Add to Home Screen in Chrome), then use the share button in your email app and select Sub-Site. Requires the app to be installed from a served URL (not `file://`).
+
+**iOS (Shortcuts):**
+1. Open the Shortcuts app → New Shortcut
+2. Add action: **Get Text from Input** (share sheet)
+3. Add action: **Open URL** — set to `https://beta.sub-site.com/?text=[Shortcut Input]`
+4. Enable "Show in Share Sheet"
+5. In Mail or Gmail, tap Share → your shortcut — the app opens with the email pre-parsed
+
+**Privacy:** Email text is processed entirely in the browser. It is never sent to any server.
 
 ---
 
