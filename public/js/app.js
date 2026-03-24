@@ -116,7 +116,6 @@ function closeModal() {
 document.addEventListener('DOMContentLoaded', () => {
   initApp();
   _wireImportButton();
-  _wireDashImportButton();
   _handleUrlParams();
   _initSaveStatus();
   _initUnloadGuard();
@@ -139,14 +138,6 @@ function _initUnloadGuard() {
 
 function _wireImportButton() {
   const btn = document.getElementById('importEmailBtn');
-  if (btn && !btn._bound) {
-    btn._bound = true;
-    btn.addEventListener('click', () => showImportModal());
-  }
-}
-
-function _wireDashImportButton() {
-  const btn = document.getElementById('dashImportBtn');
   if (btn && !btn._bound) {
     btn._bound = true;
     btn.addEventListener('click', () => showImportModal());

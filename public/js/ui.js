@@ -278,6 +278,10 @@ function renderDashboard(subs, settings) {
   const dashAddBtn = document.getElementById('dashAddBtn');
   if (dashAddBtn && !dashAddBtn._bound) { dashAddBtn._bound = true; dashAddBtn.addEventListener('click', () => openModal(null)); }
 
+  // Import button
+  const dashImportBtn = document.getElementById('dashImportBtn');
+  if (dashImportBtn && !dashImportBtn._bound) { dashImportBtn._bound = true; dashImportBtn.addEventListener('click', () => showImportModal()); }
+
   // Trust banner
   const bannerEl = document.getElementById('trust-banner');
   if (bannerEl) {
