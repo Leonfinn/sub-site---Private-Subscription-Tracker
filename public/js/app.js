@@ -119,7 +119,23 @@ document.addEventListener('DOMContentLoaded', () => {
   _wireDashImportButton();
   _handleUrlParams();
   _initSaveStatus();
+  _initUnloadGuard();
 });
+
+function _initUnloadGuard() {
+  window.addEventListener('beforeunload', e => {
+    const subs = getAllSubscriptions();
+    if (!subs.length) return; // nothing to lose
+    const exportTs = localStorage.getItem(_EXPORT_TS_KEY);
+    const daysSinceExport = exportTs
+      ? Math.floor((Date.now() - parseInt(exportTs, 10)) / 86_400_000)
+      : Infinity;
+    if (daysSinceExport > _BACKUP_NUDGE_DAYS) {
+      e.preventDefault();
+      e.returnValue = ''; // required for Chrome
+    }
+  });
+}
 
 function _wireImportButton() {
   const btn = document.getElementById('importEmailBtn');
