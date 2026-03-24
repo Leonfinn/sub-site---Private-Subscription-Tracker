@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function(){var t=localStorage.getItem('subsite_theme');if(t!=='dark'){document.documentElement.setAttribute('data-theme','light');}})();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Guide | Sub-Site</title>
+  <link rel="stylesheet" href="css/style.css?v=1.1">
+  <style>
+    /* ── Guide-specific styles ───────────────────────────── */
+    .guide-toc {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .guide-toc h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 0.75rem;
+    }
+    .guide-toc ol {
+      margin: 0;
+      padding-left: 1.2rem;
+      line-height: 2;
+    }
+    .guide-toc a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .guide-toc a:hover { text-decoration: underline; }
+
+    .guide-section {
+      margin-bottom: 3rem;
+    }
+    .guide-section h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin: 0 0 1.25rem;
+    }
+    .guide-section h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+    }
+    .guide-section p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin: 0 0 0.75rem;
+    }
+    .guide-section ul, .guide-section ol {
+      color: var(--text-muted);
+      line-height: 1.8;
+      padding-left: 1.4rem;
+      margin: 0 0 0.75rem;
+    }
+
+    /* ── UI mockup containers ────────────────────────────── */
+    .mockup {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.25rem;
+      font-size: 0.85rem;
+    }
+    .mockup-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .mockup-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    /* Stat cards mockup */
+    .mockup-stats {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .mockup-stat {
+      flex: 1;
+      min-width: 100px;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+    .mockup-stat-val {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .mockup-stat-val.accent { color: var(--accent); }
+    .mockup-stat-val.savings { color: var(--green); }
+    .mockup-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+    .mockup-stat-sub {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      margin-top: 0.1rem;
+    }
+
+    /* Subscription row mockup */
+    .mockup-sub-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mockup-sub-row:last-child { border-bottom: none; }
+    .mockup-sub-name {
+      flex: 1;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    .mockup-sub-cat {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+    }
+    .mockup-sub-cost {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    .mockup-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .mockup-badge.active   { background: rgba(52,199,89,0.15);  color: #22a74b; }
+    .mockup-badge.paused   { background: rgba(255,159,10,0.15); color: #c47a00; }
+    .mockup-badge.cancelled{ background: rgba(142,142,147,0.15);color: #6b6b70; }
+    .mockup-badge.wishlist { background: rgba(94,92,230,0.15);  color: #5e5ce6; }
+    [data-theme="light"] .mockup-badge.active   { color: #1a8c3c; }
+    [data-theme="light"] .mockup-badge.paused   { color: #9a5f00; }
+    [data-theme="light"] .mockup-badge.cancelled{ color: #555; }
+    [data-theme="light"] .mockup-badge.wishlist { color: #4643c9; }
+
+    /* Split badge */
+    .mockup-split {
+      font-size: 0.7rem;
+      color: var(--accent);
+      background: rgba(10,132,255,0.1);
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-left: 4px;
+    }
+
+    /* Audit mockup */
+    .mockup-audit {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .mockup-audit-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .mockup-audit-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .mockup-audit-btns {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .mockup-audit-btn {
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: none;
+      cursor: default;
+    }
+    .mockup-audit-btn.keep     { background: rgba(52,199,89,0.2);  color: #22a74b; }
+    .mockup-audit-btn.pause    { background: rgba(255,159,10,0.2); color: #c47a00; }
+    .mockup-audit-btn.cancel   { background: rgba(255,69,58,0.2);  color: #d0362a; }
+    .mockup-audit-btn.wishlist { background: rgba(94,92,230,0.2);  color: #5e5ce6; }
+    [data-theme="light"] .mockup-audit-btn.keep     { color: #1a8c3c; }
+    [data-theme="light"] .mockup-audit-btn.pause    { color: #9a5f00; }
+    [data-theme="light"] .mockup-audit-btn.cancel   { color: #b52a1e; }
+    [data-theme="light"] .mockup-audit-btn.wishlist { color: #4643c9; }
+
+    /* Tip box */
+    .guide-tip {
+      background: rgba(10,132,255,0.08);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .guide-tip strong { color: var(--text); }
+
+    .guide-warn {
+      background: rgba(255,159,10,0.1);
+      border-left: 3px solid #ff9f0a;
+      border-radius: 0 8px 8px 0;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .guide-warn strong { color: var(--text); }
+
+    /* Step list */
+    .guide-steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0.75rem;
+    }
+    .guide-steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .guide-steps li::before {
+      content: counter(step);
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* Import flow mockup */
+    .mockup-import {
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .mockup-import-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Renewal item */
+    .mockup-renewal {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .mockup-renewal:last-child { border-bottom: none; }
+    .mockup-renewal-name { font-weight: 600; color: var(--text); }
+    .mockup-renewal-date { color: var(--text-muted); }
+    .mockup-renewal-cost { font-weight: 700; color: var(--text); }
+    .mockup-renewal-badge {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(255,159,10,0.15);
+      color: #c47a00;
+    }
+    [data-theme="light"] .mockup-renewal-badge { color: #9a5f00; }
+
+    /* Category bar */
+    .mockup-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .mockup-bar-label { width: 90px; color: var(--text-muted); flex-shrink: 0; }
+    .mockup-bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--bg-raised);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .mockup-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 5px;
+      opacity: 0.8;
+    }
+    .mockup-bar-val { color: var(--text); font-weight: 600; white-space: nowrap; }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+          <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-text">SUB-SITE <span class="beta-badge">BETA</span></div>
+        <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="index.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span> Dashboard
+      </a>
+      <a class="nav-item active" href="guide.html" aria-current="page">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 2h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> User Guide
+      </a>
+      <a class="nav-item" href="feedback.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 2h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5l-3 2V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Feedback
+      </a>
+      <a class="nav-item" href="privacy.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1L2 4v4c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V4L8 1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Privacy Policy
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      &#128274; 100% private &#8212; all data stored locally on your device. Nothing is sent to any server.
+      <br><a href="privacy.html" style="color:var(--text-faint);font-size:11px;">Privacy Policy</a>
+      <br><a href="feedback.html" style="color:var(--text-faint);font-size:11px;">Feedback</a>
+    </div>
+  </aside>
+
+  <!-- Mobile sticky top header -->
+  <header class="mobile-header" id="mobileHeader">
+    <div class="mobile-header-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+        <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+      </svg>
+      <span class="mobile-header-wordmark">SUB-SITE</span>
+      <span class="beta-badge">BETA</span>
+    </div>
+    <span class="mobile-header-page">User Guide</span>
+  </header>
+
+  <!-- Main content area -->
+  <main class="main" id="main">
+    <section class="view active" id="view-guide">
+
+      <h1 class="page-title">User Guide</h1>
+      <p class="page-sub">Everything you need to know about Sub-Site &nbsp;&middot;&nbsp; <a href="index.html" style="color:var(--accent);">&#8592; Back to App</a></p>
+
+      <!-- Table of Contents -->
+      <div class="guide-toc">
+        <h3>Contents</h3>
+        <ol>
+          <li><a href="#what-is-sub-site">What is Sub-Site?</a></li>
+          <li><a href="#getting-started">Getting Started</a></li>
+          <li><a href="#dashboard">The Dashboard</a></li>
+          <li><a href="#subscriptions">Managing Subscriptions</a></li>
+          <li><a href="#statuses">Subscription Statuses</a></li>
+          <li><a href="#shared-cost">Shared Cost Splitter</a></li>
+          <li><a href="#quarterly-audit">Quarterly Audit Mode</a></li>
+          <li><a href="#alternatives">Alternatives &amp; Suggestions</a></li>
+          <li><a href="#backup">Backup &amp; Restore</a></li>
+          <li><a href="#email-import">Import from Email</a></li>
+          <li><a href="#settings">Settings</a></li>
+          <li><a href="#privacy">Privacy &amp; Data Safety</a></li>
+        </ol>
+      </div>
+
+
+      <!-- 1. What is Sub-Site -->
+      <div class="guide-section" id="what-is-sub-site">
+        <h2>1. What is Sub-Site?</h2>
+        <p>Sub-Site is a free, privacy-first subscription tracker. It helps you keep track of all your recurring payments — streaming services, software subscriptions, gym memberships, and anything else you pay for regularly.</p>
+        <p>Unlike most apps, Sub-Site requires <strong>no account, no login, and no internet connection</strong> to work. Everything is stored privately in your browser.</p>
+        <div class="guide-tip">
+          <strong>100% Private:</strong> Your subscription data never leaves your device. Sub-Site has no server, no database, and sends no data anywhere.
+        </div>
+      </div>
+
+
+      <!-- 2. Getting Started -->
+      <div class="guide-section" id="getting-started">
+        <h2>2. Getting Started</h2>
+        <p>The fastest way to get started is to add your first subscription manually or import one from a renewal email.</p>
+
+        <h3>Adding your first subscription</h3>
+        <ol class="guide-steps">
+          <li>Click <strong>+ Add Subscription</strong> in the top-right corner of the Dashboard or Subscriptions page.</li>
+          <li>Enter the service name, cost, billing cycle (Monthly, Quarterly, Annually, or Weekly), and the next billing date.</li>
+          <li>Optionally pick a category (e.g. Streaming, Software, Fitness) and add notes.</li>
+          <li>Click <strong>Save Subscription</strong>. The subscription appears in your list immediately.</li>
+        </ol>
+
+        <div class="mockup">
+          <div class="mockup-label">Add Subscription form — example</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;font-size:0.85rem;">
+            <div>
+              <div style="color:var(--text-faint);font-size:0.72rem;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Service Name</div>
+              <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);">Netflix</div>
+            </div>
+            <div>
+              <div style="color:var(--text-faint);font-size:0.72rem;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Cost</div>
+              <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);">£17.99</div>
+            </div>
+            <div>
+              <div style="color:var(--text-faint);font-size:0.72rem;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Billing Cycle</div>
+              <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);">Monthly ▾</div>
+            </div>
+            <div>
+              <div style="color:var(--text-faint);font-size:0.72rem;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Next Billing Date</div>
+              <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);">15 Apr 2025</div>
+            </div>
+          </div>
+          <div style="margin-top:0.75rem;">
+            <div style="color:var(--text-faint);font-size:0.72rem;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Category</div>
+            <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);">Streaming ▾</div>
+          </div>
+          <div style="margin-top:1rem;text-align:right;">
+            <span style="background:var(--accent);color:#fff;padding:8px 18px;border-radius:7px;font-size:0.85rem;font-weight:600;display:inline-block;">Save Subscription</span>
+          </div>
+        </div>
+
+        <div class="guide-tip">
+          <strong>Tip:</strong> If you have a renewal email, use <strong>Import from Email</strong> instead — it fills in all the details automatically. See <a href="#email-import" style="color:var(--accent);">Section 10</a> for how.
+        </div>
+
+        <div class="guide-warn">
+          <strong>Important — back up your data:</strong> Sub-Site stores data in your browser. If you clear your browser history or cache, your data will be lost. Export a JSON backup regularly from the <a href="index.html" style="color:var(--accent);">Backup &amp; Restore</a> page.
+        </div>
+      </div>
+
+
+      <!-- 3. Dashboard -->
+      <div class="guide-section" id="dashboard">
+        <h2>3. The Dashboard</h2>
+        <p>The Dashboard gives you a live overview of your subscription spending. It updates automatically whenever you add or change a subscription.</p>
+
+        <h3>Stats row</h3>
+        <p>The stats row shows your key spending figures at a glance.</p>
+
+        <div class="mockup">
+          <div class="mockup-label">Stats row — example</div>
+          <div class="mockup-stats">
+            <div class="mockup-stat">
+              <div class="mockup-stat-val accent">£62</div>
+              <div class="mockup-stat-label">Monthly Spend</div>
+              <div class="mockup-stat-sub">across 6 active subscriptions</div>
+            </div>
+            <div class="mockup-stat">
+              <div class="mockup-stat-val">£744</div>
+              <div class="mockup-stat-label">Annual Spend</div>
+              <div class="mockup-stat-sub">projected this year</div>
+            </div>
+            <div class="mockup-stat">
+              <div class="mockup-stat-val">3</div>
+              <div class="mockup-stat-label">Due This Month</div>
+              <div class="mockup-stat-sub">renewals in next 30 days</div>
+            </div>
+            <div class="mockup-stat">
+              <div class="mockup-stat-val savings">£130/yr</div>
+              <div class="mockup-stat-label">Potential Savings</div>
+              <div class="mockup-stat-sub">switching monthly → annual</div>
+            </div>
+          </div>
+        </div>
+
+        <ul>
+          <li><strong>Monthly Spend</strong> — total cost of all Active subscriptions, normalised to a monthly figure.</li>
+          <li><strong>Annual Spend</strong> — monthly figure × 12 (projected annual cost).</li>
+          <li><strong>Due This Month</strong> — number of Active subscriptions renewing in the next 30 days.</li>
+          <li><strong>Potential Savings</strong> — appears when you have monthly subscriptions. Shows how much you could save per year by switching to annual billing (assumes ~17.5% saving, typical for most services).</li>
+        </ul>
+
+        <h3>Spend by Category</h3>
+        <p>A horizontal bar chart showing which categories account for the most spending.</p>
+        <div class="mockup">
+          <div class="mockup-label">Spend by Category — example</div>
+          <div class="mockup-bar-row"><div class="mockup-bar-label">Streaming</div><div class="mockup-bar-track"><div class="mockup-bar-fill" style="width:75%"></div></div><div class="mockup-bar-val">£28</div></div>
+          <div class="mockup-bar-row"><div class="mockup-bar-label">Software</div><div class="mockup-bar-track"><div class="mockup-bar-fill" style="width:45%"></div></div><div class="mockup-bar-val">£17</div></div>
+          <div class="mockup-bar-row"><div class="mockup-bar-label">Fitness</div><div class="mockup-bar-track"><div class="mockup-bar-fill" style="width:22%"></div></div><div class="mockup-bar-val">£8</div></div>
+          <div class="mockup-bar-row"><div class="mockup-bar-label">Music</div><div class="mockup-bar-track"><div class="mockup-bar-fill" style="width:14%"></div></div><div class="mockup-bar-val">£5</div></div>
+        </div>
+
+        <h3>Monthly Trend</h3>
+        <p>A sparkline chart showing how your total monthly spend has changed over the past 6 months. Useful for spotting if your spending is creeping up.</p>
+
+        <h3>Upcoming Renewals</h3>
+        <p>A list of Active subscriptions billing in the next 30 days, sorted by date. Use this to make sure you have funds available before a charge goes out.</p>
+
+        <div class="mockup">
+          <div class="mockup-label">Upcoming Renewals — example</div>
+          <div class="mockup-renewal">
+            <div><div class="mockup-renewal-name">Netflix</div><div class="mockup-renewal-date">15 Apr 2025</div></div>
+            <div style="display:flex;align-items:center;gap:0.5rem;"><span class="mockup-renewal-badge">in 3 days</span><span class="mockup-renewal-cost">£17.99</span></div>
+          </div>
+          <div class="mockup-renewal">
+            <div><div class="mockup-renewal-name">Spotify</div><div class="mockup-renewal-date">22 Apr 2025</div></div>
+            <div style="display:flex;align-items:center;gap:0.5rem;"><span class="mockup-renewal-date">in 10 days</span><span class="mockup-renewal-cost">£10.99</span></div>
+          </div>
+          <div class="mockup-renewal">
+            <div><div class="mockup-renewal-name">Adobe CC</div><div class="mockup-renewal-date">30 Apr 2025</div></div>
+            <div style="display:flex;align-items:center;gap:0.5rem;"><span class="mockup-renewal-date">in 18 days</span><span class="mockup-renewal-cost">£54.99</span></div>
+          </div>
+        </div>
+
+        <h3>Possible Savings widget</h3>
+        <p>Highlights a cheaper alternative to your most expensive Active subscription. Click it to jump to the Alternatives page for more suggestions.</p>
+
+        <h3>Waste Alert</h3>
+        <p>If your total annual spend exceeds the threshold you set in Settings, a warning banner appears at the top of the Dashboard. Use this as a prompt to review your subscriptions. You can adjust or disable the threshold in <a href="#settings" style="color:var(--accent);">Settings</a>.</p>
+      </div>
+
+
+      <!-- 4. Managing Subscriptions -->
+      <div class="guide-section" id="subscriptions">
+        <h2>4. Managing Subscriptions</h2>
+
+        <h3>Adding a subscription</h3>
+        <p>Click <strong>+ Add Subscription</strong> at the top of the Dashboard or Subscriptions page. Fill in the form and click <strong>Save Subscription</strong>.</p>
+
+        <h3>Editing a subscription</h3>
+        <p>On the Subscriptions page, click <strong>Edit</strong> on any row to open the form pre-filled with existing details. Make your changes and click <strong>Save Subscription</strong>.</p>
+
+        <h3>Quick actions (⋯ menu)</h3>
+        <p>Click the <strong>⋯</strong> button on any subscription row to open a quick-action menu. From here you can:</p>
+        <ul>
+          <li>Change status to Active, Paused, Cancelled, or Wishlist without opening the full edit form.</li>
+          <li>Permanently delete the subscription.</li>
+        </ul>
+
+        <h3>Starring</h3>
+        <p>Click the <strong>☆</strong> icon on a row to star it. Starred subscriptions are visually highlighted for easy reference — useful for your most important or frequently reviewed subscriptions.</p>
+
+        <h3>Search, filter &amp; sort</h3>
+        <p>The toolbar above the subscription list lets you:</p>
+        <ul>
+          <li><strong>Search</strong> by service name.</li>
+          <li><strong>Filter by category</strong> — e.g. show only Streaming services.</li>
+          <li><strong>Filter by status</strong> — show only Active, Paused, Cancelled, or Wishlist items.</li>
+          <li><strong>Sort</strong> by name (A–Z or Z–A), cost (high–low or low–high), or next renewal date.</li>
+        </ul>
+
+        <div class="mockup">
+          <div class="mockup-label">Subscription list — example</div>
+          <div class="mockup-sub-row">
+            <span style="color:var(--text-faint);font-size:1rem;">☆</span>
+            <div style="flex:1">
+              <div class="mockup-sub-name">Netflix</div>
+              <div class="mockup-sub-cat">Streaming · Monthly</div>
+            </div>
+            <div class="mockup-sub-cost">£17.99</div>
+            <span class="mockup-badge active">Active</span>
+          </div>
+          <div class="mockup-sub-row">
+            <span style="color:var(--text-faint);font-size:1rem;">★</span>
+            <div style="flex:1">
+              <div class="mockup-sub-name">Adobe Creative Cloud</div>
+              <div class="mockup-sub-cat">Software · Annually</div>
+            </div>
+            <div class="mockup-sub-cost">£659.88/yr</div>
+            <span class="mockup-badge active">Active</span>
+          </div>
+          <div class="mockup-sub-row">
+            <span style="color:var(--text-faint);font-size:1rem;">☆</span>
+            <div style="flex:1">
+              <div class="mockup-sub-name">Gym Membership</div>
+              <div class="mockup-sub-cat">Fitness · Monthly</div>
+            </div>
+            <div class="mockup-sub-cost">£24.99</div>
+            <span class="mockup-badge paused">Paused</span>
+          </div>
+          <div class="mockup-sub-row">
+            <span style="color:var(--text-faint);font-size:1rem;">☆</span>
+            <div style="flex:1">
+              <div class="mockup-sub-name">Notion Pro</div>
+              <div class="mockup-sub-cat">Software · Monthly</div>
+            </div>
+            <div class="mockup-sub-cost">£16.00</div>
+            <span class="mockup-badge wishlist">🗂 Wishlist</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 5. Statuses -->
+      <div class="guide-section" id="statuses">
+        <h2>5. Subscription Statuses</h2>
+        <p>Every subscription has one of four statuses. Choose the one that best reflects your current relationship with that service.</p>
+
+        <div class="mockup" style="display:grid;gap:0.75rem;">
+          <div style="display:flex;align-items:flex-start;gap:1rem;">
+            <span class="mockup-badge active" style="margin-top:2px;min-width:70px;text-align:center;">Active</span>
+            <div style="color:var(--text-muted);font-size:0.875rem;line-height:1.6;">You are currently subscribed and paying. Included in all spend calculations, charts, and the upcoming renewals list.</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:1rem;">
+            <span class="mockup-badge paused" style="margin-top:2px;min-width:70px;text-align:center;">Paused</span>
+            <div style="color:var(--text-muted);font-size:0.875rem;line-height:1.6;">Temporarily suspended — for example, a gym membership while you're travelling. Kept in your list but excluded from spending totals. Change back to Active when you resume.</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:1rem;">
+            <span class="mockup-badge cancelled" style="margin-top:2px;min-width:70px;text-align:center;">Cancelled</span>
+            <div style="color:var(--text-muted);font-size:0.875rem;line-height:1.6;">You have cancelled this subscription. Kept in your list for reference but excluded from spending totals. Useful to remember which services you've already tried and cancelled.</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:1rem;">
+            <span class="mockup-badge wishlist" style="margin-top:2px;min-width:70px;text-align:center;">🗂 Wishlist</span>
+            <div style="color:var(--text-muted);font-size:0.875rem;line-height:1.6;">Services you're considering but haven't subscribed to yet. Excluded from spending totals. Use this to track things you want to try or compare before signing up.</div>
+          </div>
+        </div>
+
+        <div class="guide-tip">
+          <strong>Tip:</strong> Use <strong>Paused</strong> instead of Cancelled for services you plan to return to — you'll keep the subscription details for when you reactivate.
+        </div>
+      </div>
+
+
+      <!-- 6. Shared Cost Splitter -->
+      <div class="guide-section" id="shared-cost">
+        <h2>6. Shared Cost Splitter</h2>
+        <p>If you share a subscription with others (e.g. a family plan split between flatmates, or a software plan paid by your team), Sub-Site can track your individual share of the cost.</p>
+
+        <h3>How to use it</h3>
+        <ol class="guide-steps">
+          <li>Open a subscription's edit form (click <strong>Edit</strong> on any row).</li>
+          <li>Tick <strong>Shared plan — split cost between people</strong>.</li>
+          <li>Set the number of people sharing the cost.</li>
+          <li>Save. The subscription list and all spending totals will now show your share only.</li>
+        </ol>
+
+        <div class="mockup">
+          <div class="mockup-label">Subscription list with split cost — example</div>
+          <div class="mockup-sub-row">
+            <span style="color:var(--text-faint);font-size:1rem;">☆</span>
+            <div style="flex:1">
+              <div class="mockup-sub-name">Disney+ <span class="mockup-split">÷4</span></div>
+              <div class="mockup-sub-cat">Streaming · Monthly · full plan: £27.99</div>
+            </div>
+            <div class="mockup-sub-cost">£7.00</div>
+            <span class="mockup-badge active">Active</span>
+          </div>
+        </div>
+
+        <p>The <strong>÷4</strong> badge shows that the cost is split across 4 people. Hover over the badge to see the full plan price. Your share (£7.00) is what appears in all spend calculations.</p>
+      </div>
+
+
+      <!-- 7. Quarterly Audit Mode -->
+      <div class="guide-section" id="quarterly-audit">
+        <h2>7. Quarterly Audit Mode</h2>
+        <p>Every 90 days, Sub-Site prompts you to audit your active subscriptions. This is a structured review process that steps you through each subscription one by one, helping you cut anything you no longer need.</p>
+
+        <h3>Starting an audit</h3>
+        <p>When the audit prompt appears on the Dashboard, click <strong>Start Audit</strong>. You can also trigger it at any time from the dashboard banner.</p>
+
+        <div class="mockup">
+          <div class="mockup-label">Audit step — example</div>
+          <div class="mockup-audit">
+            <div style="font-size:0.75rem;color:var(--text-faint);margin-bottom:0.5rem;">Reviewing 3 of 7</div>
+            <div style="background:var(--bg-raised);border-radius:4px;height:6px;margin-bottom:1rem;overflow:hidden;"><div style="width:40%;height:100%;background:var(--accent);"></div></div>
+            <div class="mockup-audit-name">Adobe Creative Cloud</div>
+            <div class="mockup-audit-meta">£54.99/month · Software · Annual billing</div>
+            <div class="mockup-audit-btns">
+              <span class="mockup-audit-btn keep">✓ Keep</span>
+              <span class="mockup-audit-btn pause">⏸ Pause</span>
+              <span class="mockup-audit-btn cancel">✕ Cancel</span>
+              <span class="mockup-audit-btn wishlist">🗂 Wishlist</span>
+            </div>
+          </div>
+        </div>
+
+        <h3>Audit actions</h3>
+        <ul>
+          <li><strong>Keep</strong> — no change, move to the next subscription.</li>
+          <li><strong>Pause</strong> — marks the subscription as Paused.</li>
+          <li><strong>Cancel</strong> — marks the subscription as Cancelled.</li>
+          <li><strong>Wishlist</strong> — moves it to Wishlist (you're considering cancelling but want to keep the details).</li>
+        </ul>
+
+        <p>After reviewing all subscriptions, an audit summary shows how many you changed and the potential annual saving from Paused/Cancelled items.</p>
+
+        <div class="guide-tip">
+          <strong>Note:</strong> The audit prompt reappears every 90 days. Sub-Site timestamps the last audit in your browser so it knows when to remind you again.
+        </div>
+      </div>
+
+
+      <!-- 8. Alternatives -->
+      <div class="guide-section" id="alternatives">
+        <h2>8. Alternatives &amp; Suggestions</h2>
+        <p>The <strong>Alternatives</strong> page suggests cheaper or free services that could replace your existing subscriptions.</p>
+
+        <h3>How it works</h3>
+        <ul>
+          <li><strong>Matched suggestions</strong> — for well-known services (Netflix, Spotify, Adobe, etc.), Sub-Site suggests specific cheaper alternatives (e.g. Netflix → Amazon Prime Video).</li>
+          <li><strong>Category suggestions</strong> — for services without a specific match, you'll see general money-saving tips for that category.</li>
+        </ul>
+
+        <p>All comparisons are based on publicly listed prices. Sub-Site cannot access your account or verify your exact plan. The suggestions are a starting point — always check the current pricing on the service's website before switching.</p>
+
+        <div class="guide-tip">
+          <strong>Affiliate links:</strong> Some suggestion links may be affiliate links. Sub-Site may earn a small commission if you sign up via a link, at no extra cost to you. This helps keep the site free.
+        </div>
+      </div>
+
+
+      <!-- 9. Backup & Restore -->
+      <div class="guide-section" id="backup">
+        <h2>9. Backup &amp; Restore</h2>
+        <p>Sub-Site stores your data in your browser's local storage. This means <strong>your data will be permanently lost</strong> if you clear your browser cache, switch browsers, or reinstall your OS — unless you have a backup.</p>
+
+        <div class="guide-warn">
+          <strong>Export regularly.</strong> The backup status indicator in the sidebar (and at the bottom of the screen on mobile) shows whether you have unsaved changes. When it says "Unsaved changes", export a backup before closing the app.
+        </div>
+
+        <h3>Export JSON (full backup)</h3>
+        <p>Go to <strong>Backup &amp; Restore</strong> in the sidebar and click <strong>Export JSON</strong>. This downloads a <code style="background:var(--bg-raised);padding:1px 5px;border-radius:3px;">.json</code> file containing all your subscriptions and settings. Keep this somewhere safe — iCloud Drive, Google Drive, Dropbox, or your Documents folder.</p>
+
+        <h3>Export CSV (spreadsheet)</h3>
+        <p>Click <strong>Export CSV</strong> to download your subscriptions as a spreadsheet. Open it in Excel, Numbers, or Google Sheets for custom analysis. <strong>CSV files cannot be imported back — use JSON for backups.</strong></p>
+
+        <h3>Importing a backup</h3>
+        <ol class="guide-steps">
+          <li>Go to <strong>Backup &amp; Restore</strong> in the sidebar.</li>
+          <li>Choose <strong>Merge</strong> or <strong>Replace</strong> (see below).</li>
+          <li>Click <strong>Choose backup file…</strong> and select your saved <code style="background:var(--bg-raised);padding:1px 5px;border-radius:3px;">.json</code> file.</li>
+          <li>A confirmation shows how many subscriptions were imported, and any duplicates that were skipped.</li>
+        </ol>
+
+        <h3>Merge vs Replace</h3>
+        <ul>
+          <li><strong>Merge</strong> — keeps everything you already have and adds any new entries from the backup. Duplicate subscriptions (same service, cost, and billing details) are automatically skipped.</li>
+          <li><strong>Replace</strong> — deletes everything currently saved and loads only the subscriptions from the backup file. Use this to fully restore from a backup on a new device.</li>
+        </ul>
+
+        <div class="guide-tip">
+          <strong>Smart deduplication:</strong> When merging, Sub-Site compares subscriptions by both ID and content (name, cost, currency, billing cycle, status, and category). If a subscription matches on content even with a different ID, it is skipped as a duplicate — so you can safely re-import old backups without creating doubles.
+        </div>
+
+        <h3>Moving to a new device or browser</h3>
+        <ol class="guide-steps">
+          <li>On your old device: export a JSON backup.</li>
+          <li>Transfer the file to your new device (AirDrop, email, cloud storage).</li>
+          <li>On the new device: open Sub-Site, go to Backup &amp; Restore, choose Replace, and import the file.</li>
+        </ol>
+      </div>
+
+
+      <!-- 10. Email Import -->
+      <div class="guide-section" id="email-import">
+        <h2>10. Import from Email</h2>
+        <p>Skip manual data entry. Click <strong>✉ Import from Email</strong> and paste the text of a renewal email — Sub-Site extracts the service name, cost, billing cycle, and next date automatically.</p>
+
+        <p>Everything is processed locally in your browser. Your email text is never sent to any server.</p>
+
+        <h3>Three ways to import</h3>
+
+        <h3 style="font-size:0.875rem;">Paste email text</h3>
+        <ol class="guide-steps">
+          <li>Open a renewal email in your email client.</li>
+          <li>Select all the email body text and copy it.</li>
+          <li>Click <strong>✉ Import from Email</strong> in Sub-Site.</li>
+          <li>The text is automatically read from your clipboard. If not, paste it into the text box.</li>
+          <li>Sub-Site shows the extracted details with a confidence score. Review and click <strong>Add Subscription</strong>.</li>
+        </ol>
+
+        <div class="mockup">
+          <div class="mockup-label">Import from Email — parsed result example</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem;margin-bottom:0.75rem;">
+            <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;">
+              <div style="color:var(--text-faint);font-size:0.7rem;margin-bottom:2px;">SERVICE</div>
+              <div style="color:var(--text);font-weight:600;">Netflix</div>
+            </div>
+            <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;">
+              <div style="color:var(--text-faint);font-size:0.7rem;margin-bottom:2px;">COST</div>
+              <div style="color:var(--text);font-weight:600;">£17.99</div>
+            </div>
+            <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;">
+              <div style="color:var(--text-faint);font-size:0.7rem;margin-bottom:2px;">CYCLE</div>
+              <div style="color:var(--text);font-weight:600;">Monthly</div>
+            </div>
+            <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:8px 10px;">
+              <div style="color:var(--text-faint);font-size:0.7rem;margin-bottom:2px;">NEXT DATE</div>
+              <div style="color:var(--text);font-weight:600;">15 Apr 2025</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--green);">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Confidence: 95%
+          </div>
+        </div>
+
+        <h3 style="font-size:0.875rem;">.eml file import</h3>
+        <p>Save the email as a <code style="background:var(--bg-raised);padding:1px 5px;border-radius:3px;">.eml</code> file from your email client, then drag-and-drop it onto the import panel or use the file picker. Sub-Site handles MIME decoding including base64 and quoted-printable encoding.</p>
+
+        <h3 style="font-size:0.875rem;">iOS Shortcuts</h3>
+        <p>Set up a Share Sheet shortcut to send emails directly from the Mail app to Sub-Site:</p>
+        <ol class="guide-steps">
+          <li>Open the <strong>Shortcuts</strong> app on your iPhone/iPad and tap <strong>+</strong> to create a new shortcut.</li>
+          <li>Add action: <strong>Get Text from Input</strong> (this reads from the share sheet).</li>
+          <li>Add action: <strong>Open URL</strong> — set the URL to <code style="background:var(--bg-raised);padding:1px 5px;border-radius:3px;">https://beta.sub-site.com/?text=[Shortcut Input]</code></li>
+          <li>Tap the share icon and enable <strong>Show in Share Sheet</strong>.</li>
+          <li>In the Mail or Gmail app, open a renewal email, tap <strong>Share</strong>, then select your new shortcut. Sub-Site opens with the email pre-parsed.</li>
+        </ol>
+
+        <h3 style="font-size:0.875rem;">Android (PWA)</h3>
+        <p>Install Sub-Site as a PWA by opening it in Chrome and choosing <strong>Add to Home Screen</strong>. Then use the share button in your email app and select Sub-Site from the share menu.</p>
+      </div>
+
+
+      <!-- 11. Settings -->
+      <div class="guide-section" id="settings">
+        <h2>11. Settings</h2>
+
+        <h3>Default Currency</h3>
+        <p>Sets the currency pre-selected when you add a new subscription. You can still pick a different currency for individual subscriptions. Available: GBP (£), USD ($), EUR (€), CAD (CA$), AUD (A$).</p>
+        <div class="guide-tip">If you have subscriptions in multiple currencies, the Dashboard displays "Multiple currencies" instead of a combined total to avoid misleading figures.</div>
+
+        <h3>Waste Alert Threshold</h3>
+        <p>When your total annual spend (Active subscriptions only) exceeds this amount, a warning banner appears on the Dashboard. Set it to <strong>0</strong> to disable the alert, or a higher number if you have a larger subscription budget.</p>
+
+        <h3>Danger Zone — Clear All Data</h3>
+        <p>Permanently deletes all subscriptions and settings from your browser. <strong>This cannot be undone.</strong></p>
+        <div class="guide-warn"><strong>Always export a backup</strong> from Backup &amp; Restore before clearing your data.</div>
+      </div>
+
+
+      <!-- 12. Privacy -->
+      <div class="guide-section" id="privacy">
+        <h2>12. Privacy &amp; Data Safety</h2>
+        <ul>
+          <li><strong>No account required</strong> — Sub-Site works without any sign-up or login.</li>
+          <li><strong>No server storage</strong> — all subscription data is stored in your browser's localStorage. It never leaves your device.</li>
+          <li><strong>No analytics</strong> — there are no tracking scripts, cookies, or page-view telemetry.</li>
+          <li><strong>No font CDN</strong> — Sub-Site uses your device's system fonts only.</li>
+          <li><strong>Feedback only</strong> — the only network request Sub-Site makes is when you submit the feedback form (which is optional).</li>
+          <li><strong>Email import is local</strong> — email text is parsed entirely in your browser; nothing is sent to any server.</li>
+        </ul>
+        <p>For the full privacy policy, see <a href="privacy.html" style="color:var(--accent);">privacy.html</a>.</p>
+      </div>
+
+      <p style="text-align:center; margin-bottom:2rem;">
+        <a href="index.html" style="color:var(--accent); font-size:0.9rem;">&#8592; Back to App</a>
+        &nbsp;&middot;&nbsp;
+        <a href="feedback.html" style="color:var(--accent); font-size:0.9rem;">Leave Feedback</a>
+      </p>
+
+    </section>
+  </main>
+
+</body>
+</html>

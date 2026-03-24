@@ -86,7 +86,7 @@ function navigate(view) {
     el.classList.toggle('active', el.id === 'view-' + view);
   });
   // Update mobile header page title
-  const pageTitles = { dashboard: 'Dashboard', subscriptions: 'Subscriptions', alternatives: 'Alternatives', export: 'Export & Import', settings: 'Settings' };
+  const pageTitles = { dashboard: 'Dashboard', subscriptions: 'Subscriptions', alternatives: 'Alternatives', export: 'Backup & Restore', settings: 'Settings' };
   const mpt = document.getElementById('mobilePageTitle');
   if (mpt) mpt.textContent = pageTitles[view] || '';
   renderCurrentView();

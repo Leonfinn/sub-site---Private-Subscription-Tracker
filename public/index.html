@@ -60,7 +60,7 @@
         <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13L13 3M13 3H7M13 3V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Alternatives
       </button>
       <button class="nav-item" data-view="export">
-        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor"/></svg></span> Export
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor"/></svg></span> Backup
       </button>
       <a class="nav-item" href="calculator.html">
         <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> Calculator
@@ -83,6 +83,7 @@
     </button>
     <div class="sidebar-footer">
       🔒 100% private — all data stored locally on your device. Nothing is sent to any server.
+      <br><a href="guide.html" style="color:var(--text-faint);font-size:11px;">User Guide</a>
       <br><a href="privacy.html" style="color:var(--text-faint);font-size:11px;">Privacy Policy</a>
       <br><a href="feedback.html" style="color:var(--text-faint);font-size:11px;">Feedback</a>
     </div>
@@ -117,7 +118,7 @@
     <button class="bottom-nav-item active" data-view="dashboard"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span><span>Dashboard</span></button>
     <button class="bottom-nav-item" data-view="subscriptions"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="2" rx="1" fill="currentColor"/><rect x="2" y="7" width="12" height="2" rx="1" fill="currentColor"/><rect x="2" y="11" width="8" height="2" rx="1" fill="currentColor"/></svg></span><span>Subs</span></button>
     <button class="bottom-nav-item" data-view="alternatives"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13L13 3M13 3H7M13 3V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Deals</span></button>
-    <button class="bottom-nav-item" data-view="export"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor"/></svg></span><span>Export</span></button>
+    <button class="bottom-nav-item" data-view="export"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="12" width="12" height="2" rx="1" fill="currentColor"/></svg></span><span>Backup</span></button>
     <button class="bottom-nav-item" data-view="settings"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Settings</span></button>
     <button class="bottom-nav-item" id="themeToggleMobile" aria-label="Toggle light/dark mode">☀️<span>Theme</span></button>
   </nav>
@@ -183,24 +184,26 @@
             <li>Data will be lost if you clear your browser history/cache.</li>
             <li>Data does not follow you to other browsers or devices automatically.</li>
           </ul>
-          <div class="help-tip"><strong>⚠ Important:</strong> Use <strong>Export &amp; Import</strong> (in the sidebar) to save a backup file regularly. Keep it somewhere safe — your Downloads folder, cloud storage, or a USB drive.</div>
+          <div class="help-tip"><strong>⚠ Important:</strong> Use <strong>Backup &amp; Restore</strong> (in the sidebar) to save a backup file regularly. Keep it somewhere safe — your Downloads folder, cloud storage, or a USB drive.</div>
 
           <h4>Dashboard at a glance</h4>
           <ul>
-            <li><strong>Stats row</strong> — monthly spend, annual projection, and renewals due this month.</li>
+            <li><strong>Stats row</strong> — monthly spend, annual projection, renewals due this month, and potential annual savings from switching monthly subscriptions to annual billing.</li>
             <li><strong>Spend by Category</strong> — horizontal bar chart showing where your money goes.</li>
             <li><strong>Monthly Trend</strong> — 6-month sparkline of your total subscription spend.</li>
             <li><strong>Upcoming Renewals</strong> — subscriptions billing in the next 30 days.</li>
             <li><strong>Possible Savings</strong> — a cheaper alternative suggestion for your highest-cost subscription.</li>
+            <li><strong>Quarterly Audit prompt</strong> — every 90 days, a banner appears prompting you to review and trim your active subscriptions.</li>
           </ul>
 
           <h4>Navigation</h4>
           <ul>
-            <li><strong>Subscriptions</strong> — add, edit, search, and manage all your subscriptions.</li>
+            <li><strong>Subscriptions</strong> — add, edit, search, filter, and manage all your subscriptions.</li>
             <li><strong>Alternatives</strong> — browse cheaper alternatives matched to your services.</li>
-            <li><strong>Export &amp; Import</strong> — back up and restore your data.</li>
+            <li><strong>Backup &amp; Restore</strong> — back up and restore your data.</li>
             <li><strong>Settings</strong> — set your default currency and waste alert threshold.</li>
           </ul>
+          <p style="margin:0.5rem 0 0;"><a href="guide.html" style="color:var(--accent);">Full User Guide →</a></p>
         </div>
       </details>
       <div id="trust-banner"></div>
@@ -245,9 +248,13 @@
           <h4>Statuses</h4>
           <ul>
             <li><strong>Active</strong> — included in all spend calculations and charts.</li>
-            <li><strong>Paused</strong> — kept in your list but excluded from totals.</li>
+            <li><strong>Paused</strong> — kept in your list but excluded from totals; use this for temporary suspensions.</li>
             <li><strong>Cancelled</strong> — marked as cancelled; excluded from totals.</li>
+            <li><strong>Wishlist</strong> — services you want to try but haven't subscribed to yet; excluded from totals.</li>
           </ul>
+
+          <h4>Shared cost splitter</h4>
+          <p>When editing a subscription, tick <strong>Shared plan — split cost between people</strong> and enter the number of people. Sub-Site will show and calculate only your share of the cost.</p>
 
           <h4>Importing from email</h4>
           <p>Skip the manual entry. Click <strong>✉ Import from Email</strong>, paste a renewal receipt, and Sub-Site fills in the details automatically — service name, cost, billing cycle, and next date. Everything is processed in your browser; your email text is never sent anywhere. Click the <strong>?</strong> inside the import panel for a full step-by-step guide.</p>
@@ -311,7 +318,7 @@
     <section id="view-export" class="view">
       <div class="view-header">
         <div>
-          <h1 class="page-title">Export &amp; Import</h1>
+          <h1 class="page-title">Backup &amp; Restore</h1>
           <p class="page-sub">Save a backup, export a spreadsheet, or restore from a previous backup. Your files never leave your device.</p>
         </div>
       </div>
@@ -369,7 +376,7 @@
 
           <h4>Danger Zone — Clear All Data</h4>
           <p>This <strong>permanently deletes</strong> all your subscriptions and settings. This action cannot be undone.</p>
-          <div class="help-tip"><strong>⚠ Warning:</strong> Export a JSON backup from the <strong>Export &amp; Import</strong> page before clearing your data.</div>
+          <div class="help-tip"><strong>⚠ Warning:</strong> Export a JSON backup from the <strong>Backup &amp; Restore</strong> page before clearing your data.</div>
         </div>
       </details>
       <div id="settings-container"></div>

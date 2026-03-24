@@ -8,14 +8,17 @@ Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](ht
 
 ## Features
 
-- **Dashboard** — Overview with monthly/annual spend, trend sparkline, upcoming renewals, category breakdown, and possible savings widget
-- **Subscriptions** — Add, edit, delete, search, filter, and sort your subscriptions
+- **Dashboard** — Overview with monthly/annual spend, trend sparkline, upcoming renewals, category breakdown, possible savings widget, and potential annual savings nudge (shows estimated saving from switching monthly plans to annual billing)
+- **Subscriptions** — Add, edit, delete, search, filter, and sort your subscriptions; four statuses: Active, Paused, Cancelled, and Wishlist
+- **Shared Cost Splitter** — Mark a subscription as a shared plan and split the cost between N people; individual share shown in all calculations
+- **Quarterly Audit Mode** — Prompted every 90 days; steps through each active subscription with Keep / Pause / Cancel / Wishlist actions; shows projected annual saving from changes
 - **Alternatives** — Discover cheaper alternatives via tier-1 per-service matches and tier-2 category fallbacks (see [ALTERNATIVES-LOGIC.md](ALTERNATIVES-LOGIC.md))
 - **Import from Email** — Client-side parser for renewal emails via paste, .eml file drop, or direct OS share (Android/iOS). Extracts service, cost, cycle, and next date; pre-fills the Add Subscription form. Zero network requests — email text never leaves the device.
-- **Export & Import** — Download as JSON backup or CSV; restore with merge or replace
+- **Backup & Restore** — Download as JSON backup or CSV; restore with merge (smart content-fingerprint deduplication) or replace
 - **Settings** — Default currency (GBP/USD/EUR/CAD/AUD), waste alert threshold, data management
 - **Light/Dark mode** — Persistent theme toggle, WCAG 2.2 AA compliant in both modes
 - **Feedback form** — Sends submissions via Cloudflare Worker + Email Routing (no third-party services)
+- **User Guide** — Comprehensive in-app guide at `/guide.html` covering all features
 - **Privacy policy** — Plain-English UK GDPR/PECR compliant policy at `/privacy.html`
 - **100% Private** — Subscription data never leaves your browser
 
@@ -104,6 +107,10 @@ The site uses **Cloudflare Pages** with two branches:
 |---|---|---|
 | `main` | sub-site.com | `wrangler pages deploy public --project-name sub-site` |
 | `beta` | beta.sub-site.com | `wrangler pages deploy public --project-name sub-site --branch beta` |
+
+### Auto-deploy on push (beta)
+
+A git pre-push hook (`.git/hooks/pre-push`) automatically runs `wrangler pages deploy` when pushing to the `beta` branch. No CI/CD runner required — deployment happens as part of the push.
 
 ### Feedback Worker
 
