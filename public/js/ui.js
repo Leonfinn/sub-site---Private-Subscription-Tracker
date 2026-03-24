@@ -804,6 +804,276 @@ function renderModal(sub) {
   // Focus name field
   setTimeout(() => nameInput.focus(), 50);
 }
+// ── Import from Email modal ───────────────────────────────
+
+function autoCategory(name) {
+  if (!name) return CATEGORIES[0];
+  const key = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // Try exact key match first
+  if (KNOWN_SERVICE_CATEGORIES && KNOWN_SERVICE_CATEGORIES[key]) return KNOWN_SERVICE_CATEGORIES[key];
+  // Try prefix match
+  if (KNOWN_SERVICE_CATEGORIES) {
+    const found = Object.keys(KNOWN_SERVICE_CATEGORIES).find(k => key.includes(k) || k.includes(key));
+    if (found) return KNOWN_SERVICE_CATEGORIES[found];
+  }
+  return CATEGORIES[0];
+}
+
+function showImportModal() {
+  const modal   = document.getElementById('modal');
+  const overlay = document.getElementById('modalOverlay');
+  if (!modal) return;
+
+  modal.innerHTML = '';
+
+  // Title
+  const titleEl = document.createElement('div');
+  titleEl.className = 'modal-title';
+  titleEl.textContent = 'Import from Email';
+
+  const subEl = document.createElement('div');
+  subEl.className = 'modal-sub';
+  subEl.textContent = 'Paste a renewal email or drop a .eml file — all parsing is 100% on-device.';
+
+  // Drop / paste zone
+  const dropZone = document.createElement('div');
+  dropZone.className = 'import-area';
+
+  const hint = document.createElement('div');
+  hint.className = 'import-hint';
+  hint.innerHTML = '<span class="import-icon">📧</span> Drop a <strong>.eml</strong> file here, or paste below';
+
+  const textarea = document.createElement('textarea');
+  textarea.className = 'import-textarea form-input';
+  textarea.placeholder = 'Paste the text of your renewal email here…';
+  textarea.rows = 6;
+
+  dropZone.appendChild(hint);
+  dropZone.appendChild(textarea);
+
+  // Button row
+  const btnRow = document.createElement('div');
+  btnRow.className = 'import-btn-row';
+
+  const clipBtn = document.createElement('button');
+  clipBtn.type = 'button';
+  clipBtn.className = 'btn-clip';
+  clipBtn.textContent = '📋 Read Clipboard';
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.eml,message/rfc822';
+  fileInput.style.display = 'none';
+
+  const fileBtn = document.createElement('button');
+  fileBtn.type = 'button';
+  fileBtn.className = 'btn-clip';
+  fileBtn.textContent = '📁 Choose File';
+
+  btnRow.appendChild(clipBtn);
+  btnRow.appendChild(fileBtn);
+
+  // Preview section
+  const preview = document.createElement('div');
+  preview.className = 'import-preview';
+  preview.style.display = 'none';
+
+  // Actions
+  const actions = document.createElement('div');
+  actions.className = 'modal-actions';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'btn-cancel';
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.addEventListener('click', closeModal);
+
+  const continueBtn = document.createElement('button');
+  continueBtn.className = 'btn-save';
+  continueBtn.textContent = 'Continue →';
+  continueBtn.disabled = true;
+
+  actions.appendChild(cancelBtn);
+  actions.appendChild(continueBtn);
+
+  modal.appendChild(titleEl);
+  modal.appendChild(subEl);
+  modal.appendChild(dropZone);
+  modal.appendChild(btnRow);
+  modal.appendChild(fileInput);
+  modal.appendChild(preview);
+  modal.appendChild(actions);
+
+  overlay.classList.remove('hidden');
+
+  // ── State ────────────────────────────────────────────────
+  let parsedResult = null;
+
+  function runParse(text, subject, from) {
+    if (!text || text.trim().length < 15) {
+      preview.style.display = 'none';
+      continueBtn.disabled = true;
+      parsedResult = null;
+      return;
+    }
+    parsedResult = EMAIL_PARSER.parse(text, subject, from);
+    renderPreview(parsedResult);
+    continueBtn.disabled = false;
+  }
+
+  function renderPreview(p) {
+    preview.innerHTML = '';
+    preview.style.display = 'block';
+
+    // Confidence bar
+    const confRow = document.createElement('div');
+    confRow.className = 'import-conf-row';
+    const confLabel = document.createElement('span');
+    confLabel.className = 'import-conf-label';
+    confLabel.textContent = 'Match confidence';
+    const confBar = document.createElement('div');
+    confBar.className = 'import-conf-bar';
+    const confFill = document.createElement('div');
+    confFill.className = 'import-conf-fill';
+    const pct = Math.round(p.confidence);
+    confFill.style.width = pct + '%';
+    confFill.classList.add(pct >= 60 ? 'conf-high' : pct >= 30 ? 'conf-mid' : 'conf-low');
+    confBar.appendChild(confFill);
+    const confNum = document.createElement('span');
+    confNum.className = 'import-conf-num';
+    confNum.textContent = pct + '%';
+    confRow.appendChild(confLabel);
+    confRow.appendChild(confBar);
+    confRow.appendChild(confNum);
+    preview.appendChild(confRow);
+
+    // Fields grid
+    const grid = document.createElement('div');
+    grid.className = 'import-fields';
+    function addField(label, value, missing) {
+      const cell = document.createElement('div');
+      cell.className = 'import-field' + (missing ? ' import-field--missing' : '');
+      const lbl = document.createElement('div');
+      lbl.className = 'import-field-label';
+      lbl.textContent = label;
+      const val = document.createElement('div');
+      val.className = 'import-field-value';
+      val.textContent = value || '—';
+      cell.appendChild(lbl);
+      cell.appendChild(val);
+      grid.appendChild(cell);
+    }
+    addField('Service', p.name, !p.name);
+    addField('Cost', p.cost !== null ? p.cost.toFixed(2) : null, p.cost === null);
+    addField('Currency', p.currency, !p.currency);
+    addField('Billing', p.billingCycle, !p.billingCycle);
+    addField('Next date', p.nextBillingDate, !p.nextBillingDate);
+    preview.appendChild(grid);
+
+    if (p.partial) {
+      const warn = document.createElement('div');
+      warn.className = 'import-partial-hint';
+      warn.textContent = '⚠ Cost not found — you\'ll be able to enter it on the next screen.';
+      preview.appendChild(warn);
+    }
+  }
+
+  // ── Clipboard ────────────────────────────────────────────
+  clipBtn.addEventListener('click', async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text && text.trim().length > 10) {
+        textarea.value = text;
+        runParse(text, '', '');
+      } else {
+        _showToast('Clipboard is empty', 'error');
+      }
+    } catch (_) {
+      _showToast('Clipboard access denied — paste manually', 'error');
+    }
+  });
+
+  // ── File picker ──────────────────────────────────────────
+  fileBtn.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) readEmlFile(fileInput.files[0]);
+  });
+
+  // ── Drag-and-drop ────────────────────────────────────────
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('import-area--dragover');
+  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('import-area--dragover'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('import-area--dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && (file.name.endsWith('.eml') || file.type === 'message/rfc822')) {
+      readEmlFile(file);
+    } else {
+      _showToast('Drop a .eml file', 'error');
+    }
+  });
+
+  function readEmlFile(file) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const data = EMAIL_PARSER.parseEml(ev.target.result);
+      if (data) {
+        textarea.value = data.body.slice(0, 3000);
+        runParse(data.body, data.subject, data.from);
+      } else {
+        _showToast('Could not read .eml file — try pasting the text instead', 'error');
+      }
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  // ── Textarea live parse ───────────────────────────────────
+  let parseTimer = null;
+  textarea.addEventListener('input', () => {
+    clearTimeout(parseTimer);
+    parseTimer = setTimeout(() => runParse(textarea.value, '', ''), 450);
+  });
+
+  // ── Continue ─────────────────────────────────────────────
+  continueBtn.addEventListener('click', () => {
+    if (!parsedResult) return;
+    const prefill = {
+      name:            parsedResult.name || '',
+      cost:            parsedResult.cost,
+      currency:        parsedResult.currency || 'GBP',
+      billingCycle:    parsedResult.billingCycle || 'Monthly',
+      nextBillingDate: parsedResult.nextBillingDate || null,
+      category:        autoCategory(parsedResult.name),
+      status:          'Active',
+      notes:           '',
+    };
+    closeModal();
+    openModal(prefill);
+  });
+
+  // ── Backdrop ─────────────────────────────────────────────
+  if (!overlay._modalBackdropBound) {
+    overlay._modalBackdropBound = true;
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+  }
+
+  // Auto-read clipboard silently on open
+  if (navigator.clipboard && navigator.clipboard.readText) {
+    navigator.clipboard.readText().then(text => {
+      if (text && text.trim().length > 50 && !textarea.value) {
+        textarea.value = text;
+        runParse(text, '', '');
+      }
+    }).catch(() => {});
+  }
+
+  setTimeout(() => textarea.focus(), 50);
+}
+
 function renderAlternatives(subs) {
   const container = document.getElementById('alternatives-container');
   if (!container) return;

@@ -188,3 +188,6 @@ venv/
 # Cloudflare Wrangler
 .wrangler/
 .dev.vars
+
+# Test email samples (personal data, never commit)
+test-emails/

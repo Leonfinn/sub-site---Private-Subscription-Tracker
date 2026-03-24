@@ -177,6 +177,28 @@ input[type="radio"] {
 }
 .add-btn:hover { opacity: 0.85; }
 
+.view-header-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Import from Email button ───────────────────────────── */
+.btn-import {
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  min-height: 44px;
+}
+.btn-import:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ── Content grid (two-column layout) ───────────────────── */
 .content-grid {
   display: grid;
@@ -425,6 +447,125 @@ input[type="radio"] {
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-grid .full { grid-column: 1 / -1; }
 .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+
+/* ── Import from Email modal ────────────────────────────── */
+.import-area {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  background: var(--bg-raised);
+  transition: border-color 0.2s, background 0.2s;
+  cursor: default;
+}
+.import-area--dragover {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+.import-hint {
+  font-size: 13px;
+  color: var(--text-faint);
+  text-align: center;
+  margin-bottom: 10px;
+}
+.import-icon { font-size: 20px; }
+.import-textarea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--bg-panel);
+  border-radius: var(--radius-sm);
+  cursor: text;
+}
+.import-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.btn-clip {
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-clip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Preview card */
+.import-preview {
+  margin-top: 16px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+}
+.import-conf-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.import-conf-label { font-size: 12px; color: var(--text-faint); white-space: nowrap; }
+.import-conf-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-panel);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.import-conf-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+.conf-high  { background: var(--green); }
+.conf-mid   { background: var(--amber); }
+.conf-low   { background: var(--red); }
+.import-conf-num { font-size: 12px; color: var(--text-muted); min-width: 32px; text-align: right; }
+.import-fields {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.import-field {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+.import-field--missing {
+  border-color: var(--amber);
+  opacity: 0.7;
+}
+.import-field-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  margin-bottom: 4px;
+}
+.import-field-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.import-field--missing .import-field-value { color: var(--text-faint); }
+.import-partial-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--amber);
+}
+
+@media (max-width: 480px) {
+  .import-fields { grid-template-columns: repeat(3, 1fr); }
+}
 
 /* ── Autocomplete dropdown ──────────────────────────────── */
 .autocomplete-wrapper {

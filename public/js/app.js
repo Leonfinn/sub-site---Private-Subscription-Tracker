@@ -109,4 +109,59 @@ function closeModal() {
   document.getElementById('modalOverlay').classList.add('hidden');
 }
 
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+  initApp();
+  _wireImportButton();
+  _handleUrlParams();
+});
+
+function _wireImportButton() {
+  const btn = document.getElementById('importEmailBtn');
+  if (btn && !btn._bound) {
+    btn._bound = true;
+    btn.addEventListener('click', () => showImportModal());
+  }
+}
+
+// iOS Shortcut flow: ?text=<encoded>, or ?name=&cost=&currency=&cycle=&date=
+function _handleUrlParams() {
+  const p = new URLSearchParams(window.location.search);
+  if (!p.has('text') && !p.has('name') && !p.has('cost')) return;
+
+  if (p.has('text')) {
+    // Parse the shared text and open import modal pre-filled
+    const text = p.get('text');
+    if (text && text.trim().length > 10) {
+      navigate('subscriptions');
+      setTimeout(() => {
+        showImportModal();
+        // Dispatch synthetic input to textarea after modal opens
+        setTimeout(() => {
+          const ta = document.querySelector('.import-textarea');
+          if (ta) {
+            ta.value = text;
+            ta.dispatchEvent(new Event('input'));
+          }
+        }, 100);
+      }, 50);
+    }
+  } else {
+    // Direct field params: open subscription form pre-filled
+    const prefill = {
+      name:            p.get('name')     || '',
+      cost:            parseFloat(p.get('cost')) || null,
+      currency:        p.get('currency') || 'GBP',
+      billingCycle:    p.get('cycle')    || 'Monthly',
+      nextBillingDate: p.get('date')     || null,
+      category:        p.get('category') || 'Other',
+      status:          'Active',
+      notes:           '',
+    };
+    navigate('subscriptions');
+    setTimeout(() => openModal(prefill), 100);
+  }
+
+  // Clean URL params without reloading
+  const clean = window.location.pathname;
+  window.history.replaceState({}, '', clean);
+}

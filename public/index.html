@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sub-Site | Free Private Subscription Tracker</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
   <meta name="description" content="Free subscription tracker. No login required — all your data stays in your browser. Track spending, set renewal alerts, and find cheaper alternatives.">
   <meta property="og:title" content="Sub-Site — Free Private Subscription Tracker">
   <meta property="og:description" content="Track all your subscriptions privately. No account needed. 100% in your browser. Find cheaper alternatives and cut costs.">
@@ -204,7 +205,10 @@
           <h1 class="page-title">Subscriptions</h1>
           <p class="page-sub" id="subs-summary"></p>
         </div>
-        <button class="add-btn" id="addSubBtn">+ Add Subscription</button>
+        <div class="view-header-btns">
+          <button class="btn-import" id="importEmailBtn">✉ Import from Email</button>
+          <button class="add-btn" id="addSubBtn">+ Add Subscription</button>
+        </div>
       </div>
       <details class="help-block">
         <summary>Managing your subscriptions</summary>
@@ -364,6 +368,7 @@
     <div class="modal" id="modal"></div>
   </div>
 
+  <script src="js/email-parser.js"></script>
   <script src="data/affiliates.js"></script>
   <script>
     (function () {
