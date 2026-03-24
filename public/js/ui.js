@@ -657,7 +657,7 @@ function renderModal(sub) {
   const nameInput = document.createElement('input');
   nameInput.className = 'form-input';
   nameInput.type = 'text';
-  nameInput.autocomplete = 'off';
+  nameInput.setAttribute('autocomplete', 'new-password');
   nameInput.placeholder = 'e.g. Netflix, Spotify, Adobe CC…';
   if (isEdit) nameInput.value = sub.name;
 

@@ -107,10 +107,12 @@ function renderCurrentView() {
 function openModal(sub = null) {
   renderModal(sub);
   document.getElementById('modalOverlay').classList.remove('hidden');
+  _renderSaveStatus();
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.add('hidden');
+  _renderSaveStatus();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -144,6 +146,10 @@ const _EXPORT_TS_KEY = 'subsight_last_export_ts';
 const _CHANGE_TS_KEY = 'subsight_last_change_ts'; // stamped by storage.js _notify()
 
 function _hasUnsavedChanges() {
+  // Modal open = user is actively editing/adding — treat as unsaved
+  const overlay = document.getElementById('modalOverlay');
+  if (overlay && !overlay.classList.contains('hidden')) return true;
+
   const changeTs = localStorage.getItem(_CHANGE_TS_KEY);
   const exportTs = localStorage.getItem(_EXPORT_TS_KEY);
   const subs = getAllSubscriptions();
