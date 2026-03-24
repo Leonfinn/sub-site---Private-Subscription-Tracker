@@ -1765,7 +1765,12 @@ function renderExport() {
       resultDiv.style.display = 'block';
       if (result.ok) {
         resultDiv.className = 'import-result success';
-        resultDiv.textContent = `✓ ${result.imported} subscription${result.imported !== 1 ? 's' : ''} added. ${result.skipped} skipped (already existed or could not be read).`;
+        const lines = [
+          `✓ Added:   ${result.added} subscription${result.added !== 1 ? 's' : ''}`,
+          `~ Skipped: ${result.dupeSkipped} already on your dashboard`,
+        ];
+        if (result.invalid > 0) lines.push(`✗ Invalid: ${result.invalid} record${result.invalid !== 1 ? 's' : ''} couldn't be read`);
+        resultDiv.textContent = lines.join('\n');
       } else {
         resultDiv.className = 'import-result error';
         resultDiv.textContent = result.error || 'Could not read the file. Make sure you are using a .json backup file exported from Sub-Site.';
