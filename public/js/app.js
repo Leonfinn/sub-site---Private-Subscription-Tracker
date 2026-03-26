@@ -115,12 +115,88 @@ function closeModal() {
   _renderSaveStatus();
 }
 
+/* ── PWA Install Prompt ───────────────────────────────── */
+let _deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+});
+
+function _isInstalledPWA() {
+  return window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+}
+
+function _isIOS() {
+  return /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+function _maybeShowInstallBanner() {
+  if (_isInstalledPWA()) return;
+  if (localStorage.getItem('subsite_install_dismissed')) return;
+  const container = document.getElementById('install-banner');
+  if (!container || container.children.length > 0) return;
+
+  // Only show if user has at least 1 subscription (engagement signal)
+  const subs = typeof getAllSubscriptions === 'function' ? getAllSubscriptions() : [];
+  if (subs.length === 0) return;
+
+  // Show appropriate banner for platform
+  if (_deferredInstallPrompt) {
+    _renderInstallBanner(container, 'chrome');
+  } else if (_isIOS()) {
+    _renderInstallBanner(container, 'ios');
+  }
+  // Desktop Safari / Firefox: rely on browser UI, no banner shown
+}
+
+function _renderInstallBanner(container, type) {
+  const banner = document.createElement('div');
+  banner.className = 'install-banner';
+
+  if (type === 'chrome') {
+    banner.innerHTML = `
+      <span class="install-banner-text">📲 Install Sub-Site as an app for quick access from your home screen.</span>
+      <div class="install-banner-actions">
+        <button class="install-banner-btn" id="installPwaBtn">Install</button>
+        <button class="install-banner-dismiss" aria-label="Dismiss">✕</button>
+      </div>`;
+    banner.querySelector('#installPwaBtn').addEventListener('click', async () => {
+      if (!_deferredInstallPrompt) return;
+      await _deferredInstallPrompt.prompt();
+      const { outcome } = await _deferredInstallPrompt.userChoice;
+      _deferredInstallPrompt = null;
+      if (outcome === 'accepted') {
+        localStorage.setItem('subsite_install_dismissed', '1');
+        container.innerHTML = '';
+      }
+    });
+  } else {
+    // iOS — manual instructions
+    banner.innerHTML = `
+      <span class="install-banner-text">📲 Add to Home Screen: tap the Share button (⬆) then <strong>Add to Home Screen</strong>.</span>
+      <div class="install-banner-actions">
+        <button class="install-banner-dismiss" aria-label="Dismiss">✕</button>
+      </div>`;
+  }
+
+  banner.querySelector('.install-banner-dismiss').addEventListener('click', () => {
+    localStorage.setItem('subsite_install_dismissed', '1');
+    container.innerHTML = '';
+  });
+
+  container.appendChild(banner);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initApp();
   _wireImportButton();
   _handleUrlParams();
   _initSaveStatus();
   _initUnloadGuard();
+  // Check install prompt after subscriptions load
+  document.addEventListener('subsight:updated', _maybeShowInstallBanner);
 });
 
 function _initUnloadGuard() {

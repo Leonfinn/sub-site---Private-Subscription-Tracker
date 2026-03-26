@@ -25,7 +25,16 @@
   <meta name="twitter:description" content="Track all your subscriptions privately. No account needed. 100% in your browser.">
   <meta name="twitter:image" content="https://sub-site.com/og-image.png">
   <link rel="canonical" href="https://sub-site.com/">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Sub-Site">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="css/style.css?v=1.1">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+    }
+  </script>
 </head>
 <body>
 
@@ -209,6 +218,7 @@
           <p style="margin:0.5rem 0 0;"><a href="guide.html" style="color:var(--accent);">Full User Guide →</a></p>
         </div>
       </details>
+      <div id="install-banner"></div>
       <div id="trust-banner"></div>
       <div id="audit-banner"></div>
       <div id="waste-alert"></div>
