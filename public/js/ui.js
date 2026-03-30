@@ -19,6 +19,20 @@ function _formatCost(sub) {
   return _currencySymbol(sub.currency) + parseFloat(sub.cost).toFixed(2);
 }
 
+// Resolve the correct recommendation data for a subscription, accounting for plan tiers.
+// For flat entries (no tiers), returns the entry unchanged.
+// For tiered entries, matches against the full plan monthly cost (un-splitting splitWays)
+// so a user paying their share of a family plan still matches the family tier.
+function resolveServiceData(key, sub) {
+  const entry = KNOWN_SERVICES[key];
+  if (!entry || !entry.tiers) return entry;
+  const fullMonthly = monthlyEquivalent(sub) * (sub.splitWays > 1 ? sub.splitWays : 1);
+  for (const tier of entry.tiers) {
+    if (fullMonthly <= tier.maxMonthly) return tier;
+  }
+  return entry.tiers[entry.tiers.length - 1];
+}
+
 function _formatCycle(cycle) {
   return { Monthly: 'monthly', Quarterly: 'quarterly', Annually: 'annually', Weekly: 'weekly' }[cycle] || cycle.toLowerCase();
 }
@@ -576,7 +590,7 @@ function renderDashboard(subs, settings) {
     let found = null;
     for (const s of activeSorted) {
       const key = s.name.trim().toLowerCase();
-      if (typeof KNOWN_SERVICES !== 'undefined' && KNOWN_SERVICES[key]) { found = { sub: s, data: KNOWN_SERVICES[key] }; break; }
+      if (typeof KNOWN_SERVICES !== 'undefined' && KNOWN_SERVICES[key]) { found = { sub: s, data: resolveServiceData(key, s) }; break; }
     }
     if (found) {
       const { sub: matchSub, data } = found;
@@ -686,6 +700,16 @@ function renderModal(sub) {
     nameInput.value = toTitleCase(key);
     if (KNOWN_SERVICE_CATEGORIES && KNOWN_SERVICE_CATEGORIES[key]) {
       catSelect.value = KNOWN_SERVICE_CATEGORIES[key];
+    }
+    // Pre-fill cost if we have a known price and the field is empty (add mode only)
+    if (!isEdit && costInput && KNOWN_SERVICES[key]) {
+      const entry = KNOWN_SERVICES[key];
+      // For tiered entries use the lowest (most common) tier's price as a hint
+      const priceStr = entry.tiers ? entry.tiers[0].price : entry.price;
+      if (priceStr) {
+        const match = priceStr.match(/[\d.]+/);
+        if (match && !costInput.value) costInput.value = match[0];
+      }
     }
     acHide();
   }
@@ -1449,7 +1473,9 @@ function renderAlternatives(subs) {
   // Disclosure
   const disc = document.createElement('div');
   disc.className = 'disclosure';
-  const allPlaceholders = Object.values(KNOWN_SERVICES).every(v => v.url === 'AFFILIATE_URL');
+  const allPlaceholders = Object.values(KNOWN_SERVICES).every(v =>
+    v.tiers ? v.tiers.every(t => t.url === 'AFFILIATE_URL') : v.url === 'AFFILIATE_URL'
+  );
   disc.textContent = allPlaceholders
     ? 'These are direct links to each service\'s pricing page. Sub-Site has no affiliate relationship with these services.'
     : 'Sub-Site may earn a small commission if you sign up via these links, at no extra cost to you. Suggestions are based on your actual subscriptions.';
@@ -1483,13 +1509,13 @@ function renderAlternatives(subs) {
     grid1.className = 'affiliate-grid';
 
     tier1.forEach(([key, sub]) => {
-      const data = KNOWN_SERVICES[key];
+      const data = resolveServiceData(key, sub);
       const card = document.createElement('div');
       card.className = 'affiliate-card';
 
       const cardTitle = document.createElement('div');
       cardTitle.className = 'affiliate-card-title';
-      cardTitle.textContent = sub.name + ' \u2192 ' + data.alt;
+      cardTitle.textContent = sub.name + (data.label ? ' (' + data.label + ')' : '') + ' \u2192 ' + data.alt;
 
       const cardSub = document.createElement('div');
       cardSub.className = 'affiliate-card-sub';
