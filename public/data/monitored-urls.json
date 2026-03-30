@@ -15,6 +15,12 @@
   { "key": "itvx premium",           "url": "https://www.itv.com/watch/itvx/subscriber" },
   { "key": "criterion channel",      "url": "https://www.criterionchannel.com/membership" },
   { "key": "curiosity stream",       "url": "https://curiositystream.com/subscribe" },
+  { "key": "youtube premium",        "url": "https://www.youtube.com/premium" },
+  { "key": "channel 4+",             "url": "https://www.channel4.com/more4/all4-plus" },
+  { "key": "tnt sports",             "url": "https://www.tntsports.co.uk/subscribe" },
+  { "key": "sky sports",             "url": "https://www.nowtv.com/gb/sport" },
+  { "key": "eurosport",              "url": "https://www.eurosport.co.uk/subscription.shtml" },
+  { "key": "dazn",                   "url": "https://www.dazn.com/en-GB/sport/boxing" },
 
   { "key": "spotify",                "url": "https://www.spotify.com/gb/premium/" },
   { "key": "apple music",            "url": "https://www.apple.com/uk/apple-music/" },
@@ -141,5 +147,15 @@
   { "key": "the athletic",           "url": "https://theathletic.com/uk/" },
   { "key": "wall street journal",    "url": "https://www.wsj.com/buy" },
   { "key": "new york times",         "url": "https://www.nytimes.com/subscription" },
-  { "key": "washington post",        "url": "https://subscribe.washingtonpost.com/" }
+  { "key": "washington post",        "url": "https://subscribe.washingtonpost.com/" },
+
+  { "key": "duolingo super",         "url": "https://www.duolingo.com/plus" },
+  { "key": "coursera plus",          "url": "https://www.coursera.org/courseraplus" },
+  { "key": "linkedin learning",      "url": "https://www.linkedin.com/learning/subscription/products" },
+  { "key": "skillshare",             "url": "https://www.skillshare.com/en/membership/checkout" },
+  { "key": "masterclass",            "url": "https://www.masterclass.com/checkout/individual" },
+  { "key": "brilliant",              "url": "https://brilliant.org/premium/" },
+  { "key": "babbel",                 "url": "https://www.babbel.com/en/prices" },
+  { "key": "ring protect",           "url": "https://ring.com/en-gb/protect-plans" },
+  { "key": "deliveroo plus",         "url": "https://deliveroo.co.uk/plus" }
 ]

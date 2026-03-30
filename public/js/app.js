@@ -43,6 +43,7 @@ function _toggleTheme() {
 })();
 
 function initApp() {
+  migrateLegacyCategories();
   if (!localStorage.getItem(KEYS.VERSION)) {
     localStorage.setItem(KEYS.VERSION, SCHEMA_VERSION);
   }

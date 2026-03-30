@@ -155,7 +155,7 @@ const KNOWN_SERVICES = {
   'google play pass':         { alt: 'Apple Arcade',                        saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-arcade/',                  price: '£6.99/mo',         lastVerified: '2026-03' },
   'humble choice':            { alt: 'Humble Bundle (one-off bundles)',     saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.humblebundle.com',                             price: null,               lastVerified: '2026-03' },
 
-  // Productivity
+  // Apps — Email, Tasks & Utilities
   'todoist':                  { alt: 'TickTick (free tier)',                saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://ticktick.com/pricing',                             price: null,               lastVerified: '2026-03' },
   'superhuman':               { alt: 'Spark Mail (free tier)',              saving: '~£28/mo',                       url: 'AFFILIATE_URL', homepage: 'https://sparkmailapp.com',                                 price: null,               lastVerified: '2026-03' },
   'spark mail':               { alt: 'Apple Mail (free)',                   saving: '~£7/mo',                        url: 'AFFILIATE_URL', homepage: null,                                                       price: null,               lastVerified: null      },
@@ -201,6 +201,48 @@ const KNOWN_SERVICES = {
   'the athletic':             { alt: 'BBC Sport (free)',                     saving: '~£10/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.bbc.co.uk/sport',                              price: null,               lastVerified: '2026-03' },
   'substack':                 { alt: 'Free Substack newsletters',            saving: 'Varies',                        url: 'AFFILIATE_URL', homepage: 'https://substack.com',                                     price: null,               lastVerified: '2026-03' },
   'patreon':                  { alt: 'Free content on YouTube / social',     saving: 'Varies',                        url: 'AFFILIATE_URL', homepage: 'https://www.youtube.com',                                  price: null,               lastVerified: '2026-03' },
+
+  // Streaming — additional
+  'youtube premium':          { alt: 'YouTube Music free tier',              saving: '~£14/mo',                       url: 'AFFILIATE_URL', homepage: 'https://music.youtube.com/',                               price: '£13.99/mo',        lastVerified: '2026-03' },
+  'channel 4+':               { alt: 'ITVX (free tier)',                     saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.itv.com/watch/itvx',                           price: '£3.99/mo',         lastVerified: '2026-03' },
+  // Streaming — UK Sports
+  'tnt sports':               { alt: 'YouTube Sports (free clips)',          saving: '~£31/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.youtube.com/sports',                           price: '£30.99/mo',        lastVerified: '2026-03' },
+  'sky sports':               { alt: 'TNT Sports',                           saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.nowtv.com/gb/sport',                           price: '£22/mo',           lastVerified: '2026-03' },
+  'eurosport':                { alt: 'BBC Sport (free)',                     saving: '~£7/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.bbc.co.uk/sport',                              price: '£6.99/mo',         lastVerified: '2026-03' },
+  'dazn':                     { alt: 'TNT Sports',                           saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.tntsports.co.uk',                              price: '£9.99/mo',         lastVerified: '2026-03' },
+
+  // Education
+  'duolingo super':           { alt: 'Babbel',                               saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.babbel.com/en/prices',                         price: '£6.99/mo',         lastVerified: '2026-03' },
+  'coursera plus':            { alt: 'LinkedIn Learning',                    saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.linkedin.com/learning/',                       price: '£39/mo',           lastVerified: '2026-03' },
+  'linkedin learning':        { alt: 'Coursera Plus',                        saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.coursera.org/courseraplus',                    price: '£19.99/mo',        lastVerified: '2026-03' },
+  'skillshare':               { alt: 'LinkedIn Learning',                    saving: '~£10/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.linkedin.com/learning/',                       price: '£9.99/mo',         lastVerified: '2026-03' },
+  'masterclass':              { alt: 'Skillshare',                           saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.skillshare.com/en/membership/checkout',         price: '£10/mo',           lastVerified: '2026-03' },
+  'brilliant':                { alt: 'Khan Academy (free)',                  saving: '~£15/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.khanacademy.org/',                             price: '£14.99/mo',        lastVerified: '2026-03' },
+  'babbel':                   { alt: 'Duolingo Super',                       saving: '~£6/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.duolingo.com/learn',                           price: '£12.95/mo',        lastVerified: '2026-03' },
+
+  // Apps — Mobile Creative
+  'vsco':                     { alt: 'Snapseed (free by Google)',            saving: '~£9/mo',                        url: 'AFFILIATE_URL', homepage: 'https://vsco.co/store/mobile',                             price: '£8.99/mo',         lastVerified: '2026-03' },
+  'capcut pro':               { alt: 'DaVinci Resolve (free)',               saving: '~£7/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.capcut.com/create-video',                     price: '£6.99/mo',         lastVerified: '2026-03' },
+  'facetune':                 { alt: 'Snapseed (free)',                      saving: '~£6/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.facetuneapp.com',                             price: '£5.99/mo',         lastVerified: '2026-03' },
+  'adobe lightroom':          { alt: 'Darkroom (free tier)',                 saving: '~£7/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.adobe.com/uk/products/photoshop-lightroom.html', price: '£9.98/mo',       lastVerified: '2026-03' },
+
+  // Security & Privacy
+  'ring protect':             { alt: 'Eufy Security',                        saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.eufy.com/uk',                                  price: '£3.49/mo',         lastVerified: '2026-03' },
+  'nest aware':               { alt: 'Eufy Security',                        saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.eufy.com/uk',                                  price: '£5/mo',            lastVerified: '2026-03' },
+
+  // Finance — UK neobanks & credit
+  'monzo plus':               { alt: 'Monzo free account',                  saving: '~£5/mo',                        url: 'AFFILIATE_URL', homepage: 'https://monzo.com/features/monzo-plus/',                   price: '£5/mo',            lastVerified: '2026-03' },
+  'monzo premium':            { alt: 'Monzo Plus (£5/mo)',                   saving: '~£10/mo',                       url: 'AFFILIATE_URL', homepage: 'https://monzo.com/features/monzo-premium/',                price: '£15/mo',           lastVerified: '2026-03' },
+  'revolut premium':          { alt: 'Monzo Plus (£5/mo)',                   saving: '~£3/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.revolut.com/revolut-premium/',                 price: '£7.99/mo',         lastVerified: '2026-03' },
+  'revolut metal':            { alt: 'Revolut Premium (£7.99/mo)',           saving: '~£6/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.revolut.com/revolut-metal/',                   price: '£13.99/mo',        lastVerified: '2026-03' },
+  'checkmyfile':              { alt: 'Experian (£14.99/mo)',                 saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.checkmyfile.com',                              price: '£14.99/mo',        lastVerified: '2026-03' },
+
+  // News & Media — UK
+  'the telegraph':            { alt: 'BBC News (free)',                      saving: '~£13/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.bbc.co.uk/news',                               price: '£12.99/mo',        lastVerified: '2026-03' },
+
+  // Other — Food delivery
+  'uber one':                 { alt: 'Deliveroo Plus (£3.99/mo)',            saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.ubereats.com/gb/uber-one',                     price: '£7.99/mo',         lastVerified: '2026-03' },
+  'deliveroo plus':           { alt: 'Uber One',                             saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.ubereats.com/gb/uber-one',                     price: '£3.99/mo',         lastVerified: '2026-03' },
 };
 
 const KNOWN_SERVICE_CATEGORIES = {
@@ -292,23 +334,23 @@ const KNOWN_SERVICE_CATEGORIES = {
   'convertkit':               'Software / SaaS',
   'kit':                      'Software / SaaS',
   'ghost':                    'Software / SaaS',
-  'bear':                     'Software / SaaS',
-  'craft':                    'Software / SaaS',
-  'ulysses':                  'Software / SaaS',
-  'day one':                  'Software / SaaS',
-  'setapp':                   'Software / SaaS',
-  'cleanmymac':               'Software / SaaS',
-  'proxyman':                 'Software / SaaS',
-  'tableplus':                'Software / SaaS',
-  'tower':                    'Software / SaaS',
-  'fork':                     'Software / SaaS',
-  'kaleidoscope':             'Software / SaaS',
-  'readwise':                 'Software / SaaS',
-  'readwise reader':          'Software / SaaS',
-  'instapaper':               'Software / SaaS',
-  'pocket':                   'Software / SaaS',
-  'reeder':                   'Software / SaaS',
-  'fantastical':              'Software / SaaS',
+  'bear':                     'Apps',
+  'craft':                    'Apps',
+  'ulysses':                  'Apps',
+  'day one':                  'Apps',
+  'setapp':                   'Apps',
+  'cleanmymac':               'Apps',
+  'proxyman':                 'Apps',
+  'tableplus':                'Apps',
+  'tower':                    'Apps',
+  'fork':                     'Apps',
+  'kaleidoscope':             'Apps',
+  'readwise':                 'Apps',
+  'readwise reader':          'Apps',
+  'instapaper':               'Apps',
+  'pocket':                   'Apps',
+  'reeder':                   'Apps',
+  'fantastical':              'Apps',
   // Cloud Storage
   'dropbox':                  'Cloud Storage',
   'google one':               'Cloud Storage',
@@ -320,22 +362,22 @@ const KNOWN_SERVICE_CATEGORIES = {
   'sync.com':                 'Cloud Storage',
   'box':                      'Cloud Storage',
   'mega':                     'Cloud Storage',
-  // VPN & Security
-  'nordvpn':                  'Software / SaaS',
-  'expressvpn':               'Software / SaaS',
-  'surfshark':                'Software / SaaS',
-  'protonvpn':                'Software / SaaS',
-  'mullvad':                  'Software / SaaS',
-  'private internet access':  'Software / SaaS',
-  'pia':                      'Software / SaaS',
-  '1password':                'Software / SaaS',
-  'dashlane':                 'Software / SaaS',
-  'keeper':                   'Software / SaaS',
-  'nordpass':                 'Software / SaaS',
-  'lastpass':                 'Software / SaaS',
-  'norton 360':               'Software / SaaS',
-  'mcafee':                   'Software / SaaS',
-  'malwarebytes':             'Software / SaaS',
+  // Security & Privacy
+  'nordvpn':                  'Security & Privacy',
+  'expressvpn':               'Security & Privacy',
+  'surfshark':                'Security & Privacy',
+  'protonvpn':                'Security & Privacy',
+  'mullvad':                  'Security & Privacy',
+  'private internet access':  'Security & Privacy',
+  'pia':                      'Security & Privacy',
+  '1password':                'Security & Privacy',
+  'dashlane':                 'Security & Privacy',
+  'keeper':                   'Security & Privacy',
+  'nordpass':                 'Security & Privacy',
+  'lastpass':                 'Security & Privacy',
+  'norton 360':               'Security & Privacy',
+  'mcafee':                   'Security & Privacy',
+  'malwarebytes':             'Security & Privacy',
   // Gaming
   'xbox game pass':           'Gaming',
   'playstation plus':         'Gaming',
@@ -345,14 +387,14 @@ const KNOWN_SERVICE_CATEGORIES = {
   'apple arcade':             'Gaming',
   'google play pass':         'Gaming',
   'humble choice':            'Gaming',
-  // Productivity
-  'todoist':                  'Productivity',
-  'superhuman':               'Productivity',
-  'spark mail':               'Productivity',
-  'mimestream':               'Productivity',
-  'airmail':                  'Productivity',
-  'cleanshot x':              'Productivity',
-  'screenium':                'Productivity',
+  // Apps — Productivity & Utilities
+  'todoist':                  'Apps',
+  'superhuman':               'Apps',
+  'spark mail':               'Apps',
+  'mimestream':               'Apps',
+  'airmail':                  'Apps',
+  'cleanshot x':              'Apps',
+  'screenium':                'Apps',
   // Finance
   'quickbooks':               'Finance',
   'xero':                     'Finance',
@@ -388,17 +430,52 @@ const KNOWN_SERVICE_CATEGORIES = {
   'the athletic':             'News & Media',
   'substack':                 'News & Media',
   'patreon':                  'News & Media',
+  // Streaming — UK Sports & TV
+  'youtube premium':          'Music',
+  'channel 4+':               'Streaming',
+  'tnt sports':               'Streaming',
+  'sky sports':               'Streaming',
+  'eurosport':                'Streaming',
+  'dazn':                     'Streaming',
+  // Education
+  'duolingo super':           'Education',
+  'coursera plus':            'Education',
+  'linkedin learning':        'Education',
+  'skillshare':               'Education',
+  'masterclass':              'Education',
+  'brilliant':                'Education',
+  'babbel':                   'Education',
+  // Apps — Mobile Creative
+  'vsco':                     'Apps',
+  'capcut pro':               'Apps',
+  'facetune':                 'Apps',
+  'adobe lightroom':          'Apps',
+  // Security & Privacy
+  'ring protect':             'Security & Privacy',
+  'nest aware':               'Security & Privacy',
+  // Finance — UK neobanks & credit
+  'monzo plus':               'Finance',
+  'monzo premium':            'Finance',
+  'revolut premium':          'Finance',
+  'revolut metal':            'Finance',
+  'checkmyfile':              'Finance',
+  // News & Media
+  'the telegraph':            'News & Media',
+  // Other — Food delivery
+  'uber one':                 'Other',
+  'deliveroo plus':           'Other',
 };
 
 const CATEGORY_FALLBACKS = {
-  'Streaming':       { alt: 'Check Freesat / Freeview for free TV', url: 'AFFILIATE_URL', homepage: 'https://www.freesat.co.uk',                                price: null, lastVerified: '2026-03' },
-  'Software / SaaS': { alt: 'Browse open-source alternatives at AlternativeTo', url: 'AFFILIATE_URL', homepage: 'https://alternativeto.net',                    price: null, lastVerified: '2026-03' },
-  'Cloud Storage':   { alt: 'pCloud — one-time payment, lifetime storage', url: 'AFFILIATE_URL', homepage: 'https://www.pcloud.com/cloud-storage-pricing-plans.html', price: '£3.99/mo', lastVerified: '2026-03' },
-  'Gaming':          { alt: 'Xbox Game Pass Ultimate for multi-platform value', url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',     price: '£7.99/mo', lastVerified: '2026-03' },
-  'Music':           { alt: 'YouTube Music — free tier with ads', url: 'AFFILIATE_URL', homepage: 'https://music.youtube.com',                                   price: null, lastVerified: '2026-03' },
-  'News & Media':    { alt: 'BBC News / The Guardian — free access', url: 'AFFILIATE_URL', homepage: 'https://www.bbc.co.uk/news',                               price: null, lastVerified: '2026-03' },
-  'Health & Fitness':{ alt: 'NHS Fitness Studio — free workout videos', url: 'AFFILIATE_URL', homepage: 'https://www.nhs.uk/conditions/nhs-fitness-studio/',     price: null, lastVerified: '2026-03' },
-  'Finance':         { alt: 'Wave — free accounting for small businesses', url: 'AFFILIATE_URL', homepage: 'https://www.waveapps.com',                           price: null, lastVerified: '2026-03' },
-  'Productivity':    { alt: 'Notion free tier or LibreOffice', url: 'AFFILIATE_URL', homepage: 'https://www.notion.so',                                          price: null, lastVerified: '2026-03' },
-  'Other':           { alt: 'Search AlternativeTo for cheaper options', url: 'AFFILIATE_URL', homepage: 'https://alternativeto.net',                             price: null, lastVerified: '2026-03' },
+  'Streaming':          { alt: 'Check Freesat / Freeview for free TV',                   url: 'AFFILIATE_URL', homepage: 'https://www.freesat.co.uk',                                       price: null,       lastVerified: '2026-03' },
+  'Music':              { alt: 'YouTube Music — free tier with ads',                      url: 'AFFILIATE_URL', homepage: 'https://music.youtube.com',                                        price: null,       lastVerified: '2026-03' },
+  'Gaming':             { alt: 'Xbox Game Pass Ultimate for multi-platform value',        url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',                        price: '£7.99/mo', lastVerified: '2026-03' },
+  'Cloud Storage':      { alt: 'pCloud — one-time payment, lifetime storage',            url: 'AFFILIATE_URL', homepage: 'https://www.pcloud.com/cloud-storage-pricing-plans.html',          price: '£3.99/mo', lastVerified: '2026-03' },
+  'Software / SaaS':   { alt: 'Browse open-source alternatives at AlternativeTo',        url: 'AFFILIATE_URL', homepage: 'https://alternativeto.net',                                        price: null,       lastVerified: '2026-03' },
+  'Apps':               { alt: 'Setapp — 240+ Mac & iOS apps in one subscription',       url: 'AFFILIATE_URL', homepage: 'https://setapp.com',                                               price: '£9.99/mo', lastVerified: '2026-03' },
+  'Education':          { alt: 'Khan Academy — free courses across every subject',       url: 'AFFILIATE_URL', homepage: 'https://www.khanacademy.org',                                      price: null,       lastVerified: '2026-03' },
+  'Security & Privacy': { alt: 'Bitwarden — free open-source password manager',          url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com',                                            price: null,       lastVerified: '2026-03' },
+  'Finance':            { alt: 'Wave — free accounting for small businesses',             url: 'AFFILIATE_URL', homepage: 'https://www.waveapps.com',                                         price: null,       lastVerified: '2026-03' },
+  'Health & Fitness':   { alt: 'NHS Fitness Studio — free workout videos',               url: 'AFFILIATE_URL', homepage: 'https://www.nhs.uk/conditions/nhs-fitness-studio/',                price: null,       lastVerified: '2026-03' },
+  'News & Media':       { alt: 'BBC News / The Guardian — free access',                  url: 'AFFILIATE_URL', homepage: 'https://www.bbc.co.uk/news',                                       price: null,       lastVerified: '2026-03' },
 };

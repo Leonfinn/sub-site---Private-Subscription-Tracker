@@ -1,9 +1,30 @@
 // js/storage.js
 
 const CATEGORIES = [
-  'Streaming', 'Software / SaaS', 'Cloud Storage', 'Gaming', 'Music',
-  'News / Media', 'Health & Fitness', 'Finance', 'Productivity', 'Other'
+  'Streaming', 'Music', 'Gaming', 'Cloud Storage',
+  'Software / SaaS', 'Apps', 'Education',
+  'Security & Privacy', 'Finance', 'Health & Fitness',
+  'News & Media', 'Other'
 ];
+
+// Migrate legacy category names in localStorage to the current taxonomy.
+// Run once on startup before any reads.
+function migrateLegacyCategories() {
+  const MAP = {
+    'News / Media':  'News & Media',
+    'Productivity':  'Apps',
+  };
+  const raw = localStorage.getItem(KEYS.SUBS);
+  if (!raw) return;
+  try {
+    const subs = JSON.parse(raw);
+    let changed = false;
+    subs.forEach(s => {
+      if (MAP[s.category]) { s.category = MAP[s.category]; changed = true; }
+    });
+    if (changed) localStorage.setItem(KEYS.SUBS, JSON.stringify(subs));
+  } catch (e) { /* ignore parse errors */ }
+}
 const CURRENCIES   = ['GBP', 'USD', 'EUR', 'CAD', 'AUD'];
 const BILLING_CYCLES = ['Monthly', 'Quarterly', 'Annually', 'Weekly'];
 const STATUSES     = ['Active', 'Paused', 'Cancelled', 'Wishlist'];

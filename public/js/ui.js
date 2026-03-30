@@ -1575,6 +1575,71 @@ function renderAlternatives(subs) {
 
     container.appendChild(grid2);
   }
+
+  // Tier 3: unmatched subs with no useful category fallback — show targeted search card
+  const tier1Keys = new Set(tier1.map(([key]) => key));
+  const unmatchedSubs = activeSubs.filter(sub => {
+    const key = sub.name.trim().toLowerCase();
+    if (tier1Keys.has(key)) return false;           // already in Tier 1
+    if (CATEGORY_FALLBACKS[sub.category]) return false; // has a Tier 2 category fallback
+    return true;
+  });
+
+  // Deduplicate by normalised name
+  const seenNames = new Set();
+  const tier3Subs = unmatchedSubs.filter(sub => {
+    const key = sub.name.trim().toLowerCase();
+    if (seenNames.has(key)) return false;
+    seenNames.add(key);
+    return true;
+  });
+
+  if (tier3Subs.length > 0) {
+    const tier3Label = document.createElement('div');
+    tier3Label.className = 'affiliate-tier-label';
+    tier3Label.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M8 7v4M8 5.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Not in our database yet';
+    container.appendChild(tier3Label);
+
+    const grid3 = document.createElement('div');
+    grid3.className = 'affiliate-grid';
+
+    tier3Subs.forEach(sub => {
+      const card = document.createElement('div');
+      card.className = 'affiliate-card affiliate-card--unmatched';
+
+      const cardTitle = document.createElement('div');
+      cardTitle.className = 'affiliate-card-title';
+      cardTitle.textContent = sub.name;
+
+      const cardSub = document.createElement('div');
+      cardSub.className = 'affiliate-card-sub';
+      cardSub.textContent = 'We don\'t have a specific recommendation for this one yet.';
+
+      const cta = document.createElement('div');
+      cta.className = 'affiliate-cta affiliate-cta--unmatched';
+
+      const searchBtn = document.createElement('a');
+      searchBtn.className = 'affiliate-btn';
+      searchBtn.href = 'https://alternativeto.net/?q=' + encodeURIComponent(sub.name);
+      searchBtn.target = '_blank';
+      searchBtn.rel = 'noopener noreferrer';
+      searchBtn.textContent = 'Find alternatives \u2197';
+
+      const suggestLink = document.createElement('a');
+      suggestLink.className = 'affiliate-suggest-link';
+      suggestLink.href = 'feedback.html?suggest=' + encodeURIComponent(sub.name);
+      suggestLink.textContent = 'Suggest this service \u2192';
+
+      cta.appendChild(searchBtn);
+      cta.appendChild(suggestLink);
+      card.appendChild(cardTitle);
+      card.appendChild(cardSub);
+      card.appendChild(cta);
+      grid3.appendChild(card);
+    });
+
+    container.appendChild(grid3);
+  }
 }
 function renderExport() {
   const container = document.getElementById('export-container');

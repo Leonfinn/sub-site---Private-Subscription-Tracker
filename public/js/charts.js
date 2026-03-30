@@ -1,16 +1,18 @@
 // js/charts.js
 
 const CATEGORY_COLORS = {
-  'Streaming':       '#38bdf8',
-  'Software / SaaS': '#818cf8',
-  'Cloud Storage':   '#34d399',
-  'Gaming':          '#f59e0b',
-  'Music':           '#f472b6',
-  'News / Media':    '#fb923c',
-  'Health & Fitness':'#a78bfa',
-  'Finance':         '#4ade80',
-  'Productivity':    '#60a5fa',
-  'Other':           '#94a3b8',
+  'Streaming':         '#38bdf8',
+  'Music':             '#f472b6',
+  'Gaming':            '#f59e0b',
+  'Cloud Storage':     '#34d399',
+  'Software / SaaS':   '#818cf8',
+  'Apps':              '#60a5fa',
+  'Education':         '#fbbf24',
+  'Security & Privacy':'#f87171',
+  'Finance':           '#4ade80',
+  'Health & Fitness':  '#a78bfa',
+  'News & Media':      '#fb923c',
+  'Other':             '#94a3b8',
 };
 
 function renderCategoryChart(breakdown) {
