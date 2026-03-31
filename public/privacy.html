@@ -83,7 +83,7 @@
             <ul style="margin:0.6rem 0 0 1.2rem; padding:0; line-height:1.9;">
               <li>Sub-Site <strong>does not collect, store, or see any personal data</strong> about you on our end.</li>
               <li>Everything you enter (subscriptions, costs, dates) lives <strong>only in your browser</strong> and never leaves your device.</li>
-              <li>We run <strong>no analytics, no tracking scripts, and no advertising</strong> of our own.</li>
+              <li>We run <strong>privacy-respecting, self-hosted analytics</strong> (no cookies, no personal data, no cross-site tracking). We do not run advertising or invasive tracking of any kind.</li>
               <li>Some links on the site are <strong>affiliate links</strong>. If you click one, the affiliate network may set a cookie or tracking pixel on your browser.</li>
               <li>Our site is hosted on <strong>Cloudflare Pages</strong>. Cloudflare handles delivery and security, which involves your IP address — we do not access those logs.</li>
             </ul>
@@ -123,7 +123,7 @@
       <div class="card" style="margin-bottom:1.25rem;">
         <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">3. What we do not do</h2>
         <ul style="margin:0 0 0 1.2rem; padding:0; color:var(--text-muted); line-height:2;">
-          <li>We do not run analytics or page-view tracking of any kind.</li>
+          <li>We do not run invasive analytics, advertising, or cross-site tracking. (We do use a privacy-focused analytics tool — see Section 5 for details.)</li>
           <li>We do not use advertising scripts or build any profile of you.</li>
           <li>We do not operate any server-side forms, databases, or logs.</li>
           <li>We do not sell, share, or trade any data about you.</li>
@@ -142,9 +142,38 @@
         </p>
       </div>
 
-      <!-- 5. Affiliate links and third-party tracking -->
+      <!-- 5. Privacy-focused analytics (Umami) -->
+      <div class="card" style="margin-bottom:1.25rem;">
+        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">5. Privacy-focused analytics (Umami)</h2>
+        <p style="margin:0 0 0.75rem; color:var(--text-muted); line-height:1.7;">
+          We use a self-hosted, open-source analytics tool called <strong>Umami</strong>, running on our own server at <strong>analytics.sub-site.com</strong>. It helps us understand basic usage — for example, which pages are visited most — so we can improve the site. It is designed from the ground up to be privacy-respecting.
+        </p>
+        <p style="margin:0 0 0.4rem; color:var(--text-muted); line-height:1.7;"><strong>What Umami collects (all anonymous):</strong></p>
+        <ul style="margin:0 0 0.75rem 1.2rem; padding:0; color:var(--text-muted); line-height:2;">
+          <li>Page views and the referring URL</li>
+          <li>Browser type, operating system, and device type (e.g. mobile or desktop)</li>
+          <li>Country, derived from your IP address — <strong>your IP itself is never stored</strong></li>
+          <li>The URL of the page you visited on Sub-Site</li>
+        </ul>
+        <p style="margin:0 0 0.4rem; color:var(--text-muted); line-height:1.7;"><strong>What Umami does <em>not</em> do:</strong></p>
+        <ul style="margin:0 0 0.75rem 1.2rem; padding:0; color:var(--text-muted); line-height:2;">
+          <li>Set cookies (disabled by default)</li>
+          <li>Collect any personal data or create individual user profiles</li>
+          <li>Track you across other websites</li>
+          <li>Fingerprint your device</li>
+          <li>Share data with any third party</li>
+        </ul>
+        <p style="margin:0 0 0.75rem; color:var(--text-muted); line-height:1.7;">
+          All analytics data is stored on our own server and is never shared with third parties. Because no cookies are used and no personal data is collected, this tool is compliant with UK <strong>GDPR and PECR</strong> by design and does not require a cookie consent banner.
+        </p>
+        <p style="margin:0; color:var(--text-muted); line-height:1.7;">
+          <strong>Lawful basis:</strong> This anonymous, aggregate data is processed under <strong>legitimate interests</strong> (Article 6(1)(f) UK GDPR) to operate and improve Sub-Site. Because no personal data is collected and no cookies are set, this processing does not override your privacy rights.
+        </p>
+      </div>
+
+      <!-- 6. Affiliate links and third-party tracking -->
       <div class="card" id="affiliate-links" style="margin-bottom:1.25rem;">
-        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">5. Affiliate links and third-party tracking</h2>
+        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">6. Affiliate links and third-party tracking</h2>
         <p style="margin:0 0 0.75rem; color:var(--text-muted); line-height:1.7;">
           Some links on Sub-Site — particularly in the Alternatives section — are <strong>affiliate links</strong>. If you click one of these links, you will be taken to a third-party merchant or service. Sub-Site may earn a small commission if you make a purchase; this does not affect the price you pay.
         </p>
@@ -168,9 +197,9 @@
         </p>
       </div>
 
-      <!-- 6. Your rights under UK GDPR -->
+      <!-- 7. Your rights under UK GDPR -->
       <div class="card" style="margin-bottom:1.25rem;">
-        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">6. Your rights under UK GDPR</h2>
+        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">7. Your rights under UK GDPR</h2>
         <p style="margin:0 0 0.75rem; color:var(--text-muted); line-height:1.7;">
           Under UK data protection law, you have the following rights in relation to your personal data:
         </p>
@@ -189,35 +218,36 @@
         </p>
       </div>
 
-      <!-- 7. Data retention -->
+      <!-- 8. Data retention -->
       <div class="card" style="margin-bottom:1.25rem;">
-        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">7. Data retention</h2>
+        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">8. Data retention</h2>
         <ul style="margin:0 0 0 1.2rem; padding:0; color:var(--text-muted); line-height:2;">
           <li><strong>Your subscription data (localStorage):</strong> retained until you clear it yourself, either in the app or via your browser settings. We have no control over this.</li>
           <li><strong>Cloudflare infrastructure logs:</strong> retained according to <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Cloudflare's own retention policy</a>.</li>
+          <li><strong>Umami analytics data:</strong> anonymous aggregate data retained on our own server indefinitely for trend analysis. No personal data is stored.</li>
           <li><strong>Affiliate tracking cookies:</strong> retention varies by network. Refer to Impact, CJ, and Awin's respective policies.</li>
         </ul>
       </div>
 
-      <!-- 8. Children's privacy -->
+      <!-- 9. Children's privacy -->
       <div class="card" style="margin-bottom:1.25rem;">
-        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">8. Children's privacy</h2>
+        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">9. Children's privacy</h2>
         <p style="margin:0; color:var(--text-muted); line-height:1.7;">
           Sub-Site is not directed at children under 13 and we do not knowingly process the personal data of children.
         </p>
       </div>
 
-      <!-- 9. Changes to this policy -->
+      <!-- 10. Changes to this policy -->
       <div class="card" style="margin-bottom:1.25rem;">
-        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">9. Changes to this policy</h2>
+        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">10. Changes to this policy</h2>
         <p style="margin:0; color:var(--text-muted); line-height:1.7;">
           If we make material changes to this policy, we will update the "Last updated" date at the top of this page. We encourage you to check back periodically. Continued use of Sub-Site after a change constitutes acceptance of the revised policy.
         </p>
       </div>
 
-      <!-- 10. Contact -->
+      <!-- 11. Contact -->
       <div class="card" style="margin-bottom:2rem;">
-        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">10. Contact</h2>
+        <h2 style="font-size:1rem; font-weight:700; margin:0 0 0.6rem; color:var(--text);">11. Contact</h2>
         <p style="margin:0; color:var(--text-muted); line-height:1.7;">
           For any questions or requests relating to this privacy policy, please contact us at <strong>admin@sub-site.com</strong>.
         </p>
