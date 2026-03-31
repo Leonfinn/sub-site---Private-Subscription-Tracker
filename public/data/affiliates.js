@@ -248,6 +248,8 @@ const KNOWN_SERVICES = {
   'whoop':                    { alt: 'Garmin free app + basic band',         saving: '~£30/mo',                       url: 'AFFILIATE_URL', homepage: null,                                                       price: null,               lastVerified: null      },
   'oura':                     { alt: 'Garmin free app + basic band',         saving: '~£6/mo',                        url: 'AFFILIATE_URL', homepage: null,                                                       price: null,               lastVerified: null      },
   'fitbit premium':           { alt: 'Fitbit free tier',                     saving: '~£8/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.fitbit.com/gb/premium',                        price: null,               lastVerified: '2026-03' },
+  'nhs prescription prepayment certificate': { noAnnualNudge: true,          alt: 'Check NHS prescription exemption',  saving: 'May be free', url: 'AFFILIATE_URL', homepage: 'https://www.nhsbsa.nhs.uk/check-if-youre-entitled-help-nhs-costs', price: null, lastVerified: '2026-03' },
+  'nhs ppc':                  { noAnnualNudge: true,                          alt: 'Check NHS prescription exemption',  saving: 'May be free', url: 'AFFILIATE_URL', homepage: 'https://www.nhsbsa.nhs.uk/check-if-youre-entitled-help-nhs-costs', price: null, lastVerified: '2026-03' },
 
   // News & Media
   'the times':                { alt: 'BBC News (free)',                      saving: '~£27/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.bbc.co.uk/news',                               price: null,               lastVerified: '2026-03' },
