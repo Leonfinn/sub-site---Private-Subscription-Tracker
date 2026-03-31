@@ -552,6 +552,79 @@ const KNOWN_SERVICE_CATEGORIES = {
   'deliveroo plus':           'Other',
 };
 
+// Services confirmed to offer annual billing (agent-researched, not guessed).
+// Only services in this Set will show the "switch to annual billing" nudge.
+// Sources: DeepSeek V3 research, March 2026.
+const ANNUAL_BILLING_AVAILABLE = new Set([
+  // Streaming
+  'netflix', 'netflix with ads', 'netflix standard', 'netflix premium',
+  'disney+', 'disney plus', 'disney+ with ads', 'disney+ standard',
+  'amazon prime', 'amazon prime video', 'apple tv+',
+  'crunchyroll', 'mubi', 'britbox', 'acorn tv', 'hayu',
+  'itvx premium', 'shudder', 'curiosity stream', 'channel 4+',
+  'sky sports', 'dazn', 'youtube premium',
+  // Music
+  'spotify', 'spotify student', 'spotify duo', 'spotify family', 'spotify premium',
+  'apple music', 'apple music student', 'apple music family',
+  'tidal', 'deezer', 'amazon music', 'amazon music unlimited', 'amazon music family',
+  'audible',
+  // AI / Copilots
+  'chatgpt', 'chatgpt plus', 'openai',
+  'claude pro', 'claude', 'anthropic',
+  'gemini advanced', 'gemini', 'google one ai premium',
+  'copilot pro', 'microsoft copilot',
+  'github copilot',
+  'perplexity pro', 'perplexity',
+  'midjourney', 'elevenlabs', 'cursor', 'notion ai',
+  // Software / SaaS
+  'adobe cc', 'adobe creative cloud',
+  'microsoft 365', 'office 365', 'microsoft 365 personal', 'microsoft 365 family',
+  'notion', 'evernote', 'canva', 'grammarly',
+  'slack', 'zoom', 'loom', 'linear', 'jira', 'atlassian', 'trello',
+  'asana', 'monday.com', 'clickup', 'airtable',
+  'webflow', 'squarespace', 'wix', 'shopify',
+  'hubspot', 'salesforce', 'zendesk', 'intercom',
+  'mailchimp', 'convertkit', 'kit', 'ghost',
+  // Apps / Utilities
+  'setapp', 'cleanmymac',
+  'readwise', 'readwise reader', 'instapaper', 'pocket',
+  'fantastical', 'bear', 'craft', 'ulysses', 'day one',
+  'proxyman', 'tableplus', 'tower', 'fork', 'kaleidoscope', 'cleanshot x',
+  // Cloud Storage
+  'dropbox', 'google one', 'icloud+', 'onedrive',
+  'backblaze', 'carbonite', 'idrive', 'sync.com', 'box', 'mega',
+  // VPN / Security
+  'nordvpn', 'expressvpn', 'surfshark', 'protonvpn', 'private internet access', 'pia',
+  '1password', '1password families', 'dashlane', 'keeper', 'nordpass', 'lastpass',
+  'norton 360', 'mcafee', 'malwarebytes',
+  // Gaming
+  'xbox game pass', 'xbox game pass pc', 'xbox game pass ultimate',
+  'playstation plus', 'nintendo switch online',
+  'ea play', 'ubisoft+', 'apple arcade', 'google play pass', 'humble choice',
+  // Finance / Productivity
+  'todoist', 'superhuman', 'ynab', 'you need a budget',
+  'monarch money', 'tiller money', 'experian', 'equifax',
+  'quickbooks', 'xero',
+  // Health & Fitness
+  'peloton', 'noom', 'myfitnesspal', 'headspace', 'calm',
+  'strava', 'whoop', 'oura', 'fitbit premium',
+  // News & Media
+  'the times', 'the guardian', 'financial times', 'ft',
+  'wall street journal', 'wsj', 'new york times', 'nyt', 'washington post',
+  'the economist', 'wired', 'the athletic', 'the telegraph', 'checkmyfile',
+  // Education
+  'duolingo super', 'coursera plus', 'linkedin learning',
+  'skillshare', 'masterclass', 'brilliant', 'babbel',
+  // Photo / Video
+  'vsco', 'adobe lightroom',
+  // Smart Home
+  'ring protect', 'nest aware',
+  // Banking / Finance
+  'monzo plus', 'monzo premium', 'revolut premium', 'revolut metal',
+  // Other
+  'uber one', 'deliveroo plus',
+]);
+
 const CATEGORY_FALLBACKS = {
   'Streaming':          { alt: 'Check Freesat / Freeview for free TV',                   url: 'AFFILIATE_URL', homepage: 'https://www.freesat.co.uk',                                       price: null,       lastVerified: '2026-03' },
   'Music':              { alt: 'YouTube Music — free tier with ads',                      url: 'AFFILIATE_URL', homepage: 'https://music.youtube.com',                                        price: null,       lastVerified: '2026-03' },

@@ -201,10 +201,9 @@ function renderSubscriptionsList(subs) {
     costTd.appendChild(costDiv);
     costTd.appendChild(cycleDiv);
 
-    // Annual savings nudge (Monthly Active only)
+    // Annual savings nudge — only shown for services confirmed to offer annual billing.
     const _nudgeKey = (sub.name || '').toLowerCase().trim();
-    const _nudgeSuppressed = KNOWN_SERVICES[_nudgeKey] && KNOWN_SERVICES[_nudgeKey].noAnnualNudge;
-    if (!_nudgeSuppressed && sub.status === 'Active' && sub.billingCycle === 'Monthly') {
+    if (ANNUAL_BILLING_AVAILABLE.has(_nudgeKey) && sub.status === 'Active' && sub.billingCycle === 'Monthly') {
       const cost = parseFloat(sub.cost) || 0;
       const saving = cost * 12 * 0.175;
       if (saving >= 1) {
