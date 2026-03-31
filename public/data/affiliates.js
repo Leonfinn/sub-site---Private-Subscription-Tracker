@@ -9,25 +9,25 @@
 const KNOWN_SERVICES = {
   // Streaming
   'netflix':                  { tiers: [
-    { label: 'with Ads',   maxMonthly:  7.50, alt: 'Disney+ with Ads',          saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.disneyplus.com/en-gb/signup',              price: '£4.99/mo',  lastVerified: '2026-03' },
-    { label: 'Standard',   maxMonthly: 15.00, alt: 'Amazon Prime Video',         saving: '~£5/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',             price: '£5.99/mo',  lastVerified: '2026-03' },
-    { label: 'Premium',    maxMonthly: 99.00, alt: 'Amazon Prime Video',         saving: '~£12/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',             price: '£5.99/mo',  lastVerified: '2026-03' },
+    { label: 'with Ads',   maxMonthly:  7.50, serviceCost: '£4.99/mo',  alt: 'Disney+ with Ads',          saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.disneyplus.com/en-gb/signup',              price: '£4.99/mo',  lastVerified: '2026-03' },
+    { label: 'Standard',   maxMonthly: 15.00, serviceCost: '£10.99/mo', alt: 'Amazon Prime Video',         saving: '~£5/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',             price: '£5.99/mo',  lastVerified: '2026-03' },
+    { label: 'Premium',    maxMonthly: 99.00, serviceCost: '£17.99/mo', alt: 'Amazon Prime Video',         saving: '~£12/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',             price: '£5.99/mo',  lastVerified: '2026-03' },
   ] },
   // Netflix name variants
-  'netflix with ads':         { alt: 'Disney+ with Ads',                 saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.disneyplus.com/en-gb/signup',                  price: '£4.99/mo',         lastVerified: '2026-03' },
-  'netflix standard':         { alt: 'Amazon Prime Video',               saving: '~£5/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',                 price: '£5.99/mo',         lastVerified: '2026-03' },
-  'netflix premium':          { alt: 'Amazon Prime Video',               saving: '~£12/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',                 price: '£5.99/mo',         lastVerified: '2026-03' },
+  'netflix with ads':         { serviceCost: '£4.99/mo',  alt: 'Disney+ with Ads',                 saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.disneyplus.com/en-gb/signup',                  price: '£4.99/mo',         lastVerified: '2026-03' },
+  'netflix standard':         { serviceCost: '£10.99/mo', alt: 'Amazon Prime Video',               saving: '~£5/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',                 price: '£5.99/mo',         lastVerified: '2026-03' },
+  'netflix premium':          { serviceCost: '£17.99/mo', alt: 'Amazon Prime Video',               saving: '~£12/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.amazon.co.uk/gp/video/offers',                 price: '£5.99/mo',         lastVerified: '2026-03' },
   'disney+':                  { tiers: [
-    { label: 'with Ads',   maxMonthly:  7.50, alt: 'Paramount+ (ad-free)',       saving: '~£1/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.paramountplus.com/gb/',                    price: '£3.99/mo',  lastVerified: '2026-03' },
-    { label: 'Standard',   maxMonthly: 99.00, alt: 'Apple TV+',                  saving: '~£2/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-tv-plus/',              price: '£8.99/mo',  lastVerified: '2026-03' },
+    { label: 'with Ads',   maxMonthly:  7.50, serviceCost: '£4.99/mo', alt: 'Paramount+ (ad-free)',       saving: '~£1/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.paramountplus.com/gb/',                    price: '£3.99/mo',  lastVerified: '2026-03' },
+    { label: 'Standard',   maxMonthly: 99.00, serviceCost: '£7.99/mo', alt: 'Apple TV+',                  saving: '~£2/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-tv-plus/',              price: '£8.99/mo',  lastVerified: '2026-03' },
   ] },
   'disney plus':              { tiers: [
-    { label: 'with Ads',   maxMonthly:  7.50, alt: 'Paramount+ (ad-free)',       saving: '~£1/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.paramountplus.com/gb/',                    price: '£3.99/mo',  lastVerified: '2026-03' },
-    { label: 'Standard',   maxMonthly: 99.00, alt: 'Apple TV+',                  saving: '~£2/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-tv-plus/',              price: '£8.99/mo',  lastVerified: '2026-03' },
+    { label: 'with Ads',   maxMonthly:  7.50, serviceCost: '£4.99/mo', alt: 'Paramount+ (ad-free)',       saving: '~£1/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.paramountplus.com/gb/',                    price: '£3.99/mo',  lastVerified: '2026-03' },
+    { label: 'Standard',   maxMonthly: 99.00, serviceCost: '£7.99/mo', alt: 'Apple TV+',                  saving: '~£2/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-tv-plus/',              price: '£8.99/mo',  lastVerified: '2026-03' },
   ] },
   // Disney+ name variants
-  'disney+ with ads':         { alt: 'Paramount+ (ad-free)',             saving: '~£1/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.paramountplus.com/gb/',                        price: '£3.99/mo',         lastVerified: '2026-03' },
-  'disney+ standard':         { alt: 'Apple TV+',                       saving: '~£2/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-tv-plus/',                  price: '£8.99/mo',         lastVerified: '2026-03' },
+  'disney+ with ads':         { serviceCost: '£4.99/mo', alt: 'Paramount+ (ad-free)',             saving: '~£1/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.paramountplus.com/gb/',                        price: '£3.99/mo',         lastVerified: '2026-03' },
+  'disney+ standard':         { serviceCost: '£7.99/mo', alt: 'Apple TV+',                       saving: '~£2/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-tv-plus/',                  price: '£8.99/mo',         lastVerified: '2026-03' },
   'amazon prime':             { alt: 'Freesat + ITVX',                   saving: '~£9/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.freesat.co.uk',                                price: null,               lastVerified: '2026-03' },
   'amazon prime video':       { alt: 'Freesat + ITVX',                   saving: '~£9/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.freesat.co.uk',                                price: null,               lastVerified: '2026-03' },
   'apple tv+':                { alt: 'Freesat',                          saving: '~£9/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.freesat.co.uk',                                price: null,               lastVerified: '2026-03' },
@@ -48,33 +48,33 @@ const KNOWN_SERVICES = {
 
   // Music
   'spotify':                  { tiers: [
-    { label: 'Student',    maxMonthly:  6.50, alt: 'Apple Music Student',   saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/shop/buy-apple-music/student', price: '£5.99/mo',  lastVerified: '2026-03' },
-    { label: 'Individual', maxMonthly: 13.50, alt: 'Apple Music',           saving: '~£1/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£10.99/mo', lastVerified: '2026-03' },
-    { label: 'Duo',        maxMonthly: 18.50, alt: 'Apple Music Family',    saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£16.99/mo', lastVerified: '2026-03' },
-    { label: 'Family',     maxMonthly: 99.00, alt: 'Apple Music Family',    saving: '~£5/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£16.99/mo', lastVerified: '2026-03' },
+    { label: 'Student',    maxMonthly:  6.50, serviceCost: '£4.99/mo',  alt: 'Apple Music Student',   saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/shop/buy-apple-music/student', price: '£5.99/mo',  lastVerified: '2026-03' },
+    { label: 'Individual', maxMonthly: 13.50, serviceCost: '£11.99/mo', alt: 'Apple Music',           saving: '~£1/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£10.99/mo', lastVerified: '2026-03' },
+    { label: 'Duo',        maxMonthly: 18.50, serviceCost: '£16.99/mo', alt: 'Apple Music Family',    saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£16.99/mo', lastVerified: '2026-03' },
+    { label: 'Family',     maxMonthly: 99.00, serviceCost: '£21.99/mo', alt: 'Apple Music Family',    saving: '~£5/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£16.99/mo', lastVerified: '2026-03' },
   ] },
   // Spotify name variants (autocomplete + precise override)
-  'spotify student':          { alt: 'Apple Music Student',               saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/shop/buy-apple-music/student',     price: '£5.99/mo',         lastVerified: '2026-03' },
-  'spotify duo':              { alt: 'Apple Music Family',                saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£16.99/mo',        lastVerified: '2026-03' },
-  'spotify family':           { alt: 'Apple Music Family',                saving: '~£5/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£16.99/mo',        lastVerified: '2026-03' },
-  'spotify premium':          { alt: 'Apple Music',                       saving: '~£1/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£10.99/mo',        lastVerified: '2026-03' },
+  'spotify student':          { serviceCost: '£4.99/mo',  alt: 'Apple Music Student',               saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/shop/buy-apple-music/student',     price: '£5.99/mo',         lastVerified: '2026-03' },
+  'spotify duo':              { serviceCost: '£16.99/mo', alt: 'Apple Music Family',                saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£16.99/mo',        lastVerified: '2026-03' },
+  'spotify family':           { serviceCost: '£21.99/mo', alt: 'Apple Music Family',                saving: '~£5/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£16.99/mo',        lastVerified: '2026-03' },
+  'spotify premium':          { serviceCost: '£11.99/mo', alt: 'Apple Music',                       saving: '~£1/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£10.99/mo',        lastVerified: '2026-03' },
   'apple music':              { tiers: [
-    { label: 'Student',    maxMonthly:  6.50, alt: 'Spotify Student',       saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/student/',                  price: '£5.99/mo',  lastVerified: '2026-03' },
-    { label: 'Individual', maxMonthly: 12.00, alt: 'Amazon Music Unlimited', saving: '~£2/mo',      url: 'AFFILIATE_URL', homepage: 'https://music.amazon.co.uk/unlimited',                 price: '£8.99/mo',  lastVerified: '2026-03' },
-    { label: 'Family',     maxMonthly: 99.00, alt: 'Amazon Music Unlimited Family', saving: '~£3/mo', url: 'AFFILIATE_URL', homepage: 'https://music.amazon.co.uk/unlimited',              price: '£13.99/mo', lastVerified: '2026-03' },
+    { label: 'Student',    maxMonthly:  6.50, serviceCost: '£5.99/mo',  alt: 'Spotify Student',       saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/student/',                  price: '£5.99/mo',  lastVerified: '2026-03' },
+    { label: 'Individual', maxMonthly: 12.00, serviceCost: '£10.99/mo', alt: 'Amazon Music Unlimited', saving: '~£2/mo',      url: 'AFFILIATE_URL', homepage: 'https://music.amazon.co.uk/unlimited',                 price: '£8.99/mo',  lastVerified: '2026-03' },
+    { label: 'Family',     maxMonthly: 99.00, serviceCost: '£16.99/mo', alt: 'Amazon Music Unlimited Family', saving: '~£3/mo', url: 'AFFILIATE_URL', homepage: 'https://music.amazon.co.uk/unlimited',              price: '£13.99/mo', lastVerified: '2026-03' },
   ] },
   // Apple Music name variants (autocomplete + precise override)
-  'apple music student':      { alt: 'Spotify Student',                   saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/student/',                      price: '£5.99/mo',         lastVerified: '2026-03' },
-  'apple music family':       { alt: 'Amazon Music Unlimited Family',     saving: '~£3/mo',                        url: 'AFFILIATE_URL', homepage: 'https://music.amazon.co.uk/unlimited',                     price: '£13.99/mo',        lastVerified: '2026-03' },
+  'apple music student':      { serviceCost: '£5.99/mo',  alt: 'Spotify Student',                   saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/student/',                      price: '£5.99/mo',         lastVerified: '2026-03' },
+  'apple music family':       { serviceCost: '£16.99/mo', alt: 'Amazon Music Unlimited Family',     saving: '~£3/mo',                        url: 'AFFILIATE_URL', homepage: 'https://music.amazon.co.uk/unlimited',                     price: '£13.99/mo',        lastVerified: '2026-03' },
   'tidal':                    { alt: 'Spotify',                          saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/premium/',                      price: '£11.99/mo',        lastVerified: '2026-03' },
   'deezer':                   { alt: 'Spotify Free',                     saving: '~£11/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/free/',                         price: null,               lastVerified: '2026-03' },
   'amazon music':             { tiers: [
-    { label: 'Unlimited',  maxMonthly: 14.50, alt: 'Spotify Free tier',           saving: '~£10/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/free/',                     price: null,        lastVerified: '2026-03' },
-    { label: 'Family',     maxMonthly: 99.00, alt: 'Apple Music Family',          saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£16.99/mo', lastVerified: '2026-03' },
+    { label: 'Unlimited',  maxMonthly: 14.50, serviceCost: '£10.99/mo', alt: 'Spotify Free tier',           saving: '~£10/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/free/',                     price: null,        lastVerified: '2026-03' },
+    { label: 'Family',     maxMonthly: 99.00, serviceCost: '£16.99/mo', alt: 'Apple Music Family',          saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                price: '£16.99/mo', lastVerified: '2026-03' },
   ] },
   // Amazon Music name variants
-  'amazon music unlimited':   { alt: 'Spotify Free tier',               saving: '~£10/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/free/',                         price: null,               lastVerified: '2026-03' },
-  'amazon music family':      { alt: 'Apple Music Family',              saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£16.99/mo',        lastVerified: '2026-03' },
+  'amazon music unlimited':   { serviceCost: '£10.99/mo', alt: 'Spotify Free tier',               saving: '~£10/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/free/',                         price: null,               lastVerified: '2026-03' },
+  'amazon music family':      { serviceCost: '£16.99/mo', alt: 'Apple Music Family',              saving: 'Similar cost',                  url: 'AFFILIATE_URL', homepage: 'https://www.apple.com/uk/apple-music/',                    price: '£16.99/mo',        lastVerified: '2026-03' },
   'pocket casts':             { alt: 'Overcast (free tier)',              saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://overcast.fm',                                      price: null,               lastVerified: '2026-03' },
   'overcast':                 { alt: 'Pocket Casts (free tier)',          saving: '~£3/mo',                        url: 'AFFILIATE_URL', homepage: 'https://pocketcasts.com',                                  price: null,               lastVerified: '2026-03' },
   'audible':                  { alt: 'Libby (free via public library)',   saving: '~£8/mo',                        url: 'AFFILIATE_URL', homepage: 'https://libbyapp.com',                                     price: null,               lastVerified: '2026-03' },
@@ -109,16 +109,16 @@ const KNOWN_SERVICES = {
   'adobe cc':                 { alt: 'Affinity Suite',                    saving: '~£47/mo (one-off)',              url: 'AFFILIATE_URL', homepage: 'https://affinity.serif.com/en-gb/',                        price: '£169.99 one-off',  lastVerified: '2026-03' },
   'adobe creative cloud':     { alt: 'Affinity Suite',                    saving: '~£47/mo (one-off)',              url: 'AFFILIATE_URL', homepage: 'https://affinity.serif.com/en-gb/',                        price: '£169.99 one-off',  lastVerified: '2026-03' },
   'microsoft 365':            { tiers: [
-    { label: 'Personal',   maxMonthly:  8.50, alt: 'LibreOffice (free)',          saving: '~£7/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
-    { label: 'Family',     maxMonthly: 99.00, alt: 'LibreOffice + Google Docs',   saving: '~£10/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
+    { label: 'Personal',   maxMonthly:  8.50, serviceCost: '£5.99/mo', alt: 'LibreOffice (free)',          saving: '~£7/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
+    { label: 'Family',     maxMonthly: 99.00, serviceCost: '£7.99/mo', alt: 'LibreOffice + Google Docs',   saving: '~£10/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
   ] },
   'office 365':               { tiers: [
-    { label: 'Personal',   maxMonthly:  8.50, alt: 'LibreOffice (free)',          saving: '~£7/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
-    { label: 'Family',     maxMonthly: 99.00, alt: 'LibreOffice + Google Docs',   saving: '~£10/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
+    { label: 'Personal',   maxMonthly:  8.50, serviceCost: '£5.99/mo', alt: 'LibreOffice (free)',          saving: '~£7/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
+    { label: 'Family',     maxMonthly: 99.00, serviceCost: '£7.99/mo', alt: 'LibreOffice + Google Docs',   saving: '~£10/mo',      url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                          price: null,        lastVerified: '2026-03' },
   ] },
   // Microsoft 365 name variants
-  'microsoft 365 personal':   { alt: 'LibreOffice (free)',               saving: '~£7/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                              price: null,               lastVerified: '2026-03' },
-  'microsoft 365 family':     { alt: 'LibreOffice + Google Docs',        saving: '~£10/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                              price: null,               lastVerified: '2026-03' },
+  'microsoft 365 personal':   { serviceCost: '£5.99/mo', alt: 'LibreOffice (free)',               saving: '~£7/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                              price: null,               lastVerified: '2026-03' },
+  'microsoft 365 family':     { serviceCost: '£7.99/mo', alt: 'LibreOffice + Google Docs',        saving: '~£10/mo',                       url: 'AFFILIATE_URL', homepage: 'https://www.libreoffice.org',                              price: null,               lastVerified: '2026-03' },
   'notion':                   { alt: 'Obsidian (free)',                    saving: '~£8/mo',                        url: 'AFFILIATE_URL', homepage: 'https://obsidian.md',                                      price: null,               lastVerified: '2026-03' },
   'evernote':                 { alt: 'Obsidian (free)',                    saving: '~£8/mo',                        url: 'AFFILIATE_URL', homepage: 'https://obsidian.md',                                      price: null,               lastVerified: '2026-03' },
   'figma':                    { alt: 'Penpot (free)',                      saving: '~£12/mo',                       url: 'AFFILIATE_URL', homepage: 'https://penpot.app',                                       price: null,               lastVerified: '2026-03' },
@@ -186,10 +186,10 @@ const KNOWN_SERVICES = {
   'private internet access':  { alt: 'ProtonVPN free tier',                saving: '~£3/mo',                        url: 'AFFILIATE_URL', homepage: 'https://protonvpn.com/free-vpn',                           price: null,               lastVerified: '2026-03' },
   'pia':                      { alt: 'ProtonVPN free tier',                saving: '~£3/mo',                        url: 'AFFILIATE_URL', homepage: 'https://protonvpn.com/free-vpn',                           price: null,               lastVerified: '2026-03' },
   '1password':                { tiers: [
-    { label: 'Individual', maxMonthly:  3.50, alt: 'Bitwarden (free)',            saving: '~£3/mo',       url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com',                                price: null,        lastVerified: '2026-03' },
-    { label: 'Families',   maxMonthly: 99.00, alt: 'Bitwarden Families (free)',   saving: '~£4/mo',       url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com/pricing/',                       price: null,        lastVerified: '2026-03' },
+    { label: 'Individual', maxMonthly:  3.50, serviceCost: '£2.99/mo', alt: 'Bitwarden (free)',            saving: '~£3/mo',       url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com',                                price: null,        lastVerified: '2026-03' },
+    { label: 'Families',   maxMonthly: 99.00, serviceCost: '£4.99/mo', alt: 'Bitwarden Families (free)',   saving: '~£4/mo',       url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com/pricing/',                       price: null,        lastVerified: '2026-03' },
   ] },
-  '1password families':       { alt: 'Bitwarden Families (free)',       saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com/pricing/',                           price: null,               lastVerified: '2026-03' },
+  '1password families':       { serviceCost: '£4.99/mo', alt: 'Bitwarden Families (free)',       saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com/pricing/',                           price: null,               lastVerified: '2026-03' },
   'dashlane':                 { alt: 'Bitwarden (free)',                   saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com',                                    price: null,               lastVerified: '2026-03' },
   'keeper':                   { alt: 'Bitwarden (free)',                   saving: '~£3/mo',                        url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com',                                    price: null,               lastVerified: '2026-03' },
   'nordpass':                 { alt: 'Bitwarden (free)',                   saving: '~£2/mo',                        url: 'AFFILIATE_URL', homepage: 'https://bitwarden.com',                                    price: null,               lastVerified: '2026-03' },
@@ -200,16 +200,16 @@ const KNOWN_SERVICES = {
 
   // Gaming
   'xbox game pass':           { tiers: [
-    { label: 'PC',         maxMonthly: 10.50, alt: 'EA Play (PC)',                saving: '~£4/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.ea.com/ea-play',                           price: '£3.99/mo',  lastVerified: '2026-03' },
-    { label: 'Ultimate',   maxMonthly: 99.00, alt: 'PC Game Pass',               saving: '~£5/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',            price: '£7.99/mo',  lastVerified: '2026-03' },
+    { label: 'PC',         maxMonthly: 10.50, serviceCost: '£7.99/mo',  alt: 'EA Play (PC)',                saving: '~£4/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.ea.com/ea-play',                           price: '£3.99/mo',  lastVerified: '2026-03' },
+    { label: 'Ultimate',   maxMonthly: 99.00, serviceCost: '£14.99/mo', alt: 'PC Game Pass',               saving: '~£5/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',            price: '£7.99/mo',  lastVerified: '2026-03' },
   ] },
   // Xbox name variants
-  'xbox game pass pc':        { alt: 'EA Play (PC)',                     saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.ea.com/ea-play',                               price: '£3.99/mo',         lastVerified: '2026-03' },
-  'xbox game pass ultimate':  { alt: 'PC Game Pass',                    saving: '~£5/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',                price: '£7.99/mo',         lastVerified: '2026-03' },
+  'xbox game pass pc':        { serviceCost: '£7.99/mo',  alt: 'EA Play (PC)',                     saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.ea.com/ea-play',                               price: '£3.99/mo',         lastVerified: '2026-03' },
+  'xbox game pass ultimate':  { serviceCost: '£14.99/mo', alt: 'PC Game Pass',                    saving: '~£5/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',                price: '£7.99/mo',         lastVerified: '2026-03' },
   'playstation plus':         { tiers: [
-    { label: 'Essential', maxMonthly:  8.00, alt: 'Xbox Game Pass (PC)',    saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',             price: '£7.99/mo',  lastVerified: '2026-03' },
-    { label: 'Extra',     maxMonthly: 13.00, alt: 'PS Plus Essential',      saving: '~£4/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.playstation.com/en-gb/ps-plus/',            price: '£6.99/mo',  lastVerified: '2026-03' },
-    { label: 'Premium',   maxMonthly: 99.00, alt: 'PS Plus Extra',          saving: '~£3/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.playstation.com/en-gb/ps-plus/',            price: '£10.99/mo', lastVerified: '2026-03' },
+    { label: 'Essential', maxMonthly:  8.00, serviceCost: '£6.99/mo',  alt: 'Xbox Game Pass (PC)',    saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',             price: '£7.99/mo',  lastVerified: '2026-03' },
+    { label: 'Extra',     maxMonthly: 13.00, serviceCost: '£10.99/mo', alt: 'PS Plus Essential',      saving: '~£4/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.playstation.com/en-gb/ps-plus/',            price: '£6.99/mo',  lastVerified: '2026-03' },
+    { label: 'Premium',   maxMonthly: 99.00, serviceCost: '£13.99/mo', alt: 'PS Plus Extra',          saving: '~£3/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.playstation.com/en-gb/ps-plus/',            price: '£10.99/mo', lastVerified: '2026-03' },
   ] },
   'nintendo switch online':   { alt: 'Family Plan share',                  saving: '~£2/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.nintendo.co.uk/Nintendo-Switch-Family/Nintendo-Switch-Online/Nintendo-Switch-Online-1183143.html', price: '£3.49/mo', lastVerified: '2026-03' },
   'ea play':                  { alt: 'EA Play free trial / Game Pass bundle', saving: '~£4/mo',                     url: 'AFFILIATE_URL', homepage: 'https://www.xbox.com/en-GB/xbox-game-pass',                price: null,               lastVerified: '2026-03' },
@@ -267,8 +267,8 @@ const KNOWN_SERVICES = {
 
   // Streaming — additional
   'youtube premium':          { tiers: [
-    { label: 'Individual', maxMonthly: 15.00, alt: 'Spotify',               saving: '~£2/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/premium/',                  price: '£11.99/mo', lastVerified: '2026-03' },
-    { label: 'Family',     maxMonthly: 99.00, alt: 'Spotify Family',        saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/family/',                   price: '£21.99/mo', lastVerified: '2026-03' },
+    { label: 'Individual', maxMonthly: 15.00, serviceCost: '£13.99/mo', alt: 'Spotify',               saving: '~£2/mo',       url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/premium/',                  price: '£11.99/mo', lastVerified: '2026-03' },
+    { label: 'Family',     maxMonthly: 99.00, serviceCost: '£22.99/mo', alt: 'Spotify Family',        saving: 'Similar cost', url: 'AFFILIATE_URL', homepage: 'https://www.spotify.com/uk/family/',                   price: '£21.99/mo', lastVerified: '2026-03' },
   ] },
   'channel 4+':               { alt: 'ITVX (free tier)',                     saving: '~£4/mo',                        url: 'AFFILIATE_URL', homepage: 'https://www.itv.com/watch/itvx',                           price: '£3.99/mo',         lastVerified: '2026-03' },
   // Streaming — UK Sports

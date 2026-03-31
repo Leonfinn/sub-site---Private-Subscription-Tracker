@@ -701,11 +701,13 @@ function renderModal(sub) {
     if (KNOWN_SERVICE_CATEGORIES && KNOWN_SERVICE_CATEGORIES[key]) {
       catSelect.value = KNOWN_SERVICE_CATEGORIES[key];
     }
-    // Pre-fill cost if we have a known price and the field is empty (add mode only)
+    // Pre-fill cost from serviceCost (the service's own price for this tier/variant).
+    // For tiered entries use the first tier's serviceCost as a hint.
+    // For flat variant entries use their serviceCost directly.
+    // The price field on all entries is the alternative's price — never use it here.
     if (!isEdit && costInput && KNOWN_SERVICES[key]) {
       const entry = KNOWN_SERVICES[key];
-      // For tiered entries use the lowest (most common) tier's price as a hint
-      const priceStr = entry.tiers ? entry.tiers[0].price : entry.price;
+      const priceStr = entry.tiers ? entry.tiers[0].serviceCost : entry.serviceCost;
       if (priceStr) {
         const match = priceStr.match(/[\d.]+/);
         if (match && !costInput.value) costInput.value = match[0];
