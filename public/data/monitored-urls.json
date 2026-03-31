@@ -157,5 +157,15 @@
   { "key": "brilliant",              "url": "https://brilliant.org/premium/" },
   { "key": "babbel",                 "url": "https://www.babbel.com/en/prices" },
   { "key": "ring protect",           "url": "https://ring.com/en-gb/protect-plans" },
-  { "key": "deliveroo plus",         "url": "https://deliveroo.co.uk/plus" }
+  { "key": "deliveroo plus",         "url": "https://deliveroo.co.uk/plus" },
+  { "key": "bitdefender",            "url": "https://www.bitdefender.com/en-gb/solutions/antivirus.html" },
+  { "key": "eset nod32",             "url": "https://www.eset.com/uk/home/antivirus/" },
+  { "key": "avast premium security", "url": "https://www.avast.com/en-gb/premium-security" },
+  { "key": "avg antivirus pro",      "url": "https://www.avg.com/en-gb/antivirus" },
+  { "key": "trend micro antivirus",  "url": "https://www.trendmicro.com/en_gb/forHome/products/antivirus-plus.html" },
+  { "key": "sophos home premium",    "url": "https://home.sophos.com/en-gb/pricing.aspx" },
+  { "key": "f-secure total",         "url": "https://www.f-secure.com/en_GB/home/products/total" },
+  { "key": "webroot",                "url": "https://www.webroot.com/gb/en/home/products/av" },
+  { "key": "avira prime",            "url": "https://www.avira.com/en/prime" },
+  { "key": "intego mac internet security", "url": "https://www.intego.com/mac-security/mac-internet-security-x9" }
 ]
