@@ -1,9 +1,8 @@
 // Sub-Site Service Worker
 // Cache-first strategy for app shell — enables offline use and Chrome PWA installability
 
-const CACHE_NAME = 'subsite-v1';
+const CACHE_NAME = 'subsite-v2';
 const APP_SHELL = [
-  '/',
   '/index.html',
   '/css/style.css',
   '/js/app.js',
