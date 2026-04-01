@@ -597,9 +597,8 @@ const KNOWN_SERVICE_CATEGORIES = {
   'deliveroo plus':           'Other',
 };
 
-// Services confirmed to offer annual billing (agent-researched, not guessed).
+// Services confirmed to offer annual billing.
 // Only services in this Set will show the "switch to annual billing" nudge.
-// Sources: DeepSeek V3 research, March 2026.
 const ANNUAL_BILLING_AVAILABLE = new Set([
   // Streaming
   'netflix', 'netflix with ads', 'netflix standard', 'netflix premium',

@@ -191,3 +191,12 @@ venv/
 
 # Test email samples (personal data, never commit)
 test-emails/
+
+# Internal / dev-only — not for public repo
+CLAUDE.md
+PROMOTION-STRATEGY.md
+graphics/
+docs/
+data/price-hashes.json
+.gitea/
+.claude/

@@ -1031,7 +1031,7 @@ function showImportModal() {
   actions.appendChild(cancelBtn);
   actions.appendChild(continueBtn);
 
-  // How it works — collapsible guide (Gemini-authored content)
+  // How it works — collapsible guide
   const howTo = document.createElement('details');
   howTo.className = 'import-howto';
   const howToSum = document.createElement('summary');
