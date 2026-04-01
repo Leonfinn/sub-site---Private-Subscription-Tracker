@@ -246,6 +246,7 @@ input[type="radio"] {
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
+  min-height: 44px;
 }
 
 /* ── Import from Email button ───────────────────────────── */
@@ -1517,6 +1518,7 @@ html[data-theme="light"] .import-replace-warning {
   vertical-align: middle;
   margin-left: 4px;
 }
+html[data-theme="light"] .beta-badge { color: #fff; } /* #fff on #b45309 = 5.05:1 — WCAG AA ✓ */
 
 .beta-banner {
   background: #2d1f00;

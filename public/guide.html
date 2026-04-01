@@ -7,6 +7,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Guide | Sub-Site</title>
+  <meta name="description" content="Complete guide to using Sub-Site: track subscriptions, run audits, import from email, find alternatives, and manage your spending.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="css/style.css?v=1.1">
   <style>
     /* ── Guide-specific styles ───────────────────────────── */
@@ -17,7 +19,7 @@
       padding: 1.25rem 1.5rem;
       margin-bottom: 2rem;
     }
-    .guide-toc h3 {
+    .guide-toc h2 {
       font-size: 0.75rem;
       font-weight: 700;
       letter-spacing: 0.08em;
@@ -165,7 +167,8 @@
     .mockup-badge.paused   { background: rgba(255,159,10,0.15); color: #c47a00; }
     .mockup-badge.cancelled{ background: rgba(142,142,147,0.15);color: #6b6b70; }
     .mockup-badge.wishlist { background: rgba(94,92,230,0.15);  color: #5e5ce6; }
-    [data-theme="light"] .mockup-badge.active   { color: #1a8c3c; }
+    [data-theme="light"] .mockup-stat-val.savings { color: #166534; } /* #166534 on #e8edf4 = 5.85:1 — WCAG AA ✓ */
+    [data-theme="light"] .mockup-badge.active   { color: #14532d; } /* #14532d on blended bg = 6.93:1 — WCAG AA ✓ */
     [data-theme="light"] .mockup-badge.paused   { color: #9a5f00; }
     [data-theme="light"] .mockup-badge.cancelled{ color: #555; }
     [data-theme="light"] .mockup-badge.wishlist { color: #4643c9; }
@@ -217,10 +220,12 @@
     .mockup-audit-btn.pause    { background: rgba(255,159,10,0.2); color: #c47a00; }
     .mockup-audit-btn.cancel   { background: rgba(255,69,58,0.2);  color: #d0362a; }
     .mockup-audit-btn.wishlist { background: rgba(94,92,230,0.2);  color: #5e5ce6; }
-    [data-theme="light"] .mockup-audit-btn.keep     { color: #1a8c3c; }
-    [data-theme="light"] .mockup-audit-btn.pause    { color: #9a5f00; }
-    [data-theme="light"] .mockup-audit-btn.cancel   { color: #b52a1e; }
+    [data-theme="light"] .mockup-audit-btn.keep     { color: #14532d; } /* 6.69:1 on blended bg ✓ */
+    [data-theme="light"] .mockup-audit-btn.pause    { color: #7a4b00; } /* 5.43:1 on blended bg ✓ */
+    [data-theme="light"] .mockup-audit-btn.cancel   { color: #9b2418; } /* 5.24:1 on blended bg ✓ */
     [data-theme="light"] .mockup-audit-btn.wishlist { color: #4643c9; }
+    .mockup-green-label { color: var(--green); }
+    [data-theme="light"] .mockup-green-label { color: #166534; } /* 6.77:1 on #fff ✓ */
 
     /* Tip box */
     .guide-tip {
@@ -421,7 +426,7 @@
 
       <!-- Table of Contents -->
       <div class="guide-toc">
-        <h3>Contents</h3>
+        <h2>Contents</h2>
         <ol>
           <li><a href="#what-is-sub-site">What is Sub-Site?</a></li>
           <li><a href="#getting-started">Getting Started</a></li>
@@ -853,7 +858,7 @@
               <div style="color:var(--text);font-weight:600;">15 Apr 2025</div>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--green);">
+          <div class="mockup-green-label" style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Confidence: 95%
           </div>
