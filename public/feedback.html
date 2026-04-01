@@ -11,6 +11,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="css/style.css?v=1.1">
   <script defer src="https://analytics.sub-site.com/script.js" data-website-id="cd46df5a-2456-4089-816f-d33c9e20711c"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -112,6 +113,9 @@
           <!-- Honeypot — hidden from real users, catches bots -->
           <input name="honeypot" type="text" style="display:none;" tabindex="-1" autocomplete="off">
 
+          <!-- Turnstile bot protection — replace data-sitekey after creating widget in Cloudflare dashboard -->
+          <div class="cf-turnstile" data-sitekey="REPLACE_WITH_TURNSTILE_SITE_KEY" style="margin-bottom:12px;"></div>
+
           <button type="submit" class="add-btn" id="submitBtn">Send Feedback</button>
           <div class="form-error" id="formError" style="display:none;"></div>
         </form>
@@ -147,6 +151,7 @@
       const replyEmail = form.elements["replyEmail"].value;
       const message = form.elements["message"].value;
       const honeypot = form.elements["honeypot"].value;
+      const turnstileToken = form.querySelector('[name="cf-turnstile-response"]')?.value || "";
 
       // Client-side validation
       if (!message.trim() || message.trim().length < 5) {
@@ -163,7 +168,7 @@
         const response = await fetch(WORKER_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, replyEmail, feedbackType, message, honeypot }),
+          body: JSON.stringify({ name, replyEmail, feedbackType, message, honeypot, turnstileToken }),
         });
 
         const data = await response.json();

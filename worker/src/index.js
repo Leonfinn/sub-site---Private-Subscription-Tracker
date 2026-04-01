@@ -31,7 +31,7 @@ export default {
       });
     }
 
-    const { name, replyEmail, feedbackType, message, honeypot } = body;
+    const { name, replyEmail, feedbackType, message, honeypot, turnstileToken } = body;
 
     // Bot trap — silently accept
     if (honeypot) {
@@ -39,6 +39,23 @@ export default {
         status: 200,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
+    }
+
+    // Verify Turnstile token (if secret is configured)
+    if (env.TURNSTILE_SECRET) {
+      const ip = request.headers.get("CF-Connecting-IP") || "";
+      const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: turnstileToken || "", remoteip: ip }),
+      });
+      const verifyData = await verifyRes.json();
+      if (!verifyData.success) {
+        return new Response(JSON.stringify({ error: "Bot check failed. Please try again." }), {
+          status: 403,
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+        });
+      }
     }
 
     // Validate message
