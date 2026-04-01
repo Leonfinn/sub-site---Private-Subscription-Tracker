@@ -1,7 +1,7 @@
 # Sub-Site — Site Map
 
-Live at **https://sub-site.com** (beta branch = production).
-Update this file whenever a page is added or removed.
+Live at **https://sub-site.com** · Beta preview at **https://beta.sub-site.pages.dev**
+Update this file whenever a page is added, removed, or restructured.
 
 ---
 
@@ -9,10 +9,23 @@ Update this file whenever a page is added or removed.
 
 | URL | File | Description |
 |---|---|---|
-| `https://sub-site.com/` | `public/index.html` | Main SPA — dashboard, subscriptions, alternatives, export, settings |
+| `https://sub-site.com/` | `public/index.html` | Main SPA — dashboard, subscriptions, alternatives, backup, settings |
 | `https://sub-site.com/calculator.html` | `public/calculator.html` | Standalone subscription cost calculator |
-| `https://sub-site.com/feedback.html` | `public/feedback.html` | Feedback form |
+| `https://sub-site.com/feedback.html` | `public/feedback.html` | Feedback form (Cloudflare Turnstile + Worker email relay) |
 | `https://sub-site.com/privacy.html` | `public/privacy.html` | Privacy policy |
+
+## User Guide
+
+| URL | File | Description |
+|---|---|---|
+| `https://sub-site.com/guide.html` | `public/guide.html` | Main user guide for the app |
+
+## Blog
+
+| URL | File | Description |
+|---|---|---|
+| `https://sub-site.com/blog/` | `public/blog/index.html` | Blog index |
+| `https://sub-site.com/blog/subscription-tracker-financial-data-privacy` | `public/blog/subscription-tracker-financial-data-privacy.html` | Why your subscription tracker is selling your financial data (Apr 2026) |
 
 ## SEO Guide Pages
 
@@ -35,8 +48,26 @@ Update this file whenever a page is added or removed.
 
 ---
 
+## CSS
+
+| File | Used by |
+|---|---|
+| `public/css/style.css` | `index.html`, `guide.html`, `calculator.html`, `privacy.html`, `feedback.html` |
+| `public/css/guide-base.css` | All pages under `public/guide/` and `public/blog/` |
+
+## Infrastructure
+
+| Component | Details |
+|---|---|
+| Hosting | Cloudflare Pages — `beta` branch → beta.sub-site.pages.dev, `main` branch → sub-site.com |
+| Worker | `worker/src/index.js` — feedback email relay via Cloudflare Email Routing |
+| PWA | Service worker at `public/sw.js`, manifest at `public/manifest.json`, icons in `public/icons/` |
+| Analytics | Self-hosted Umami at `analytics.sub-site.com` (privacy-respecting, no cookies) |
+| Sitemap | `public/sitemap.xml` — submitted to Google Search Console |
+
 ## Notes
 
-- Guide pages are SEO-only — not linked from the app navigation, discovered via Google.
-- The calculator is linked from the app sidebar and connects to the main app via shared `localStorage`.
-- All pages share `public/css/style.css` (currently `?v=1.1`).
+- SEO guide pages are not linked from the main app nav — discovered via Google and sitemap.
+- Blog pages use `guide-base.css` (slim ~3.5 KB) not the full `style.css`.
+- All internal links use `/` or root-relative paths (not `index.html`) — Cloudflare Pages redirects `/index.html` → `/`.
+- The calculator links to the main app via shared `localStorage`.
