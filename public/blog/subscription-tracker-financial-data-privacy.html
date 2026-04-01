@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function(){var t=localStorage.getItem('subsite_theme');if(t!=='dark'){document.documentElement.setAttribute('data-theme','light');}})();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Your Subscription Tracker Is Selling Your Financial Data | Sub-Site</title>
+  <meta name="description" content="Most free subscription trackers earn money from your financial data. Here's how they do it, what the alternatives are, and how to track subscriptions with zero data leaving your device.">
+  <meta property="og:title" content="Why Your Subscription Tracker Is Selling Your Financial Data">
+  <meta property="og:description" content="Most free subscription trackers earn money from your financial data. Here's how they do it and what to do instead.">
+  <meta property="og:url" content="https://sub-site.com/blog/subscription-tracker-financial-data-privacy">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://sub-site.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://sub-site.com/blog/subscription-tracker-financial-data-privacy">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/guide-base.css">
+  <script defer src="https://analytics.sub-site.com/script.js" data-website-id="cd46df5a-2456-4089-816f-d33c9e20711c"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Why Your Subscription Tracker Is Selling Your Financial Data",
+    "description": "Most free subscription trackers earn money from your financial data. Here's how they do it, what the alternatives are, and how to track subscriptions with zero data leaving your device.",
+    "datePublished": "2026-04-01",
+    "dateModified": "2026-04-01",
+    "author": {
+      "@type": "Organization",
+      "name": "Sub-Site",
+      "url": "https://sub-site.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Sub-Site",
+      "url": "https://sub-site.com"
+    },
+    "url": "https://sub-site.com/blog/subscription-tracker-financial-data-privacy",
+    "mainEntityOfPage": "https://sub-site.com/blog/subscription-tracker-financial-data-privacy"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is it safe to link my bank account to a subscription tracking app?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Open banking access gives third-party apps read access to your full transaction history, account balance, and sometimes account details. That data is stored on their servers — which can be breached, sold, or have their privacy policy changed without notice. It's convenient, but the risk is real and often buried in the terms of service."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Sub-Site keep my subscription data private?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sub-Site stores everything in your browser's localStorage. There is no Sub-Site server, no database, and no account system. Your data physically cannot leave your device because there is nowhere for it to go."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is manually tracking subscriptions worth the effort?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For most people, yes. Adding a new subscription takes under a minute and gives you a complete picture of your recurring spending without handing over bank credentials. Many users also find that manual entry makes them more mindful about what they're actually paying for."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-faint);
+      margin: 0 0 2rem;
+    }
+    .article-body h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 2.5rem 0 0.75rem;
+      padding-top: 0.5rem;
+    }
+    .article-body p {
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin: 0 0 1rem;
+    }
+    .article-body strong { color: var(--text); }
+    .article-body em { font-style: italic; }
+    .article-body ul, .article-body ol {
+      color: var(--text-muted);
+      line-height: 1.9;
+      padding-left: 1.4rem;
+      margin: 0 0 1rem;
+    }
+    .article-body li { margin-bottom: 0.25rem; }
+    .article-body a { color: var(--accent); }
+    .article-body a:hover { text-decoration: underline; }
+    .article-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .article-cta {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+    }
+    .article-cta ol {
+      color: var(--text-muted);
+      line-height: 1.9;
+      padding-left: 1.4rem;
+      margin: 0.5rem 0 0;
+    }
+    .article-cta strong { color: var(--text); }
+    .article-footer {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      margin-top: 2.5rem;
+      line-height: 1.7;
+    }
+    .faq-section { margin-top: 2.5rem; }
+    .faq-section h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 1.25rem;
+    }
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      background: var(--bg-panel);
+    }
+    .faq-q {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.95rem;
+      margin: 0 0 0.5rem;
+    }
+    .faq-a {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    .back-link {
+      display: inline-block;
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+          <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-text">SUB-SITE <span class="beta-badge">BETA</span></div>
+        <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="../index.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span> Dashboard
+      </a>
+      <a class="nav-item" href="../guide.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 2h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> User Guide
+      </a>
+      <a class="nav-item active" href="../blog/" aria-current="page">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 2h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M4 5h8M4 8h8M4 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> Blog
+      </a>
+      <a class="nav-item" href="../feedback.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 2h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5l-3 2V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Feedback
+      </a>
+      <a class="nav-item" href="../privacy.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1L2 4v4c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V4L8 1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Privacy Policy
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      &#128274; 100% private &#8212; all data stored locally on your device. Nothing is sent to any server.
+      <br><a href="../guide.html" style="color:var(--text-faint);font-size:11px;">User Guide</a>
+      <br><a href="../privacy.html" style="color:var(--text-faint);font-size:11px;">Privacy Policy</a>
+      <br><a href="../feedback.html" style="color:var(--text-faint);font-size:11px;">Feedback</a>
+    </div>
+  </aside>
+
+  <!-- Mobile sticky top header -->
+  <header class="mobile-header" id="mobileHeader">
+    <div class="mobile-header-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+        <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+      </svg>
+      <span class="mobile-header-wordmark">SUB-SITE</span>
+      <span class="beta-badge">BETA</span>
+    </div>
+    <span class="mobile-header-page">Blog</span>
+  </header>
+
+  <!-- Main content area -->
+  <main class="main" id="main">
+    <section class="view active" id="view-post" style="max-width: 720px;">
+
+      <a class="back-link" href="../blog/">&larr; Back to Blog</a>
+
+      <h1 class="page-title" style="font-size: 1.6rem; line-height: 1.3; margin-bottom: 0.5rem;">Why Your Subscription Tracker Is Selling Your Financial Data</h1>
+      <p class="article-meta">April 2026 &nbsp;&middot;&nbsp; 5 min read</p>
+
+      <article class="article-body">
+
+        <p>There's a comforting lie at the heart of most "free" subscription tracking apps.</p>
+
+        <p>You download them because you want to stop wasting money. You hand over your bank login, let the app scan your transactions, and watch a clean dashboard populate with every Netflix, Spotify, and Adobe subscription you'd forgotten about. It feels empowering. It feels like finally being in control.</p>
+
+        <p>What you're not thinking about — because the app is designed to make sure you're not thinking about it — is what happens to that data next.</p>
+
+        <h2>The Business Model Behind "Free" Financial Apps</h2>
+
+        <p>Apps like Rocket Money (formerly Truebill) and Mint aren't free because the developers are generous. They're free because <em>you</em> are the product.</p>
+
+        <p>Here's how the money actually flows:</p>
+
+        <p><strong>Transaction data aggregation.</strong> Your spending habits — every subscription, every merchant, every amount — are valuable to data brokers, advertisers, and financial institutions. When you link your bank account to a "free" budgeting app, you're often consenting (buried in the terms of service) to your anonymised — or not so anonymised — spending data being shared with third parties.</p>
+
+        <p><strong>Targeted financial product placement.</strong> When Rocket Money suggests you switch credit cards or try a particular savings account, that's not neutral advice. That's an affiliate referral. The app earns money when you click. The recommendation algorithm is optimised for revenue, not for your best interest.</p>
+
+        <p><strong>Subscription to the "premium" tier.</strong> Many apps deliberately limit their free tier to nudge you towards £5–12/month plans. You came to save money on subscriptions. You now have another subscription.</p>
+
+        <p><strong>The Mint cautionary tale.</strong> Intuit shut down Mint in January 2024 after 16 years. Millions of users who had shared years of financial history with the platform suddenly had to export what they could and move on. Your financial history — securely on <em>their</em> servers — became a migration problem overnight.</p>
+
+        <h2>The Data You Don't Know You're Sharing</h2>
+
+        <p>Even if you trust a specific app, the technical reality of "linking your bank account" is worth understanding.</p>
+
+        <p>Most apps use open banking APIs or screen-scraping services (like Plaid or TrueLayer in the UK). When you authorise access, the app can typically see:</p>
+
+        <ul>
+          <li>Your complete transaction history (often going back 90+ days, sometimes years)</li>
+          <li>Your account balance</li>
+          <li>Your direct debits and standing orders</li>
+          <li>Sometimes: your account number and sort code</li>
+        </ul>
+
+        <p>That data lives on a server somewhere. That server can be breached. That company can be acquired. That privacy policy can change.</p>
+
+        <p>In 2020, Experian — which has a subscription tracking feature — <a href="https://en.wikipedia.org/wiki/Experian#South_Africa" target="_blank" rel="noopener noreferrer">suffered a breach in South Africa</a> exposing data on 24 million people. Financial data aggregators are attractive targets precisely because the data they hold is so valuable.</p>
+
+        <h2>The Simpler Alternative: Your Data Stays on Your Device</h2>
+
+        <p>Here's the thing about subscription tracking: you don't actually need a server.</p>
+
+        <p>Tracking your subscriptions is not a complex computational problem. It's a list. It has dates, amounts, and names. You can sort it, sum it, and visualise it entirely inside a web browser using standard JavaScript — no backend required, no account required, no data upload required.</p>
+
+        <p>That's the principle behind <a href="https://sub-site.com">sub-site.com</a> — a free subscription tracker that runs entirely in your browser. Your data never leaves your device because there is no server for it to go to. Technically, there <em>cannot</em> be a breach of your data because the developer has never seen it.</p>
+
+        <p>Here's what that looks like in practice:</p>
+
+        <ul>
+          <li><strong>No account to create.</strong> Open the site, start adding subscriptions. Done.</li>
+          <li><strong>No bank login.</strong> You enter what you pay, manually, the same way you'd update a spreadsheet.</li>
+          <li><strong>No cloud backup.</strong> Your data lives in your browser's localStorage — the same technology that saves your settings on countless websites. You can (and should) create a JSON export at any time, which you save in a secure location of your choice.</li>
+          <li><strong>Works offline.</strong> Install it as a PWA (Progressive Web App) and it works without an internet connection.</li>
+          <li><strong>Works anywhere.</strong> Not iOS-only, not Windows-only — any browser on any device.</li>
+        </ul>
+
+        <h2>But Is Manual Entry Worth It?</h2>
+
+        <p>Fair question. Automatic bank sync is genuinely more convenient. You don't have to remember to add a new subscription — it just appears.</p>
+
+        <p>The honest answer is: it depends on what you're optimising for.</p>
+
+        <p>If you want convenience and you trust the data aggregator with your bank credentials: use Rocket Money, Emma, or a similar app. They're useful tools.</p>
+
+        <p>If you have concerns about financial data privacy — and the statistics on financial data breaches suggest you should — then the three minutes a month it takes to manually add a new subscription is a reasonable tradeoff.</p>
+
+        <p>There's also an argument that manual entry makes you <em>more</em> aware of what you're spending. Automatic tools can produce a sense of passive management. When you have to consciously add each subscription, you make an active decision about whether it's worth tracking — and whether it's worth keeping.</p>
+
+        <h2>The Quarterly Audit: Where the Real Savings Are</h2>
+
+        <p>The single most useful feature in a subscription tracker isn't the dashboard. It's the audit.</p>
+
+        <p>Once every three months, set aside 15 minutes to review every active subscription against a single question: <strong>Have I used this in the last 30 days?</strong></p>
+
+        <p>If the answer is no, cancel it.</p>
+
+        <p>The psychology here is important. We sign up for subscriptions when we're optimistic about our future selves. "I'll definitely use the gym membership this month." "I'll definitely watch all those Criterion films." We cancel subscriptions when we're confronted with the reality.</p>
+
+        <p>A quarterly audit forces that confrontation. It's not about being harsh — it's about being honest.</p>
+
+        <p>In one systematic audit, removing subscriptions you haven't used in 30 days typically saves £40–£120 per year for the average UK household. For a household carrying 8–12 active subscriptions (the current UK average), the savings are often much higher.</p>
+
+        <p><a href="https://sub-site.com">Sub-Site's built-in Quarterly Audit mode</a> walks you through every active subscription one by one, so there's no mental friction — just a clear keep / pause / cancel decision for each one.</p>
+
+        <div class="article-cta">
+          <h2 style="margin-top: 0; font-size: 1rem; font-weight: 700; color: var(--text);">What to Do Right Now</h2>
+          <ol>
+            <li><strong>Open <a href="https://sub-site.com">sub-site.com</a></strong> — no account, no email, no bank login.</li>
+            <li><strong>Spend 10 minutes adding every subscription you can remember.</strong> Check your email for receipts, check your bank statement for recurring charges. Don't aim for perfection — aim for completeness.</li>
+            <li><strong>Scan your emails for subscription renewal messages</strong> — Sub-Site has an <a href="https://sub-site.com">import tool</a> that works completely offline, helping you pull data from those emails in seconds.</li>
+            <li><strong>Look at the annual total.</strong> For most people, this number is a surprise.</li>
+            <li><strong>Set a calendar reminder for three months from now</strong> to do your first quarterly audit.</li>
+          </ol>
+        </div>
+
+        <p>Your financial data is worth protecting. The good news is that protecting it doesn't have to cost you anything — or mean giving up a useful tool.</p>
+
+        <hr>
+
+        <section class="faq-section" aria-label="Frequently asked questions">
+          <h2>Frequently Asked Questions</h2>
+
+          <div class="faq-item">
+            <p class="faq-q">Is it safe to link my bank account to a subscription tracking app?</p>
+            <p class="faq-a">Open banking access gives third-party apps read access to your full transaction history, account balance, and sometimes account details. That data is stored on their servers — which can be breached, sold, or have their privacy policy changed without notice. It's convenient, but the risk is real and often buried in the terms of service.</p>
+          </div>
+
+          <div class="faq-item">
+            <p class="faq-q">How does Sub-Site keep my subscription data private?</p>
+            <p class="faq-a">Sub-Site stores everything in your browser's localStorage. There is no Sub-Site server, no database, and no account system. Your data physically cannot leave your device because there is nowhere for it to go.</p>
+          </div>
+
+          <div class="faq-item">
+            <p class="faq-q">Is manually tracking subscriptions worth the effort?</p>
+            <p class="faq-a">For most people, yes. Adding a new subscription takes under a minute and gives you a complete picture of your recurring spending without handing over bank credentials. Many users also find that manual entry makes them more mindful about what they're actually paying for.</p>
+          </div>
+        </section>
+
+        <div class="article-footer">
+          <em><a href="https://sub-site.com">Sub-Site</a> is a free, open-source subscription tracker that runs entirely in your browser. No server. No account. No tracking. <a href="https://sub-site.com">Try it here &rarr;</a></em>
+        </div>
+
+      </article>
+
+    </section>
+  </main>
+
+</body>
+</html>

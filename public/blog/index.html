@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function(){var t=localStorage.getItem('subsite_theme');if(t!=='dark'){document.documentElement.setAttribute('data-theme','light');}})();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Sub-Site</title>
+  <meta name="description" content="Practical tips on managing subscriptions, saving money, and keeping your financial data private — from the team behind Sub-Site.">
+  <link rel="canonical" href="https://sub-site.com/blog/">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/guide-base.css">
+  <script defer src="https://analytics.sub-site.com/script.js" data-website-id="cd46df5a-2456-4089-816f-d33c9e20711c"></script>
+  <style>
+    .blog-list { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.5rem; }
+    .blog-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .blog-card:hover { border-color: var(--accent); background: var(--bg-raised); }
+    .blog-card-meta { font-size: 12px; color: var(--text-faint); margin-bottom: 0.4rem; }
+    .blog-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 0.5rem;
+      line-height: 1.4;
+    }
+    .blog-card:hover .blog-card-title { color: var(--accent); }
+    .blog-card-excerpt { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; margin: 0; }
+    .blog-card-read { font-size: 12px; color: var(--accent); margin-top: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+          <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+          <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-text">SUB-SITE <span class="beta-badge">BETA</span></div>
+        <span class="sidebar-tagline">SUBSCRIPTION TRACKER</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="../index.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span> Dashboard
+      </a>
+      <a class="nav-item" href="../guide.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 2h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> User Guide
+      </a>
+      <a class="nav-item active" href="../blog/" aria-current="page">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 2h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M4 5h8M4 8h8M4 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span> Blog
+      </a>
+      <a class="nav-item" href="../feedback.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 2h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5l-3 2V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Feedback
+      </a>
+      <a class="nav-item" href="../privacy.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1L2 4v4c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V4L8 1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg></span> Privacy Policy
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      &#128274; 100% private &#8212; all data stored locally on your device. Nothing is sent to any server.
+      <br><a href="../guide.html" style="color:var(--text-faint);font-size:11px;">User Guide</a>
+      <br><a href="../privacy.html" style="color:var(--text-faint);font-size:11px;">Privacy Policy</a>
+      <br><a href="../feedback.html" style="color:var(--text-faint);font-size:11px;">Feedback</a>
+    </div>
+  </aside>
+
+  <!-- Mobile sticky top header -->
+  <header class="mobile-header" id="mobileHeader">
+    <div class="mobile-header-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <rect x="8" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="11" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="14" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="17" y="14" width="2" height="6" fill="currentColor"/>
+        <rect x="7" y="21" width="14" height="1.5" rx="0.5" fill="currentColor"/>
+        <polygon points="14,7 21,13 7,13" fill="currentColor"/>
+      </svg>
+      <span class="mobile-header-wordmark">SUB-SITE</span>
+      <span class="beta-badge">BETA</span>
+    </div>
+    <span class="mobile-header-page">Blog</span>
+  </header>
+
+  <!-- Main content area -->
+  <main class="main" id="main">
+    <section class="view active" id="view-blog">
+
+      <h1 class="page-title">Blog</h1>
+      <p class="page-sub">Welcome to the Sub-Site blog. We write about managing subscriptions, saving money, and why financial privacy matters — all from the same perspective that shaped the tracker: your data should stay with you, not on someone else's server.</p>
+
+      <div class="blog-list">
+
+        <a class="blog-card" href="subscription-tracker-financial-data-privacy.html">
+          <p class="blog-card-meta">April 2026 &nbsp;&middot;&nbsp; 5 min read</p>
+          <h2 class="blog-card-title">Why Your Subscription Tracker Is Selling Your Financial Data</h2>
+          <p class="blog-card-excerpt">Most "free" subscription tracking apps aren't free at all — you're paying with your financial data. Here's exactly how the business model works, what open banking APIs expose, and how to track subscriptions without handing over your bank credentials.</p>
+          <p class="blog-card-read">Read article &rarr;</p>
+        </a>
+
+      </div>
+
+    </section>
+  </main>
+
+</body>
+</html>
