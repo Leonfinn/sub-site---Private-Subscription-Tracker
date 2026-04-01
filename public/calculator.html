@@ -139,7 +139,7 @@
       </div>
     </div>
     <nav class="sidebar-nav">
-      <a class="nav-item" href="index.html">
+      <a class="nav-item" href="/">
         <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/></svg></span> Dashboard
       </a>
       <a class="nav-item active" href="calculator.html" aria-current="page">
@@ -225,7 +225,7 @@
           This calculator is part of Sub-Site — a free, private tracker that stores your subscriptions, flags upcoming renewals, and shows spending over time. No login, no account, all data in your browser.
         </p>
         <button onclick="saveToApp()" class="btn-primary" style="margin-right:10px;">Save to my dashboard →</button>
-        <a href="index.html" style="color:var(--text-faint); font-size:13px; text-decoration:none;">Browse first</a>
+        <a href="/" style="color:var(--text-faint); font-size:13px; text-decoration:none;">Browse first</a>
         <div id="saveMsg" style="display:none; margin-top:10px; font-size:13px; color:var(--accent);"></div>
       </div>
 
@@ -361,7 +361,7 @@
         const active = saved.filter(s => s.status === 'Active' || !s.status);
         if (active.length) {
           const banner = document.getElementById('appDataBanner');
-          banner.innerHTML = `You have <strong>${active.length} subscription${active.length > 1 ? 's' : ''}</strong> saved in Sub-Site. <button onclick="loadFromApp()" style="background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:4px 12px;font-size:13px;cursor:pointer;margin-left:8px;">Load them →</button> <a href="index.html" style="color:var(--text-faint);font-size:12px;margin-left:10px;">Go to dashboard</a>`;
+          banner.innerHTML = `You have <strong>${active.length} subscription${active.length > 1 ? 's' : ''}</strong> saved in Sub-Site. <button onclick="loadFromApp()" style="background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:4px 12px;font-size:13px;cursor:pointer;margin-left:8px;">Load them →</button> <a href="/" style="color:var(--text-faint);font-size:12px;margin-left:10px;">Go to dashboard</a>`;
           banner.style.display = 'block';
         }
       } catch(e) {}

@@ -1,9 +1,9 @@
 // Sub-Site Service Worker
 // Cache-first strategy for app shell — enables offline use and Chrome PWA installability
 
-const CACHE_NAME = 'subsite-v2';
+const CACHE_NAME = 'subsite-v3';
 const APP_SHELL = [
-  '/index.html',
+  '/',
   '/css/style.css',
   '/js/app.js',
   '/js/ui.js',
@@ -37,7 +37,15 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
+  // Cloudflare Pages redirects /index.html → /; normalise here to avoid
+  // the service worker ever returning a cached redirect for a navigation.
+  let request = event.request;
+  if (url.pathname === '/index.html') {
+    url.pathname = '/';
+    request = new Request(url.toString(), event.request);
+  }
+
   event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request))
+    caches.match(request).then(cached => cached || fetch(request))
   );
 });
