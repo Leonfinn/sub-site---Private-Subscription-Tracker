@@ -2,7 +2,7 @@
 
 A privacy-first subscription spending tracker built as a static website. All subscription data is stored in your browser's localStorage — no server, no accounts, no build step.
 
-Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](https://beta.sub-site.com)**
+Live demo: **[sub-site.com](https://sub-site.com)**
 
 ---
 
@@ -19,7 +19,9 @@ Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](ht
 - **Light/Dark mode** — Persistent theme toggle, WCAG 2.2 AA compliant in both modes
 - **Feedback form** — Sends submissions via Cloudflare Worker + Email Routing (no third-party services)
 - **User Guide** — Comprehensive in-app guide at `/guide.html` covering all features
+- **Blog** — Articles on subscription management, privacy, and saving money at `/blog/`
 - **Privacy policy** — Plain-English UK GDPR/PECR compliant policy at `/privacy.html`
+- **PWA** — Installable as a Progressive Web App; works offline
 - **100% Private** — Subscription data never leaves your browser
 
 ---
@@ -30,9 +32,10 @@ Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](ht
 - **localStorage** — all subscription data stored client-side
 - **Light/dark theme** — CSS custom properties, toggled via `html[data-theme="light"]`
 - **Responsive** — desktop sidebar + mobile sticky header + bottom navigation
-- **Cloudflare Pages** — static site hosting (beta and production branches)
+- **Cloudflare Pages** — static site hosting
 - **Cloudflare Worker** — feedback form email relay (`worker/`)
 - **Cloudflare Email Routing** — forwards form submissions to inbox
+- **Analytics** — self-hosted [Umami](https://umami.is/) (privacy-respecting, no cookies, no personal data)
 
 ---
 
@@ -42,38 +45,39 @@ Live: **[sub-site.com](https://sub-site.com)** · Beta: **[beta.sub-site.com](ht
 .
 ├── public/                     # Static site — deployed via Cloudflare Pages
 │   ├── index.html              # Main app (dashboard, subscriptions, export, settings)
+│   ├── guide.html              # User guide
 │   ├── privacy.html            # Privacy policy
 │   ├── feedback.html           # Feedback form
 │   ├── _headers                # Cloudflare Pages cache-control rules
 │   ├── css/
-│   │   └── style.css           # All styles (light/dark, responsive)
+│   │   ├── style.css           # All styles (light/dark, responsive)
+│   │   └── guide-base.css      # Slim stylesheet for guide/blog pages
 │   ├── js/
 │   │   ├── app.js              # Routing, navigation, theme management, URL param reader
 │   │   ├── storage.js          # localStorage CRUD + JSON/CSV export
 │   │   ├── charts.js           # Category bar chart & trend sparkline
 │   │   ├── ui.js               # All view renders and templates
 │   │   └── email-parser.js     # MIME decoder + two-pass regex extraction engine
+│   ├── guide/                  # SEO guide pages (cancel guides)
+│   ├── blog/                   # Blog index and posts
 │   ├── manifest.json           # PWA manifest — share_target for Android email sharing
+│   ├── sw.js                   # Service worker — offline cache
 │   └── data/
 │       ├── affiliates.js       # 200 known services + category fallbacks (homepage, price, lastVerified)
-│       └── monitored-urls.json # ~20 high-volatility services monitored for price changes
+│       └── monitored-urls.json # Services monitored for price changes
 ├── worker/                     # Cloudflare Worker — feedback form email relay
 │   ├── wrangler.toml           # Worker config (send_email binding)
 │   └── src/
 │       └── index.js            # Worker handler
 ├── scripts/
 │   └── check-prices.mjs        # Node 20 ESM price-change monitor script
-├── .gitea/
-│   └── workflows/
-│       └── price-monitor.yml   # Weekly Gitea Actions cron — detects pricing page changes
-├── data/
-│   └── price-hashes.json       # Stored content hashes (updated by price-monitor workflow)
 ├── tests/
 │   ├── runner.html             # Browser-based test harness
 │   ├── lib/assert.js           # Test utilities
 │   └── test-*.js               # Unit tests
-├── docs/                       # Additional documentation
 ├── ALTERNATIVES-LOGIC.md       # How the recommendation engine works
+├── SITE_MAP.md                 # Site structure reference
+├── SEO-KEYWORDS.md             # Target keyword list
 ├── wrangler.toml               # Cloudflare Pages config
 └── LICENSE
 ```
@@ -101,144 +105,48 @@ Open `tests/runner.html` in a browser.
 
 ## Deployment
 
-The site uses **Cloudflare Pages** with two branches:
+The site is designed for **Cloudflare Pages**. Deploy with:
 
-| Branch | URL | Command |
-|---|---|---|
-| `main` | sub-site.com | `wrangler pages deploy public --project-name sub-site` |
-| `beta` | beta.sub-site.com | `wrangler pages deploy public --project-name sub-site --branch beta` |
+```bash
+# Production
+wrangler pages deploy public --project-name <your-project-name>
 
-### Auto-deploy on push (beta)
-
-A git pre-push hook (`.git/hooks/pre-push`) automatically runs `wrangler pages deploy` when pushing to the `beta` branch. No CI/CD runner required — deployment happens as part of the push.
+# Preview branch
+wrangler pages deploy public --project-name <your-project-name> --branch beta
+```
 
 ### Feedback Worker
 
-The feedback form requires a separate Cloudflare Worker deployment:
+The feedback form requires a separate Cloudflare Worker:
 
 ```bash
-# First time — set the destination email secret:
+# Set the destination email secret:
 wrangler secret put DEST_EMAIL --config worker/wrangler.toml
 
-# Deploy / redeploy:
+# Deploy:
 wrangler deploy --config worker/wrangler.toml
 ```
 
 The Worker uses the `send_email` binding with Cloudflare Email Routing. `DEST_EMAIL` must be a verified destination address in your Email Routing configuration.
 
-After deploying the Worker, update the `WORKER_URL` constant in `public/feedback.html` to match the deployed Workers URL.
+After deploying, update the `WORKER_URL` constant in `public/feedback.html` to match your Worker's URL.
 
----
+### Turnstile (bot protection on feedback form)
 
-## Price Monitoring (Gitea Actions)
-
-A weekly workflow detects content changes on tracked pricing pages and opens a PR for manual review. This is **not scraping** — it just detects whether the page has changed.
-
-### Prerequisites
-
-- A self-hosted Gitea Actions runner registered to this repository (see below)
-- Node.js 20+ available on the runner (installed automatically by `actions/setup-node@v4`)
-- A Gitea personal access token stored as repository secret `GITEA_TOKEN`
-
-### How it works
-
-1. `.gitea/workflows/price-monitor.yml` runs on a weekly cron (Monday 08:00 UTC)
-2. `scripts/check-prices.mjs` fetches each URL in `public/data/monitored-urls.json`
-3. Page content (title + first price pattern) is hashed and compared against `data/price-hashes.json`
-4. If any hash changed: the script exits with code 1; the workflow commits updated hashes to a new branch and opens a PR via the Gitea API
-5. Review the PR, manually verify the changed service's pricing page, update `price` + `lastVerified` in `public/data/affiliates.js`, and merge
-
-Manual trigger: use the `workflow_dispatch` event in the Gitea Actions UI.
-
-### Runner setup on TrueNAS Scale / Docker
-
-Gitea runs as a Docker container in TrueNAS Scale. The runner must also run as a container.
-
-**Step 1 — Get a registration token**
-
-Gitea: **Repository → Settings → Actions → Runners → Create new runner**
-
-**Step 2 — Create a persistent volume and config**
+Add your Cloudflare Turnstile site key to the `data-sitekey` attribute in `public/feedback.html`, then set the secret:
 
 ```bash
-# Create volume directory on your ZFS pool
-mkdir -p /mnt/pool/gitea-runner
+wrangler secret put TURNSTILE_SECRET --config worker/wrangler.toml
 ```
-
-Create `/mnt/pool/gitea-runner/config.yaml`:
-
-```yaml
-log:
-  level: info
-runner:
-  file: .runner
-  capacity: 1
-  timeout: 3h
-  insecure: false
-cache:
-  enabled: false
-```
-
-**Step 3 — Register the runner (one-off)**
-
-```bash
-docker run --rm \
-  -v /mnt/pool/gitea-runner:/data \
-  gitea/act_runner:latest \
-  register \
-  --no-interactive \
-  --instance http://192.168.68.67:3003 \
-  --token <TOKEN_FROM_STEP_1> \
-  --name "truenas-runner" \
-  --labels "self-hosted,linux,x64"
-```
-
-**Step 4 — Deploy the runner (Docker Compose)**
-
-Create `/mnt/pool/gitea-runner/docker-compose.yml`:
-
-```yaml
-services:
-  act_runner:
-    image: gitea/act_runner:latest
-    restart: unless-stopped
-    volumes:
-      - /mnt/pool/gitea-runner:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      GITEA_INSTANCE_URL: http://192.168.68.67:3003
-      GITEA_RUNNER_REGISTRATION_TOKEN: ""
-    network_mode: host
-```
-
-```bash
-docker compose -f /mnt/pool/gitea-runner/docker-compose.yml up -d
-```
-
-Alternatively, use the **TrueNAS Scale Custom App GUI**: Apps → Custom App → Add, with image `gitea/act_runner:latest`, the volume mount and environment variable above, and host networking.
-
-**Notes:**
-- Do **not** install the runner natively on TrueNAS Scale's OS — use Docker only
-- The runner volume should be on a ZFS dataset so it survives TrueNAS updates
-- If Gitea uses a custom Docker network, add the runner to the same network instead of host networking
-
-**Step 5 — Add the Gitea token as a repo secret**
-
-Gitea: **Repository → Settings → Secrets → Add Secret**
-- Name: `GITEA_TOKEN`
-- Value: personal access token with `repo` scope (Settings → Applications → Generate Token)
-
-**Step 6 — Verify**
-
-Gitea: **Repository → Settings → Actions → Runners** — runner should appear as `truenas-runner` (green/online).
 
 ---
 
 ## Before Going Live
 
-- Replace all `AFFILIATE_URL` placeholders in `data/affiliates.js` with real affiliate links
-- Update `public/feedback.html` `WORKER_URL` if the Worker URL changes
-- Review and update `public/privacy.html` contact email if needed
+- Replace all `AFFILIATE_URL` placeholders in `public/data/affiliates.js` with real affiliate links
+- Update `WORKER_URL` in `public/feedback.html` if the Worker URL changes
+- Update the contact email in `public/privacy.html`
+- Update analytics script in all HTML pages if self-hosting Umami (or remove if not using analytics)
 
 ---
 
@@ -258,7 +166,7 @@ A client-side email parser that extracts subscription details (service name, cos
 **iOS (Shortcuts):**
 1. Open the Shortcuts app → New Shortcut
 2. Add action: **Get Text from Input** (share sheet)
-3. Add action: **Open URL** — set to `https://beta.sub-site.com/?text=[Shortcut Input]`
+3. Add action: **Open URL** — set to `https://<your-domain>/?text=[Shortcut Input]`
 4. Enable "Show in Share Sheet"
 5. In Mail or Gmail, tap Share → your shortcut — the app opens with the email pre-parsed
 
@@ -269,7 +177,7 @@ A client-side email parser that extracts subscription details (service name, cos
 ## Privacy & Security
 
 - **No server backend** for subscription data — all computation in the browser
-- **No analytics** — no tracking scripts, no page-view telemetry
+- **Privacy-respecting analytics** — self-hosted [Umami](https://umami.is/): no cookies, no personal data, no cross-site tracking. Data stays on your own server.
 - **No font CDN** — system font stack only
 - **Feedback form only** — the Cloudflare Worker processes form submissions in transit; no database storage
 - See [public/privacy.html](public/privacy.html) for the full UK GDPR/PECR policy
@@ -286,4 +194,4 @@ Chrome/Edge 80+, Firefox 75+, Safari 13.1+
 
 ## License
 
-See LICENSE file for details.
+See [LICENSE](LICENSE) for details.
