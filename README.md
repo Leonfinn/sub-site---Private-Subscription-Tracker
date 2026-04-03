@@ -1,8 +1,8 @@
 # Sub-Site — Subscription Tracker
 
-A privacy-first subscription spending tracker built as a static website. All subscription data is stored in your browser's localStorage — no server, no accounts, no build step.
+A free subscription spending tracker that runs entirely in your browser. No account, no bank login — your data is stored locally and never sent to a server.
 
-Live demo: **[sub-site.com](https://sub-site.com)**
+**Use it free: [sub-site.com](https://sub-site.com)**
 
 ---
 
