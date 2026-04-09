@@ -200,3 +200,4 @@ docs/
 data/price-hashes.json
 .gitea/
 .claude/
+.opencode
